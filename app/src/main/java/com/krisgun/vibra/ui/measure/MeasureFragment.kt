@@ -22,10 +22,10 @@ class MeasureFragment : Fragment() {
         measureViewModel =
                 ViewModelProvider(this).get(MeasureViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_measure, container, false)
-        val textView: TextView = root.findViewById(R.id.text_measure)
+        /*val textView: TextView = root.findViewById(R.id.text_measure)
         measureViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
-        })
+        })*/
         return root
     }
 }
