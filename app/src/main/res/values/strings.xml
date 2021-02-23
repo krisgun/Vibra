@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Vibra</string>
+    <string name="title_measure">Measure</string>
+    <string name="title_history">History</string>
+    <string name="title_liveview">Live View</string>
+    <string name="filter_list">Filter List</string>
+    <string name="content_description_filter_list">Filter List</string>
+    <string name="settings">Settings</string>
+    <string name="content_description_settings">Settings</string>
+    <string name="share">Share</string>
+    <string name="content_description_share">Share</string>
+</resources>
