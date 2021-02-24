@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="TextAppearance.MaterialComponents.Headline3.Thin"
-        parent="TextAppearance.MaterialComponents.Headline3">
-        <item name="fontWeight">100</item>
-    </style>
-</resources>

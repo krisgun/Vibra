@@ -27,9 +27,12 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/duration_card"
-            android:layout_width="322dp"
+            android:layout_width="match_parent"
             android:layout_height="176dp"
-            android:layout_marginTop="84dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="32dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,11 +74,12 @@
 
                     <EditText
                         android:id="@+id/duration_minutes"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="68dp"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
+                        android:gravity="center_horizontal"
+                        android:inputType="number"
+                        android:maxLength="2"
                         android:text="01"
                         android:textAppearance="?attr/textAppearanceHeadline2"
                         android:textColor="?android:attr/colorPrimary" />
@@ -83,18 +87,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingEnd="20dp"
                         android:text="m"
                         android:textAppearance="?attr/textAppearanceHeadline5"
                         android:textColor="?android:attr/colorPrimary" />
 
                     <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:id="@+id/duration_seconds"
+                        android:layout_width="68dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_horizontal"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:background="@android:color/transparent"
-                        android:paddingStart="10dp"
                         android:text="30"
                         android:textAppearance="?attr/textAppearanceHeadline2"
                         android:textColor="?android:attr/colorPrimary" />
@@ -113,16 +118,19 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/countdown_card"
-            android:layout_width="322dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duration_card" >
+            app:layout_constraintTop_toBottomOf="@+id/duration_card">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/countdown_image"
@@ -152,17 +160,18 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.6">
 
                     <EditText
                         android:id="@+id/countdown_seconds"
-                        android:layout_width="wrap_content"
+                        android:layout_width="47dp"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="sans-serif-light"
+                        android:gravity="center_horizontal"
                         android:inputType="number"
                         android:maxLength="2"
-                        android:paddingStart="10dp"
                         android:text="30"
                         android:textColor="?android:attr/colorPrimary"
                         android:textSize="38sp" />
@@ -182,13 +191,15 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/start_button"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginBottom="96dp"
+            android:background="@drawable/button_rounded"
+            android:text="@string/start"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/countdown_card"
-            android:text="@string/start"/>
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
