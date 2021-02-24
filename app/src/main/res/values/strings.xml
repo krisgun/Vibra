@@ -3,6 +3,7 @@
     <string name="title_measure">Measure</string>
     <string name="title_history">History</string>
     <string name="title_liveview">Live View</string>
+    <string name="title_collect_data">Collect Data</string>
     <string name="filter_list">Filter List</string>
     <string name="content_description_filter_list">Filter List</string>
     <string name="settings">Settings</string>

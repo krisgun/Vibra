@@ -1,205 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.measure.MeasureFragment"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    tools:context=".ui.measure.MeasureFragment" >
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBarMeasure"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/title_measure"
-        app:menu="@menu/top_app_bar_measure"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
-        />
+    <data>
+        <variable
+            name="measureVM"
+            type="com.krisgun.vibra.ui.measure.MeasureViewModel" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
+        <variable
+            name="navDirection"
+            type="androidx.navigation.NavDirections" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize"
-        app:layout_anchor="@+id/constraintLayout"
-        app:layout_anchorGravity="center">
+        android:layout_width="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/duration_card"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBarMeasure"
             android:layout_width="match_parent"
-            android:layout_height="176dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="32dp"
-            app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.505"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/title_measure"
+            app:menu="@menu/top_app_bar_measure"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/timer_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_baseline_timer_24" />
-
-                <TextView
-                    android:id="@+id/duration_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/duration"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
-                    app:layout_constraintStart_toEndOf="@+id/timer_image"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <EditText
-                        android:id="@+id/duration_minutes"
-                        android:layout_width="68dp"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_horizontal"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:text="01"
-                        android:textAppearance="?attr/textAppearanceHeadline2"
-                        android:textColor="?android:attr/colorPrimary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="20dp"
-                        android:text="m"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textColor="?android:attr/colorPrimary" />
-
-                    <EditText
-                        android:id="@+id/duration_seconds"
-                        android:layout_width="68dp"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_horizontal"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:text="30"
-                        android:textAppearance="?attr/textAppearanceHeadline2"
-                        android:textColor="?android:attr/colorPrimary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="s"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textColor="?android:attr/colorPrimary" />
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/countdown_card"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duration_card">
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
+            app:layout_anchor="@+id/constraintLayout"
+            app:layout_anchorGravity="center">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/duration_card"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="176dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="32dp"
+                app:cardElevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.505"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/countdown_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_baseline_timer_24" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/countdown_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/countdown"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"
-                    app:layout_constraintStart_toEndOf="@+id/countdown_image"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.6">
-
-                    <EditText
-                        android:id="@+id/countdown_seconds"
-                        android:layout_width="47dp"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="center_horizontal"
-                        android:inputType="number"
-                        android:maxLength="2"
-                        android:text="30"
-                        android:textColor="?android:attr/colorPrimary"
-                        android:textSize="38sp" />
-
-                    <TextView
+                    <ImageView
+                        android:id="@+id/timer_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="s"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textColor="?android:attr/colorPrimary" />
-                </LinearLayout>
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_baseline_timer_24" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/duration_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/duration"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        app:layout_constraintStart_toEndOf="@+id/timer_image"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </com.google.android.material.card.MaterialCardView>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/duration_minutes"
+                            android:layout_width="68dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:text="01"
+                            android:textAppearance="?attr/textAppearanceHeadline2"
+                            android:textColor="?android:attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="20dp"
+                            android:text="m"
+                            android:textAppearance="?attr/textAppearanceHeadline5"
+                            android:textColor="?android:attr/colorPrimary" />
+
+                        <EditText
+                            android:id="@+id/duration_seconds"
+                            android:layout_width="68dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:text="30"
+                            android:textAppearance="?attr/textAppearanceHeadline2"
+                            android:textColor="?android:attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="s"
+                            android:textAppearance="?attr/textAppearanceHeadline5"
+                            android:textColor="?android:attr/colorPrimary" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/countdown_card"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                app:cardElevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/duration_card">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/countdown_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_baseline_timer_24" />
+
+                    <TextView
+                        android:id="@+id/countdown_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/countdown"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        app:layout_constraintStart_toEndOf="@+id/countdown_image"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.6">
+
+                        <EditText
+                            android:id="@+id/countdown_seconds"
+                            android:layout_width="47dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="sans-serif-light"
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:text="30"
+                            android:textColor="?android:attr/colorPrimary"
+                            android:textSize="38sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="s"
+                            android:textAppearance="?attr/textAppearanceHeadline5"
+                            android:textColor="?android:attr/colorPrimary" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/start_button"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="96dp"
-            android:background="@drawable/button_rounded"
-            android:text="@string/start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_button"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="96dp"
+                android:background="@drawable/button_rounded"
+                android:text="@string/start"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                android:onClick="@{() -> measureVM.onStart()}"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

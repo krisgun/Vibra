@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.krisgun.vibra.R
+import com.krisgun.vibra.databinding.FragmentMeasureBinding
 
 class MeasureFragment : Fragment() {
 
@@ -21,11 +25,18 @@ class MeasureFragment : Fragment() {
     ): View? {
         measureViewModel =
                 ViewModelProvider(this).get(MeasureViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_measure, container, false)
-        /*val textView: TextView = root.findViewById(R.id.text_measure)
-        measureViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })*/
-        return root
+
+        val binding = FragmentMeasureBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            measureVM = measureViewModel
+        }
+
+        setUpNavigation()
+        return binding.root
+    }
+
+    private fun setUpNavigation() {
+        val navController = findNavController()
+        measureViewModel.setNavController(navController)
     }
 }

@@ -9,7 +9,17 @@
         android:id="@+id/navigation_measure"
         android:name="com.krisgun.vibra.ui.measure.MeasureFragment"
         android:label="@string/title_measure"
-        tools:layout="@layout/fragment_measure" />
+        tools:layout="@layout/fragment_measure" >
+        <action
+            android:id="@+id/action_navigation_measure_to_navigation_collect_data"
+            app:destination="@id/navigation_collect_data" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_collect_data"
+        android:name="com.krisgun.vibra.ui.collect_data.CollectDataFragment"
+        android:label="@string/title_collect_data"
+        tools:layout="@layout/fragment_collect_data" />
 
     <fragment
         android:id="@+id/navigation_history"
