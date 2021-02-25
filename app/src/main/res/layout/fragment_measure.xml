@@ -94,7 +94,9 @@
                             android:maxLength="2"
                             android:text="01"
                             android:textAppearance="?attr/textAppearanceHeadline2"
-                            android:textColor="?android:attr/colorPrimary" />
+                            android:textColor="?android:attr/colorPrimary"
+                            android:selectAllOnFocus="true"
+                            android:onTextChanged ="@{() -> measureVM.onTextChangedDurationMinuteText()}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -114,7 +116,8 @@
                             android:maxLength="2"
                             android:text="30"
                             android:textAppearance="?attr/textAppearanceHeadline2"
-                            android:textColor="?android:attr/colorPrimary" />
+                            android:textColor="?android:attr/colorPrimary"
+                            android:selectAllOnFocus="true"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -186,7 +189,8 @@
                             android:maxLength="2"
                             android:text="30"
                             android:textColor="?android:attr/colorPrimary"
-                            android:textSize="38sp" />
+                            android:textSize="38sp"
+                            android:selectAllOnFocus="true"/>
 
                         <TextView
                             android:layout_width="wrap_content"
