@@ -92,11 +92,12 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="01"
+                            android:text="@{measureVM.durationMinutes}"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
                             android:selectAllOnFocus="true"
-                            android:onTextChanged ="@{() -> measureVM.onTextChangedDurationMinuteText()}"/>
+                            android:longClickable="false"
+                            android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedDurationMinuteText(text)}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -114,10 +115,12 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="30"
+                            android:text="@{measureVM.durationSeconds}"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
-                            android:selectAllOnFocus="true"/>
+                            android:selectAllOnFocus="true"
+                            android:longClickable="false"
+                            android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedDurationSecondsText(text)}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -187,10 +190,12 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="30"
+                            android:text="@{measureVM.countdownSeconds}"
                             android:textColor="?android:attr/colorPrimary"
                             android:textSize="38sp"
-                            android:selectAllOnFocus="true"/>
+                            android:selectAllOnFocus="true"
+                            android:longClickable="false"
+                            android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedCountdownSecondsText(text)}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
