@@ -18,4 +18,5 @@
     <string name="countdown">Countdown</string>
     <string name="minutes_abbreviation">m</string>
     <string name="seconds_abbreviation">s</string>
+    <string name="empty_timer_input">00</string>
 </resources>

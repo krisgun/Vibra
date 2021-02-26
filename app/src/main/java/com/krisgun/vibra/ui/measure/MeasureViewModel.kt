@@ -1,45 +1,55 @@
 package com.krisgun.vibra.ui.measure
 
+import android.text.Editable
 import android.util.Log
-import androidx.databinding.BaseObservable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.view.View
+import android.widget.EditText
+import androidx.databinding.Bindable
+import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
+import com.krisgun.vibra.BR
 import com.krisgun.vibra.R
 import com.krisgun.vibra.util.ObservableViewModel
 
 private const val TAG = "MeasureViewModel"
+const val INITIAL_MINUTES = "01"
+const val INITIAL_SECONDS = "30"
+const val INITIAL_COUNTDOWN_SECONDS = "05"
 
 class MeasureViewModel : ObservableViewModel() {
 
     private lateinit var navController: NavController
 
-    private val _durationMinutes = MutableLiveData<String>()
-    val durationMinutes: LiveData<String>
-        get() = _durationMinutes
+    @get:Bindable
+    var durationMinutes: String = INITIAL_MINUTES
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.durationMinutes)
+        }
 
-    private val _durationSeconds = MutableLiveData<String>()
-    val durationSeconds: LiveData<String>
-        get() = _durationSeconds
+    @get:Bindable
+    var durationSeconds: String = INITIAL_SECONDS
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.durationSeconds)
+        }
 
-    private val _countdownSeconds = MutableLiveData<String>()
-    val countdownSeconds: LiveData<String>
-        get() = _countdownSeconds
+    @get:Bindable
+    var countdownSeconds: String = INITIAL_COUNTDOWN_SECONDS
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.countdownSeconds)
+        }
 
-    init {
-        _durationMinutes.value = "01"
-        _durationSeconds.value = "30"
-        _countdownSeconds.value = "05"
-    }
+
 
     fun setNavController(navController: NavController) {
         this.navController = navController
     }
 
     fun onStart() {
-        Log.d(TAG, "Clicky!")
-        val action = MeasureFragmentDirections.actionNavigationMeasureToNavigationCollectData()
+        val action = MeasureFragmentDirections.
+            actionNavigationMeasureToNavigationCollectData()
         navController.navigate(action)
     }
 
@@ -47,25 +57,45 @@ class MeasureViewModel : ObservableViewModel() {
      * TODO: IMPLEMENT AFTER TEXT CHANGED. SINGLE DIGIT SHOULD BE PREPENDED WITH A 0. EX 1 -> 01
      */
 
-    fun onTextChangedDurationMinuteText(text: CharSequence) {
-        onTextChangedSetTimeText(text, _durationMinutes)
+    fun afterTextChangedDurationMinutesText(text: Editable) {
+        afterTextChangedSetTimeText(text)?.let {
+            durationMinutes = it
+        }
     }
 
-    fun onTextChangedDurationSecondsText(text: CharSequence) {
-        onTextChangedSetTimeText(text, _durationSeconds)
+    fun afterTextChangedDurationSecondsText(text: Editable) {
+        afterTextChangedSetTimeText(text)?.let {
+            durationSeconds = it
+        }
     }
 
-    fun onTextChangedCountdownSecondsText(text: CharSequence) {
-        onTextChangedSetTimeText(text, _countdownSeconds)
+    fun afterTextChangedCountdownSecondsText(text: Editable) {
+        afterTextChangedSetTimeText(text)?.let {
+            countdownSeconds = it
+        }
     }
 
-    private fun onTextChangedSetTimeText(text: CharSequence, data: MutableLiveData<String>) {
+    private fun afterTextChangedSetTimeText(text: Editable): String? {
         if (text.isNotEmpty()) {
             val textToChange = text.toString().toInt()
-            if (textToChange in 6..9) {
+            if (textToChange in 6..9 && text.length < 2) {
                 textToChange.toString()
-                data.value = "0$textToChange"
+                return "0$textToChange"
+            }
+        }
+        return null
+    }
+
+    fun onFocusChangedTimerValidation(view: View, hasFocus: Boolean) {
+        val editText = view as EditText
+        if(!hasFocus) {
+            val text = editText.text
+            val singleDigitString = "0$text"
+            when (text.length) {
+                0 -> editText.setText(R.string.empty_timer_input)
+                1 -> editText.setText(singleDigitString)
             }
         }
     }
+
 }

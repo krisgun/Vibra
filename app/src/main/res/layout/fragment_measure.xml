@@ -17,7 +17,9 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarMeasure"
@@ -35,9 +37,7 @@
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
             app:layout_anchor="@+id/constraintLayout"
-            app:layout_anchorGravity="center"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            app:layout_anchorGravity="center">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/duration_card"
@@ -95,14 +95,16 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="@={measureVM.durationMinutes}"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
                             android:autofillHints="minutes"
                             android:labelFor="@id/duration_minutes"
                             android:selectAllOnFocus="true"
                             android:longClickable="false"
-                            android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedDurationMinuteText(text)}"/>
+                            android:text="@={measureVM.durationMinutes}"
+                            android:afterTextChanged ="@{(text) -> measureVM.afterTextChangedDurationMinutesText(text)}"
+                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"
+                            tools:text="01"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -121,14 +123,16 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="@{measureVM.durationSeconds}"
+                            tools:text="30"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
                             android:selectAllOnFocus="true"
                             android:longClickable="false"
                             android:autofillHints="seconds"
                             android:labelFor="@id/duration_seconds"
-                            android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedDurationSecondsText(text)}"/>
+                            android:text="@={measureVM.durationSeconds}"
+                            android:afterTextChanged ="@{(text) -> measureVM.afterTextChangedDurationSecondsText(text)}"
+                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -199,14 +203,17 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="@{measureVM.countdownSeconds}"
                             android:textColor="?android:attr/colorPrimary"
                             android:textSize="38sp"
+                            tools:text="05"
                             android:autofillHints="seconds"
                             android:selectAllOnFocus="true"
                             android:labelFor="@id/countdown_seconds"
                             android:longClickable="false"
-                            android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedCountdownSecondsText(text)}"/>
+                            android:text="@={measureVM.countdownSeconds}"
+                            android:afterTextChanged ="@{(text) -> measureVM.afterTextChangedCountdownSecondsText(text)}"
+                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"/>
+
 
                         <TextView
                             android:layout_width="wrap_content"
