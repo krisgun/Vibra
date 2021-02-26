@@ -1,5 +1,6 @@
 package com.krisgun.vibra.ui.collect_data
 
+import android.content.pm.ActivityInfo
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
@@ -17,6 +18,12 @@ class CollectDataFragment : Fragment() {
 
     private lateinit var binding: FragmentCollectDataBinding
     private lateinit var viewModel: CollectDataViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

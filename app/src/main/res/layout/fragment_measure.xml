@@ -35,7 +35,9 @@
             android:layout_height="match_parent"
             android:paddingTop="?attr/actionBarSize"
             app:layout_anchor="@+id/constraintLayout"
-            app:layout_anchorGravity="center">
+            app:layout_anchorGravity="center"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/duration_card"
@@ -62,7 +64,8 @@
                         android:layout_marginTop="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_baseline_timer_24" />
+                        app:srcCompat="@drawable/ic_baseline_timer_24"
+                        android:contentDescription="@string/content_description_timer_icon"/>
 
                     <TextView
                         android:id="@+id/duration_text"
@@ -92,9 +95,11 @@
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:maxLength="2"
-                            android:text="@{measureVM.durationMinutes}"
+                            android:text="@={measureVM.durationMinutes}"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
+                            android:autofillHints="minutes"
+                            android:labelFor="@id/duration_minutes"
                             android:selectAllOnFocus="true"
                             android:longClickable="false"
                             android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedDurationMinuteText(text)}"/>
@@ -103,9 +108,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingEnd="20dp"
-                            android:text="m"
+                            android:text="@string/minutes_abbreviation"
                             android:textAppearance="?attr/textAppearanceHeadline5"
-                            android:textColor="?android:attr/colorPrimary" />
+                            android:textColor="?android:attr/colorPrimary"
+                            tools:ignore="RtlSymmetry" />
 
                         <EditText
                             android:id="@+id/duration_seconds"
@@ -120,12 +126,14 @@
                             android:textColor="?android:attr/colorPrimary"
                             android:selectAllOnFocus="true"
                             android:longClickable="false"
+                            android:autofillHints="seconds"
+                            android:labelFor="@id/duration_seconds"
                             android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedDurationSecondsText(text)}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="s"
+                            android:text="@string/seconds_abbreviation"
                             android:textAppearance="?attr/textAppearanceHeadline5"
                             android:textColor="?android:attr/colorPrimary" />
                     </LinearLayout>
@@ -158,7 +166,8 @@
                         android:layout_marginTop="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_baseline_timer_24" />
+                        app:srcCompat="@drawable/ic_baseline_more_time_24"
+                        android:contentDescription="@string/content_description_more_time_icon"/>
 
                     <TextView
                         android:id="@+id/countdown_text"
@@ -193,14 +202,16 @@
                             android:text="@{measureVM.countdownSeconds}"
                             android:textColor="?android:attr/colorPrimary"
                             android:textSize="38sp"
+                            android:autofillHints="seconds"
                             android:selectAllOnFocus="true"
+                            android:labelFor="@id/countdown_seconds"
                             android:longClickable="false"
                             android:onTextChanged ="@{(text, start, before, count) -> measureVM.onTextChangedCountdownSecondsText(text)}"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="s"
+                            android:text="@string/seconds_abbreviation"
                             android:textAppearance="?attr/textAppearanceHeadline5"
                             android:textColor="?android:attr/colorPrimary" />
                     </LinearLayout>

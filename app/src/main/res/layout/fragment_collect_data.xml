@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="20dp"
-                android:text="m"
+                android:text="@string/minutes_abbreviation"
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 android:textColor="?android:attr/colorPrimary" />
 
@@ -54,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="s"
+                android:text="@string/seconds_abbreviation"
                 android:textAppearance="?attr/textAppearanceHeadline5"
                 android:textColor="?android:attr/colorPrimary" />
         </LinearLayout>
