@@ -19,7 +19,11 @@
         android:id="@+id/navigation_collect_data"
         android:name="com.krisgun.vibra.ui.collect_data.CollectDataFragment"
         android:label="@string/title_collect_data"
-        tools:layout="@layout/fragment_collect_data" />
+        tools:layout="@layout/fragment_collect_data" >
+        <argument
+            android:name="measurement_id"
+            app:argType="java.util.UUID" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_history"

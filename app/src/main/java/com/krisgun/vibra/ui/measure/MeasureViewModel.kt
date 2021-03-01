@@ -9,6 +9,8 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import com.krisgun.vibra.BR
 import com.krisgun.vibra.R
+import com.krisgun.vibra.data.Measurement
+import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.ObservableViewModel
 
 private const val TAG = "MeasureViewModel"
@@ -19,6 +21,7 @@ const val INITIAL_COUNTDOWN_SECONDS = "05"
 class MeasureViewModel : ObservableViewModel() {
 
     private lateinit var navController: NavController
+    private val measurementRepository = MeasurementRepository.get()
 
     @get:Bindable
     var durationMinutes: String = INITIAL_MINUTES
@@ -48,8 +51,18 @@ class MeasureViewModel : ObservableViewModel() {
     }
 
     fun onStart() {
+        val measurementDuration: Int = (durationMinutes.toInt() * 60) + durationSeconds.toInt()
+        //Create Measurement obj
+        val measurement = Measurement(duration = measurementDuration)
+
+        //Add measurement to database
+        measurementRepository.addMeasurement(measurement)
+
+        //Prepare navigation action
         val action = MeasureFragmentDirections.
-            actionNavigationMeasureToNavigationCollectData()
+            actionNavigationMeasureToNavigationCollectData(measurement.id)
+
+        //Navigate to collect data view
         navController.navigate(action)
     }
 

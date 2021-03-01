@@ -6,8 +6,9 @@ import java.util.*
 
 @Entity
 data class Measurement(@PrimaryKey val id: UUID = UUID.randomUUID(),
-                        var title: String,
-                        var date: Date = Date()) {
+                        var title: String = "$id",
+                        var date: Date = Date(),
+                        var duration: Int) {
 
     val rawDataFileName
         get() = "SENSOR_$date.csv"

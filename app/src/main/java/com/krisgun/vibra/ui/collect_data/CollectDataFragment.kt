@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.navArgs
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentCollectDataBinding
 
@@ -18,6 +20,8 @@ class CollectDataFragment : Fragment() {
 
     private lateinit var binding: FragmentCollectDataBinding
     private lateinit var viewModel: CollectDataViewModel
+
+    val args: CollectDataFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,17 +48,32 @@ class CollectDataFragment : Fragment() {
             collectDataVM = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
+        passMeasurementToViewModel()
 
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.registerSensor()
+        viewModel.onStartCollectingData()
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.unregisterSensor()
+    }
+
+    private fun passMeasurementToViewModel() {
+        val id = args.measurementId
+        viewModel.setMeasurementId(id)
+        viewModel.measurementLiveData.observe(
+                viewLifecycleOwner,
+                {
+                    measurement ->
+                    measurement?.let {
+                        viewModel.setMeasurement(measurement)
+                    }
+                }
+        )
     }
 }
