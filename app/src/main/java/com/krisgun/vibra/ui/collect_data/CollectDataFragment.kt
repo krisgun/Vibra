@@ -1,17 +1,13 @@
 package com.krisgun.vibra.ui.collect_data
 
 import android.content.pm.ActivityInfo
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.fragment.navArgs
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentCollectDataBinding
@@ -48,30 +44,28 @@ class CollectDataFragment : Fragment() {
             collectDataVM = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        passMeasurementToViewModel()
 
+        passMeasurementToViewModel()
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.onStartCollectingData()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.unregisterSensor()
+        viewModel.stopCollectingData()
     }
 
     private fun passMeasurementToViewModel() {
         val id = args.measurementId
         viewModel.setMeasurementId(id)
-        viewModel.measurementLiveData.observe(
-                viewLifecycleOwner,
-                {
-                    measurement ->
+        viewModel.measurementLiveData.observe(viewLifecycleOwner,
+                { measurement ->
                     measurement?.let {
                         viewModel.setMeasurement(measurement)
+                        viewModel.startCollectingData()
                     }
                 }
         )

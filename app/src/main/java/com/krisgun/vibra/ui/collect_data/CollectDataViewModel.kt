@@ -8,7 +8,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.*
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
+import java.io.File
 import java.io.FileWriter
+import java.io.IOException
 import java.util.*
 
 private const val TAG = "CollectDataViewModel"
@@ -17,7 +19,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         SensorEventListener {
 
     private lateinit var fileWriter: FileWriter
+    private lateinit var file: File
     private lateinit var measurement: Measurement
+
+    private var countLines = 0
+    private var startTime = 0L
+    private var endTime = 0L
 
     private val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
@@ -37,17 +44,39 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     }
 
 
-    fun onStartCollectingData() {
+    fun startCollectingData() {
         //Get measurement object from db
 
         //Start timer
 
         //Open file writer and register sensor
+        Log.d(TAG, "Opening FileWriter with filename: ${measurement.rawDataFileName}")
+        try {
+            file = measurementRepository.getRawDataFile(measurement)
+            fileWriter = FileWriter(file, true)
+            if (file.length() == 0L) {
+                Log.d(TAG, "Wrote CSV header.")
+                fileWriter.write("Timestamp,X (m/s^2),Y (m/s^2),Z (m/s^2)")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        startTime = System.currentTimeMillis()
         registerSensor()
     }
 
-    fun onStopCollectingData() {
-        //Unregister listener
+    fun stopCollectingData() {
+        endTime = System.currentTimeMillis()
+        //Unregister listener and close filewriter
+        try {
+            fileWriter.close()
+            val duration = (endTime - startTime) / 1000
+            Log.d(TAG, "Closed FileWriter. Wrote $countLines lines in $duration seconds.")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        unregisterSensor()
+
 
         //Stop timer
 
@@ -66,12 +95,14 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
-            _accelData.postValue("timestamp: ${event.timestamp}\n " +
+            /*_accelData.postValue("timestamp: ${event.timestamp}\n " +
                     "x: ${event.values[0]}\n " +
                     "y: ${event.values[1]}\n " +
                     "z: ${event.values[2]}\n " +
                     "acc: ${event.accuracy}\n" +
-                    "duration: ${measurement.duration}")
+                    "duration: ${measurement.duration}")*/
+            fileWriter.write(String.format("%d, %f, %f, %f", event.timestamp, event.values[0], event.values[1], event.values[2]))
+            countLines++
         } else {
             _accelData.postValue("No event")
         }
@@ -81,12 +112,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         Log.d(TAG, "Registered Sensor Listener")
         sensorManager.let { sm ->
             sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER).let {
-                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME) //ca 50 per sekund med GAME
             }
         }
     }
 
-    fun unregisterSensor() {
+    private fun unregisterSensor() {
         Log.d(TAG, "Unregistered Sensor Listener")
         sensorManager.unregisterListener(this)
     }
