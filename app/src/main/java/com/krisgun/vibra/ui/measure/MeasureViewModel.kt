@@ -96,6 +96,7 @@ class MeasureViewModel : ObservableViewModel() {
                 1 -> editText.setText(singleDigitString)
             }
         }
+        if(hasFocus) view.isCursorVisible = false
     }
 
 }

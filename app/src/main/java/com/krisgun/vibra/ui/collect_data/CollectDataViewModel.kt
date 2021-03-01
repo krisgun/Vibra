@@ -2,29 +2,30 @@ package com.krisgun.vibra.ui.collect_data
 
 import android.app.Application
 import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
+import android.hardware.*
 import android.util.Log
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 private const val TAG = "CollectDataViewModel"
 
-class CollectDataViewModel(application: Application) : AndroidViewModel(application), SensorEventListener {
+class CollectDataViewModel(application: Application) : AndroidViewModel(application),
+        SensorEventListener {
 
     private val _accelData = MutableLiveData<String>()
     val accelData: LiveData<String>
         get() = _accelData
 
-
-
     init {
         _accelData.value = "Initial value"
     }
 
+
+    /**
+     * Sensor handling
+     */
     private val sensorManager
         get() = getApplication<Application>().getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
@@ -53,6 +54,4 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         Log.d(TAG, "Unregistered Sensor Listener")
         sensorManager.unregisterListener(this)
     }
-
-
 }
