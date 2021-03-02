@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_measure" >
         <action
             android:id="@+id/action_navigation_measure_to_navigation_collect_data"
-            app:destination="@id/navigation_collect_data" />
+            app:destination="@id/navigation_collect_data"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 
     <fragment

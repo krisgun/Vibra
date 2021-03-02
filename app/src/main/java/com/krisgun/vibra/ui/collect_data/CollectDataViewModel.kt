@@ -35,7 +35,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     //Timer
     private lateinit var countDownTimer: CountDownTimer
     private var timerDuration = 0L
-    private var isRunning: Boolean = false
 
     //Progressbar
     var maxProgress = 100
@@ -119,7 +118,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
         countDownTimer.start()
-        isRunning = true
     }
 
     /**
@@ -179,6 +177,5 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     fun onStop() {
         countDownTimer.cancel()
         stopCollectingData()
-        isRunning = false
     }
 }

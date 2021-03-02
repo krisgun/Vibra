@@ -44,7 +44,6 @@ class CollectDataFragment : Fragment() {
             collectDataVM = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-
         passMeasurementToViewModel()
         return binding.root
     }
@@ -55,7 +54,7 @@ class CollectDataFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopCollectingData()
+        viewModel.onStop()
     }
 
     private fun passMeasurementToViewModel() {
