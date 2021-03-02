@@ -3,11 +3,10 @@ package com.krisgun.vibra.ui.collect_data
 import android.app.Application
 import android.content.Context
 import android.hardware.*
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.*
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
@@ -15,6 +14,7 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.util.*
+import kotlin.math.ceil
 
 private const val TAG = "CollectDataViewModel"
 
@@ -32,6 +32,13 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     //Fetched measurement object from DB
     private lateinit var measurement: Measurement
 
+    //Timer
+    private lateinit var countDownTimer: CountDownTimer
+    private var timerDuration = 0L
+    private var isRunning: Boolean = false
+
+    //Progressbar
+    var maxProgress = 100
     //Benchmarking
     private var countLines = 0
     private var startTime = 0L
@@ -45,25 +52,24 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 measurementRepository.getMeasurement(id)
             }
 
-    private val _accelData = MutableLiveData<String>()
-    val accelData: LiveData<String>
-        get() = _accelData
+    //UI data
+    private val _durationData = MutableLiveData<Int>()
+    val durationData: LiveData<Int>
+        get() = _durationData
 
+    private val _progressData = MutableLiveData<Int>()
+    val progressData: LiveData<Int>
+        get() = _progressData
 
     init {
-        _accelData.value = "Initial value"
+        _progressData.value = 0
     }
 
-
     fun startCollectingData() {
-        //Get measurement object from db
-
-        //Start timer
 
         //Open file writer and register sensor
-        Log.d(TAG, "Opening FileWriter with filename: ${measurement.rawDataFileName}")
+        Log.d(TAG, "Opening FileWriter with filename: ${file.name}")
         try {
-            file = measurementRepository.getRawDataFile(measurement)
             fileWriter = FileWriter(file, true)
             if (file.length() == 0L) {
                 Log.d(TAG, "Wrote CSV header.")
@@ -73,25 +79,47 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             e.printStackTrace()
         }
         startTime = System.currentTimeMillis()
+
         registerSensor()
+        //Start timer
+        startTimer(timerDuration)
+
     }
 
     fun stopCollectingData() {
+        unregisterSensor()
         endTime = System.currentTimeMillis()
         //Unregister listener and close filewriter
         try {
             fileWriter.close()
-            val duration = (endTime - startTime) / 1000
-            Log.d(TAG, "Closed FileWriter. Wrote $countLines lines in $duration seconds.")
+            val duration = (endTime - startTime)
+            Log.d(TAG, "Closed FileWriter. Wrote $countLines lines in $duration ms.")
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        unregisterSensor()
-
-
-        //Stop timer
 
         //Update duration if measurement is stopped before timer runs out
+    }
+
+    /**
+     * CountDownTimer handling
+     */
+    private fun startTimer(millisTimerDuration: Long) {
+        countDownTimer = object : CountDownTimer(millisTimerDuration, 1000) {
+            override fun onFinish() {
+                _durationData.postValue(0)
+                _progressData.postValue(maxProgress)
+                Log.d(TAG, "Timer finished.")
+                stopCollectingData()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                _durationData.postValue(ceil((millisUntilFinished / 1000.0)).toInt())
+                _progressData.postValue(100 - ((millisUntilFinished.toFloat() / timerDuration.toFloat())*100).toInt())
+            }
+        }
+        countDownTimer.start()
+        isRunning = true
     }
 
     /**
@@ -106,12 +134,9 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
-
             //Write sensor data to file
-            fileWriter.write(String.format("%d, %f, %f, %f", event.timestamp, event.values[0], event.values[1], event.values[2]))
+            fileWriter.write(String.format("%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
             countLines++
-        } else {
-            _accelData.postValue("No event")
         }
     }
 
@@ -134,11 +159,26 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         mSensorThread.quitSafely()
     }
 
+    /**
+     * Initialize ViewModel
+     */
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
     }
 
     fun setMeasurement(measurement: Measurement) {
         this.measurement = measurement
+        timerDuration = measurement.duration_seconds.toLong() * 1000 //in ms
+        _durationData.value = measurement.duration_seconds
+        file = measurementRepository.getRawDataFile(measurement)
+    }
+
+    /**
+     * Button handling
+     */
+    fun onStop() {
+        countDownTimer.cancel()
+        stopCollectingData()
+        isRunning = false
     }
 }

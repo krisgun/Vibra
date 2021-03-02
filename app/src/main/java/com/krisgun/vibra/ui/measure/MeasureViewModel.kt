@@ -1,11 +1,9 @@
 package com.krisgun.vibra.ui.measure
 
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.databinding.Bindable
-import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import com.krisgun.vibra.BR
 import com.krisgun.vibra.R
@@ -14,8 +12,8 @@ import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.ObservableViewModel
 
 private const val TAG = "MeasureViewModel"
-const val INITIAL_MINUTES = "01"
-const val INITIAL_SECONDS = "30"
+const val INITIAL_MINUTES = "00"
+const val INITIAL_SECONDS = "15"
 const val INITIAL_COUNTDOWN_SECONDS = "05"
 
 class MeasureViewModel : ObservableViewModel() {
@@ -53,7 +51,7 @@ class MeasureViewModel : ObservableViewModel() {
     fun onStart() {
         val measurementDuration: Int = (durationMinutes.toInt() * 60) + durationSeconds.toInt()
         //Create Measurement obj
-        val measurement = Measurement(duration = measurementDuration)
+        val measurement = Measurement(duration_seconds = measurementDuration)
 
         //Add measurement to database
         measurementRepository.addMeasurement(measurement)

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="com.krisgun.vibra.util.Converter" />
         <variable
             name="collectDataVM"
             type="com.krisgun.vibra.ui.collect_data.CollectDataViewModel" />
@@ -29,9 +30,10 @@
                 android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
                 android:maxLength="2"
-                android:text="01"
+                android:text="@{Converter.durationToPaddedMinutes(collectDataVM.durationData)}"
                 android:textAppearance="?attr/textAppearanceHeadline2"
-                android:textColor="?android:attr/colorPrimary" />
+                android:textColor="?android:attr/colorPrimary"
+                tools:text="01" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,9 +50,10 @@
                 android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
                 android:maxLength="2"
-                android:text="30"
+                android:text="@{Converter.durationToPaddedSeconds(collectDataVM.durationData)}"
                 android:textAppearance="?attr/textAppearanceHeadline2"
-                android:textColor="?android:attr/colorPrimary" />
+                android:textColor="?android:attr/colorPrimary"
+                tools:text="30"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,17 +71,9 @@
             android:layout_marginTop="148dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{collectDataVM.accelData}"
-            tools:hint="Sensor values"
-            app:layout_constraintBottom_toTopOf="@+id/materialButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            android:max="@{collectDataVM.maxProgress}"
+            android:progress="@{collectDataVM.progressData}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/materialButton"
@@ -90,7 +85,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{() -> collectDataVM.stopCollectingData()}"/>
+            android:onClick="@{() -> collectDataVM.onStop()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

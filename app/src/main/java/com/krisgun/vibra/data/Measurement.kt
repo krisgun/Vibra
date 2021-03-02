@@ -8,7 +8,7 @@ import java.util.*
 data class Measurement(@PrimaryKey val id: UUID = UUID.randomUUID(),
                         var title: String = "$id",
                         var date: Date = Date(),
-                        var duration: Int) {
+                        var duration_seconds: Int) {
 
     val rawDataFileName
         get() = "SENSOR_$date.csv"
