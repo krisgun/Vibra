@@ -3,6 +3,9 @@ package com.krisgun.vibra.ui.collect_data
 import android.app.Application
 import android.content.Context
 import android.hardware.*
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.*
@@ -18,10 +21,18 @@ private const val TAG = "CollectDataViewModel"
 class CollectDataViewModel(application: Application) : AndroidViewModel(application),
         SensorEventListener {
 
+    //Sensor thread handlers
+    private lateinit var mSensorThread: HandlerThread
+    private lateinit var mSensorHandler: Handler
+
+    //File objects
     private lateinit var fileWriter: FileWriter
     private lateinit var file: File
+
+    //Fetched measurement object from DB
     private lateinit var measurement: Measurement
 
+    //Benchmarking
     private var countLines = 0
     private var startTime = 0L
     private var endTime = 0L
@@ -95,12 +106,8 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
-            /*_accelData.postValue("timestamp: ${event.timestamp}\n " +
-                    "x: ${event.values[0]}\n " +
-                    "y: ${event.values[1]}\n " +
-                    "z: ${event.values[2]}\n " +
-                    "acc: ${event.accuracy}\n" +
-                    "duration: ${measurement.duration}")*/
+
+            //Write sensor data to file
             fileWriter.write(String.format("%d, %f, %f, %f", event.timestamp, event.values[0], event.values[1], event.values[2]))
             countLines++
         } else {
@@ -109,17 +116,22 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private fun registerSensor() {
-        Log.d(TAG, "Registered Sensor Listener")
+        mSensorThread = HandlerThread("Sensor Thread", Thread.MAX_PRIORITY)
+        mSensorThread.start()
+        mSensorHandler = Handler(mSensorThread.looper)
+
         sensorManager.let { sm ->
             sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER).let {
-                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME) //ca 50 per sekund med GAME
+                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME, mSensorHandler) //ca 50 per sekund med GAME
             }
         }
+        Log.d(TAG, "Registered Sensor Listener")
     }
 
     private fun unregisterSensor() {
         Log.d(TAG, "Unregistered Sensor Listener")
         sensorManager.unregisterListener(this)
+        mSensorThread.quitSafely()
     }
 
     fun setMeasurementId(id: UUID) {
