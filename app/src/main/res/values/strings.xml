@@ -14,6 +14,8 @@
     <string name="stop">Stop</string>
     <string name="content_description_timer_icon">Timer icon</string>
     <string name="content_description_more_time_icon">Clock icon with plus sign</string>
+    <string name="content_description_calendar">Calendar icon</string>
+    <string name="content_description_more">More menu icon</string>
     <string name="duration">Duration</string>
     <string name="countdown">Countdown</string>
     <string name="minutes_abbreviation">m</string>

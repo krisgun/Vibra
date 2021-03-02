@@ -19,3 +19,8 @@ fun durationToPaddedMinutes(seconds: Int): String {
         "0$m"
     }
 }
+
+
+/**
+ * Add converter for date string and duration string
+ */
