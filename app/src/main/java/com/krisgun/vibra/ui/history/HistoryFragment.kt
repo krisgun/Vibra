@@ -40,8 +40,8 @@ class HistoryFragment : Fragment(), RecyclerViewClickListener {
                         it.adapter = HistoryAdapter(measurements, this)
                         it.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
                     }
-                })
-
+                }
+        )
     }
 
     override fun onRecyclerViewItemClick(view: View, measurement: Measurement) {

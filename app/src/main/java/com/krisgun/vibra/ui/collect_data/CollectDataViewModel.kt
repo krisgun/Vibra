@@ -15,6 +15,7 @@ import java.io.FileWriter
 import java.io.IOException
 import java.util.*
 import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 private const val TAG = "CollectDataViewModel"
 
@@ -35,6 +36,8 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     //Timer
     private lateinit var countDownTimer: CountDownTimer
     private var timerDuration = 0L
+    private var isTimerFinished = false
+    private var actualDuration = 0
 
     //Progressbar
     var maxProgress = 100
@@ -88,10 +91,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     fun stopCollectingData() {
         unregisterSensor()
         endTime = System.currentTimeMillis()
+        val duration = (endTime - startTime).also {
+            actualDuration = ( it / 1000.0 ).roundToInt()}
+
         //Unregister listener and close filewriter
         try {
             fileWriter.close()
-            val duration = (endTime - startTime)
             Log.d(TAG, "Closed FileWriter. Wrote $countLines lines in $duration ms.")
         } catch (e: IOException) {
             e.printStackTrace()
@@ -108,6 +113,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             override fun onFinish() {
                 _durationData.postValue(0)
                 _progressData.postValue(maxProgress)
+                isTimerFinished = true
                 Log.d(TAG, "Timer finished.")
                 stopCollectingData()
             }
@@ -177,5 +183,9 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     fun onStop() {
         countDownTimer.cancel()
         stopCollectingData()
+        if (!isTimerFinished) {
+            measurement.duration_seconds = actualDuration
+            measurementRepository.updateMeasurement(measurement)
+        }
     }
 }

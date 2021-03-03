@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="com.krisgun.vibra.util.Converter" />
         <variable
             name="measurement"
             type="com.krisgun.vibra.data.Measurement" />
@@ -70,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:layout_marginTop="6dp"
-            android:text="@{Integer.toString(measurement.duration_seconds)}"
+            android:text="@{Converter.durationToString(measurement.duration_seconds)}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/material_on_surface_emphasis_medium"
             app:layout_constraintStart_toEndOf="@+id/imageView2"

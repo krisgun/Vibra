@@ -21,5 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize"
+        android:paddingBottom="?attr/actionBarSize"
         tools:listitem="@layout/list_item_history" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

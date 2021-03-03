@@ -4,6 +4,7 @@ import android.text.Editable
 import android.view.View
 import android.widget.EditText
 import androidx.databinding.Bindable
+import androidx.databinding.ObservableBoolean
 import androidx.navigation.NavController
 import com.krisgun.vibra.BR
 import com.krisgun.vibra.R
@@ -20,6 +21,13 @@ class MeasureViewModel : ObservableViewModel() {
 
     private lateinit var navController: NavController
     private val measurementRepository = MeasurementRepository.get()
+    var isButtonDisabled = ObservableBoolean()
+    private var isSecondsZero = false
+    private var isMinutesZero = false
+
+    init {
+        isButtonDisabled.set(true)
+    }
 
     @get:Bindable
     var durationMinutes: String = INITIAL_MINUTES
@@ -41,8 +49,6 @@ class MeasureViewModel : ObservableViewModel() {
             field = value
             notifyPropertyChanged(BR.countdownSeconds)
         }
-
-
 
     fun setNavController(navController: NavController) {
         this.navController = navController
@@ -69,12 +75,18 @@ class MeasureViewModel : ObservableViewModel() {
      */
 
     fun afterTextChangedDurationMinutesText(text: Editable) {
+        isMinutesZero = text.toString() == "00" || text.toString() == "0"
+        isButtonDisabled.set(isMinutesZero && isSecondsZero)
+
         afterTextChangedSetTimeText(text)?.let {
             durationMinutes = it
         }
     }
 
     fun afterTextChangedDurationSecondsText(text: Editable) {
+        isSecondsZero = text.toString() == "00" || text.toString() == "0"
+        isButtonDisabled.set(isMinutesZero && isSecondsZero)
+
         afterTextChangedSetTimeText(text)?.let {
             durationSeconds = it
         }
@@ -107,7 +119,6 @@ class MeasureViewModel : ObservableViewModel() {
                 1 -> editText.setText(singleDigitString)
             }
         }
-        if(hasFocus) view.isCursorVisible = false
     }
 
 }

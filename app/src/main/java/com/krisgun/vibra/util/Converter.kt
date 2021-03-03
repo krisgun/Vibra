@@ -24,3 +24,16 @@ fun durationToPaddedMinutes(seconds: Int): String {
 /**
  * Add converter for date string and duration string
  */
+
+fun durationToString(duration: Int ): String {
+    val seconds: String = (duration % 60).toString()
+    val minutes: String = (duration / 60).toString()
+
+    return when {
+        (duration in 2..59) -> "$seconds seconds"
+        (duration < 60) -> "$seconds second"
+        (duration % 60 == 0 && duration > 60) -> "$minutes minutes"
+        (duration % 60 == 0) -> "$minutes minute"
+        else -> "$minutes min $seconds sec"
+    }
+}
