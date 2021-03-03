@@ -18,15 +18,17 @@ class DetailsViewModel : ViewModel() {
             measurementRepository.getMeasurement(id)
         }
 
-    lateinit var rawData: Array<FloatArray>
-
+    private val _rawDataLiveData = MutableLiveData<Array<FloatArray>>()
+    val rawDataLiveData: LiveData<Array<FloatArray>>
+        get() = _rawDataLiveData
 
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
     }
 
     fun setMeasurement(measurement: Measurement) {
-        rawData = measurementRepository.getRawData2DArray(measurement)
+        val rawData = measurementRepository.getRawData2DArray(measurement)
+        _rawDataLiveData.value = rawData
     }
 
 }

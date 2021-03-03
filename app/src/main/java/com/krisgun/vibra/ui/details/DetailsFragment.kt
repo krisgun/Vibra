@@ -42,6 +42,7 @@ class DetailsFragment : Fragment() {
             Observer { measurement ->
                 measurement?.let {
                     viewModel.setMeasurement(measurement)
+                    //viewModel.measurementLiveData.removeObservers(viewLifecycleOwner)
                 }
             }
         )

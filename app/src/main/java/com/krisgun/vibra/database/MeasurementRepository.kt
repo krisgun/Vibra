@@ -17,7 +17,8 @@ class MeasurementRepository private constructor(context: Context){
     private val database: MeasurementDatabase = Room.databaseBuilder(
         context.applicationContext,
         MeasurementDatabase::class.java,
-        DATABASE_NAME).build()
+        DATABASE_NAME)
+            .build()
 
     private val measurementDao = database.measurementDao()
     private val executor = Executors.newSingleThreadExecutor()
@@ -47,6 +48,7 @@ class MeasurementRepository private constructor(context: Context){
 
     fun getRawDataFile(measurement: Measurement): File = File(filesDir, measurement.rawDataFileName)
 
+    //Simple test gave 4ms on 30k lines
     fun getRawData2DArray(measurement: Measurement): Array<FloatArray> {
         val file: File = getRawDataFile(measurement)
 
@@ -54,18 +56,17 @@ class MeasurementRepository private constructor(context: Context){
         val yMutableList: MutableList<Float> = mutableListOf()
         val zMutableList: MutableList<Float> = mutableListOf()
 
-        executor.execute {
-            file.forEachLine { eachLine ->
-                if (!eachLine.contains("Timestamp")) { //Check if title row
+        file.forEachLine { eachLine ->
+            if (!eachLine.contains("Timestamp")) { //Check if title row
 
-                    eachLine.split(",").also { splitList ->
-                        xMutableList.add(splitList[1].toFloat())
-                        yMutableList.add(splitList[2].toFloat())
-                        zMutableList.add(splitList[3].toFloat())
-                    }
+                eachLine.split(",").also { splitList ->
+                    xMutableList.add(splitList[1].toFloat())
+                    yMutableList.add(splitList[2].toFloat())
+                    zMutableList.add(splitList[3].toFloat())
                 }
             }
         }
+
 
         val xFloatArray: FloatArray = xMutableList.toFloatArray()
         val yFloatArray: FloatArray = yMutableList.toFloatArray()

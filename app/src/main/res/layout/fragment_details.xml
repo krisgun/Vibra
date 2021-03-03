@@ -126,7 +126,8 @@
                         android:layout_marginTop="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView3"
+                        android:setLineChartData="@{detailsVM.rawDataLiveData}"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -64,8 +64,8 @@ class CollectDataFragment : Fragment() {
                 { measurement ->
                     measurement?.let {
                         viewModel.setMeasurement(measurement)
-                        viewModel.startCollectingData()
                         viewModel.measurementLiveData.removeObservers(viewLifecycleOwner)
+                        viewModel.startCollectingData()
                     }
                 }
         )
