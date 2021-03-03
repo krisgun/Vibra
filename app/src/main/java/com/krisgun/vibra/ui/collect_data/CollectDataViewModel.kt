@@ -80,8 +80,8 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        startTime = System.currentTimeMillis()
 
+        startTime = System.currentTimeMillis()
         registerSensor()
         //Start timer
         startTimer(timerDuration)
@@ -92,7 +92,10 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         unregisterSensor()
         endTime = System.currentTimeMillis()
         val duration = (endTime - startTime).also {
-            actualDuration = ( it / 1000.0 ).roundToInt()}
+            if (actualDuration == 0) {
+                actualDuration = (it / 1000.0).roundToInt()
+            }
+        }
 
         //Unregister listener and close filewriter
         try {
