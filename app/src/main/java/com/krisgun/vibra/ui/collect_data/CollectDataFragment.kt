@@ -17,7 +17,7 @@ class CollectDataFragment : Fragment() {
     private lateinit var binding: FragmentCollectDataBinding
     private lateinit var viewModel: CollectDataViewModel
 
-    val args: CollectDataFragmentArgs by navArgs()
+    private val args: CollectDataFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

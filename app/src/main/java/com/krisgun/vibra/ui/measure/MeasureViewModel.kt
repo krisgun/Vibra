@@ -75,8 +75,11 @@ class MeasureViewModel : ObservableViewModel() {
      */
 
     fun afterTextChangedDurationMinutesText(text: Editable) {
-        isMinutesZero = text.toString() == "00" || text.toString() == "0"
+        val textString = text.toString()
+        isMinutesZero = textString == "00" || textString == "0" || textString == ""
         isButtonDisabled.set(isMinutesZero && isSecondsZero)
+
+        if (textString == "") isButtonDisabled.set(true)
 
         afterTextChangedSetTimeText(text)?.let {
             durationMinutes = it
@@ -84,8 +87,11 @@ class MeasureViewModel : ObservableViewModel() {
     }
 
     fun afterTextChangedDurationSecondsText(text: Editable) {
-        isSecondsZero = text.toString() == "00" || text.toString() == "0"
+        val textString = text.toString()
+        isSecondsZero = textString == "00" || textString == "0"
         isButtonDisabled.set(isMinutesZero && isSecondsZero)
+
+        if (textString == "") isButtonDisabled.set(true)
 
         afterTextChangedSetTimeText(text)?.let {
             durationSeconds = it

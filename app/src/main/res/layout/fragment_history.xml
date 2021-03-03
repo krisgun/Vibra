@@ -20,7 +20,8 @@
         android:id="@+id/recycler_view_measurements"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize"
-        android:paddingBottom="?attr/actionBarSize"
-        tools:listitem="@layout/list_item_history" />
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        tools:listitem="@layout/list_item_history"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

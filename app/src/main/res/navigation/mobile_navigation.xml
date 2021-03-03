@@ -31,11 +31,24 @@
         android:id="@+id/navigation_history"
         android:name="com.krisgun.vibra.ui.history.HistoryFragment"
         android:label="@string/title_history"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_navigation_history_to_navigation_details"
+            app:destination="@id/navigation_details" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_liveview"
         android:name="com.krisgun.vibra.ui.liveview.LiveViewFragment"
         android:label="@string/title_liveview"
         tools:layout="@layout/fragment_liveview" />
+
+    <fragment
+        android:id="@+id/navigation_details"
+        android:name="com.krisgun.vibra.ui.details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="measurement_id"
+            app:argType="java.util.UUID" />
+    </fragment>
 </navigation>

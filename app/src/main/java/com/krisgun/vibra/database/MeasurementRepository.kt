@@ -1,8 +1,8 @@
 package com.krisgun.vibra.database
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import androidx.room.Room
 import com.krisgun.vibra.data.Measurement
 import java.io.File
@@ -10,6 +10,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "measurement-database"
+private const val TAG = "MeasurementRepository"
 
 class MeasurementRepository private constructor(context: Context){
 
@@ -45,6 +46,33 @@ class MeasurementRepository private constructor(context: Context){
     }
 
     fun getRawDataFile(measurement: Measurement): File = File(filesDir, measurement.rawDataFileName)
+
+    fun getRawData2DArray(measurement: Measurement): Array<FloatArray> {
+        val file: File = getRawDataFile(measurement)
+
+        val xMutableList: MutableList<Float> = mutableListOf()
+        val yMutableList: MutableList<Float> = mutableListOf()
+        val zMutableList: MutableList<Float> = mutableListOf()
+
+        executor.execute {
+            file.forEachLine { eachLine ->
+                if (!eachLine.contains("Timestamp")) { //Check if title row
+
+                    eachLine.split(",").also { splitList ->
+                        xMutableList.add(splitList[1].toFloat())
+                        yMutableList.add(splitList[2].toFloat())
+                        zMutableList.add(splitList[3].toFloat())
+                    }
+                }
+            }
+        }
+
+        val xFloatArray: FloatArray = xMutableList.toFloatArray()
+        val yFloatArray: FloatArray = yMutableList.toFloatArray()
+        val zFloatArray: FloatArray = zMutableList.toFloatArray()
+
+        return arrayOf(xFloatArray, yFloatArray, zFloatArray)
+    }
 
     /**
      * TODO:  ADD MORE DATABASE FUNCTIONS

@@ -3,6 +3,7 @@ package com.krisgun.vibra.ui.history
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
@@ -28,13 +29,14 @@ class HistoryAdapter(
         )
 
     override fun onBindViewHolder(holder: MeasurementsViewHolder, position: Int) {
-        holder.listItemHistoryBinding.measurement = measurements[position]
+        val measurement = measurements[position]
+        holder.listItemHistoryBinding.measurement = measurement
         holder.listItemHistoryBinding.constraintLayout.setOnClickListener {
-            listener.onRecyclerViewItemClick(holder.listItemHistoryBinding.constraintLayout, measurements[position])
+            listener.onRecyclerViewItemClick(holder.listItemHistoryBinding.constraintLayout, measurement)
         }
 
         holder.listItemHistoryBinding.listItemMore.setOnClickListener {
-            listener.onRecyclerViewItemClick(holder.listItemHistoryBinding.listItemMore, measurements[position])
+            listener.onRecyclerViewItemClick(holder.listItemHistoryBinding.listItemMore, measurement)
         }
     }
 
