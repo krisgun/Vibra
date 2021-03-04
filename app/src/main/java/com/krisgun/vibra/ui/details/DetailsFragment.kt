@@ -16,8 +16,6 @@ import androidx.navigation.ui.NavigationUI
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentDetailsBinding
 
-private const val NAVIGATE_FROM_COLLECT_DATA = "NAVIGATE_FROM_COLLECT_DATA"
-
 class DetailsFragment : Fragment() {
 
     private lateinit var viewModel: DetailsViewModel
@@ -29,7 +27,7 @@ class DetailsFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val navController = findNavController()
-                if (navController.previousBackStackEntry?.savedStateHandle?.get<Boolean>(NAVIGATE_FROM_COLLECT_DATA) == true) {
+                if (navController.previousBackStackEntry?.destination?.id  == R.id.navigation_collect_data) {
                     navController.popBackStack(R.id.navigation_measure, false)
                 } else
                     navController.popBackStack()

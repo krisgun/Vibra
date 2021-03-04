@@ -19,7 +19,6 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 private const val TAG = "CollectDataViewModel"
-private const val NAVIGATE_FROM_COLLECT_DATA = "NAVIGATE_FROM_COLLECT_DATA"
 
 class CollectDataViewModel(application: Application) : AndroidViewModel(application),
         SensorEventListener {
@@ -126,7 +125,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 //Navigate to detail view
                 val action = CollectDataFragmentDirections
                         .actionNavigationCollectDataToNavigationDetails(measurement.id)
-                navController.currentBackStackEntry?.savedStateHandle?.set(NAVIGATE_FROM_COLLECT_DATA, true)
                 navController.navigate(action)
             }
 
