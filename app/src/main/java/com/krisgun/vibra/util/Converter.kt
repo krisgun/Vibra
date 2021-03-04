@@ -1,6 +1,8 @@
 @file:JvmName("Converter")
 package com.krisgun.vibra.util
 
+import com.github.mikephil.charting.data.Entry
+
 
 fun durationToPaddedSeconds(seconds: Int): String {
     val s: Int  = seconds % 60

@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentCollectDataBinding
 
@@ -19,10 +22,20 @@ class CollectDataFragment : Fragment() {
 
     private val args: CollectDataFragmentArgs by navArgs()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.nav_view)
+        if (bottomNavBar != null) {
+            bottomNavBar.visibility = View.GONE
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.onStop()
+            }
+        })
     }
 
     override fun onCreateView(
@@ -48,16 +61,24 @@ class CollectDataFragment : Fragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 
     override fun onPause() {
         super.onPause()
         viewModel.onStop()
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.nav_view)
+        if (bottomNavBar != null) {
+            bottomNavBar.visibility = View.VISIBLE
+        }
+    }
+
     private fun passMeasurementToViewModel() {
+        viewModel.setNavController(findNavController())
+
         val id = args.measurementId
         viewModel.setMeasurementId(id)
         viewModel.measurementLiveData.observe(viewLifecycleOwner,

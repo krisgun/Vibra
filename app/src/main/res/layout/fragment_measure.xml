@@ -28,8 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/title_measure"
             app:menu="@menu/top_app_bar_measure"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            />
+            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"

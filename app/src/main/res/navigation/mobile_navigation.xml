@@ -25,6 +25,12 @@
         <argument
             android:name="measurement_id"
             app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/action_navigation_collect_data_to_stopMeasurementDialog"
+            app:destination="@id/stopMeasurementDialog" />
+        <action
+            android:id="@+id/action_navigation_collect_data_to_navigation_details"
+            app:destination="@id/navigation_details" />
     </fragment>
 
     <fragment
@@ -50,5 +56,22 @@
         <argument
             android:name="measurement_id"
             app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/action_navigation_details_to_navigation_history"
+            app:destination="@id/navigation_history" />
     </fragment>
+    <dialog
+        android:id="@+id/stopMeasurementDialog"
+        android:name="com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialog"
+        android:label="StopMeasurementDialog" >
+        <argument
+            android:name="measurement_id"
+            app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/action_stopMeasurementDialog_to_navigation_details"
+            app:destination="@id/navigation_details" />
+        <action
+            android:id="@+id/action_stopMeasurementDialog_to_navigation_measure"
+            app:destination="@id/navigation_measure" />
+    </dialog>
 </navigation>

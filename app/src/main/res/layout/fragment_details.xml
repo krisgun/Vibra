@@ -33,7 +33,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/detail_basic_info_cl"
@@ -102,10 +102,10 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/raw_data_graph_cl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="386dp"
+                    android:layout_marginTop="52dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detail_basic_info_cl">
 
@@ -113,6 +113,7 @@
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:text="@string/raw_data_graph"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -121,13 +122,15 @@
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/raw_data_line_chart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="44dp"
+                        android:layout_marginEnd="4dp"
+                        android:setLineChartData="@{detailsVM.rawDataLiveData}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3"
-                        android:setLineChartData="@{detailsVM.rawDataLiveData}"/>
+                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

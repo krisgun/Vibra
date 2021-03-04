@@ -52,6 +52,7 @@ class MeasurementRepository private constructor(context: Context){
     fun getRawData2DArray(measurement: Measurement): Array<FloatArray> {
         val file: File = getRawDataFile(measurement)
 
+        val timeMutableList: MutableList<Float> = mutableListOf()
         val xMutableList: MutableList<Float> = mutableListOf()
         val yMutableList: MutableList<Float> = mutableListOf()
         val zMutableList: MutableList<Float> = mutableListOf()
@@ -60,6 +61,7 @@ class MeasurementRepository private constructor(context: Context){
             if (!eachLine.contains("Timestamp")) { //Check if title row
 
                 eachLine.split(",").also { splitList ->
+                    timeMutableList.add(splitList[0].toFloat())
                     xMutableList.add(splitList[1].toFloat())
                     yMutableList.add(splitList[2].toFloat())
                     zMutableList.add(splitList[3].toFloat())
@@ -67,12 +69,12 @@ class MeasurementRepository private constructor(context: Context){
             }
         }
 
-
+        val timeFloatArray: FloatArray = timeMutableList.toFloatArray()
         val xFloatArray: FloatArray = xMutableList.toFloatArray()
         val yFloatArray: FloatArray = yMutableList.toFloatArray()
         val zFloatArray: FloatArray = zMutableList.toFloatArray()
 
-        return arrayOf(xFloatArray, yFloatArray, zFloatArray)
+        return arrayOf(timeFloatArray, xFloatArray, yFloatArray, zFloatArray)
     }
 
     /**

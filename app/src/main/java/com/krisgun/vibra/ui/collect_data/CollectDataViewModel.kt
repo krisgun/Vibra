@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.navigation.NavController
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import java.io.File
@@ -18,6 +19,7 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 private const val TAG = "CollectDataViewModel"
+private const val NAVIGATE_FROM_COLLECT_DATA = "NAVIGATE_FROM_COLLECT_DATA"
 
 class CollectDataViewModel(application: Application) : AndroidViewModel(application),
         SensorEventListener {
@@ -32,6 +34,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
     //Fetched measurement object from DB
     private lateinit var measurement: Measurement
+    private lateinit var navController: NavController
 
     //Timer
     private lateinit var countDownTimer: CountDownTimer
@@ -119,6 +122,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 isTimerFinished = true
                 Log.d(TAG, "Timer finished.")
                 stopCollectingData()
+
+                //Navigate to detail view
+                val action = CollectDataFragmentDirections
+                        .actionNavigationCollectDataToNavigationDetails(measurement.id)
+                navController.currentBackStackEntry?.savedStateHandle?.set(NAVIGATE_FROM_COLLECT_DATA, true)
+                navController.navigate(action)
             }
 
             override fun onTick(millisUntilFinished: Long) {
@@ -180,6 +189,10 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         file = measurementRepository.getRawDataFile(measurement)
     }
 
+    fun setNavController(navController: NavController) {
+        this.navController = navController
+    }
+
     /**
      * Button handling
      */
@@ -189,6 +202,10 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         if (!isTimerFinished) {
             measurement.duration_seconds = actualDuration
             measurementRepository.updateMeasurement(measurement)
+
+            val action = CollectDataFragmentDirections
+                    .actionNavigationCollectDataToStopMeasurementDialog(measurement.id)
+            navController.navigate(action)
         }
     }
 }
