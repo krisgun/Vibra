@@ -18,7 +18,7 @@ import java.util.*
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-private const val TAG = "CollectDataViewModel"
+private const val TAG = "CollectData"
 
 class CollectDataViewModel(application: Application) : AndroidViewModel(application),
         SensorEventListener {
@@ -69,6 +69,9 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         _progressData.value = 0
     }
 
+    /**
+     * Data Collection handling
+     */
     fun startCollectingData() {
 
         //Open file writer and register sensor
@@ -205,5 +208,13 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                     .actionNavigationCollectDataToStopMeasurementDialog(measurement.id)
             navController.navigate(action)
         }
+    }
+
+    /**
+     * Lifecycle
+     */
+    fun stopCollectingAndCancelTimer() {
+        stopCollectingData()
+        countDownTimer.cancel()
     }
 }

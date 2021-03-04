@@ -2,6 +2,7 @@ package com.krisgun.vibra.ui.collect_data
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentCollectDataBinding
+
+private const val TAG = "CollectData"
 
 class CollectDataFragment : Fragment() {
 
@@ -64,7 +67,8 @@ class CollectDataFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.onStop()
+        Log.d(TAG, "Pause Fragment")
+        viewModel.stopCollectingAndCancelTimer()
     }
 
     override fun onStop() {

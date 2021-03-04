@@ -42,6 +42,8 @@ class MeasurementRepository private constructor(context: Context){
 
     fun deleteMeasurement(measurement: Measurement) {
         executor.execute {
+            val rawFile = getRawDataFile(measurement)
+            rawFile.delete()
             measurementDao.deleteMeasurement(measurement)
         }
     }
