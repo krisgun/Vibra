@@ -7,20 +7,10 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBarHistory"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/title_history"
-        app:menu="@menu/top_app_bar_history"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_measurements"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="?attr/actionBarSize"
         tools:listitem="@layout/list_item_history"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

@@ -1,10 +1,9 @@
 package com.krisgun.vibra.ui.history
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,6 +18,11 @@ import kotlinx.android.synthetic.main.fragment_history.*
 class HistoryFragment : Fragment(), RecyclerViewClickListener {
 
     private lateinit var viewModel: HistoryViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -52,10 +56,15 @@ class HistoryFragment : Fragment(), RecyclerViewClickListener {
             }
 
             R.id.constraint_layout -> {
+                (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
                 val action = HistoryFragmentDirections
                     .actionNavigationHistoryToNavigationDetails(measurement.id)
                 Navigation.findNavController(view).navigate(action)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_app_bar_history, menu)
     }
 }

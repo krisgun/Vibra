@@ -35,8 +35,7 @@
 
     <fragment
         android:id="@+id/navigation_details"
-        android:name="com.krisgun.vibra.ui.details.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:name="com.krisgun.vibra.ui.details.DetailsFragment">
         <argument
             android:name="measurement_id"
             app:argType="java.util.UUID" />

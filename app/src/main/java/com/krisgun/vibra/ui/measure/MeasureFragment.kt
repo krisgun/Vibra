@@ -1,17 +1,25 @@
 package com.krisgun.vibra.ui.measure
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentMeasureBinding
 
 class MeasureFragment : Fragment() {
 
     private lateinit var measureViewModel: MeasureViewModel
+    private lateinit var navController: NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -20,6 +28,7 @@ class MeasureFragment : Fragment() {
     ): View? {
         measureViewModel =
                 ViewModelProvider(this).get(MeasureViewModel::class.java)
+        navController = findNavController()
 
         val binding = FragmentMeasureBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -31,7 +40,10 @@ class MeasureFragment : Fragment() {
     }
 
     private fun setUpNavigation() {
-        val navController = findNavController()
         measureViewModel.setNavController(navController)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_app_bar_measure, menu)
     }
 }

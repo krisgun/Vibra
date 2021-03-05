@@ -1,22 +1,20 @@
 package com.krisgun.vibra.ui.collect_data
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentCollectDataBinding
-import java.util.*
 
 private const val TAG = "CollectData"
 
@@ -31,7 +29,9 @@ class CollectDataFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.nav_view)
+        val activity = activity as AppCompatActivity
+        activity.supportActionBar?.hide()
+        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.bottom_navigation)
         if (bottomNavBar != null) {
             bottomNavBar.visibility = View.GONE
         }
@@ -75,7 +75,10 @@ class CollectDataFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.nav_view)
+
+        val activity = activity as AppCompatActivity
+        activity.supportActionBar?.show()
+        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.bottom_navigation)
         if (bottomNavBar != null) {
             bottomNavBar.visibility = View.VISIBLE
         }

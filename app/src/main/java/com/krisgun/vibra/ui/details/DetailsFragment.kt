@@ -1,10 +1,7 @@
 package com.krisgun.vibra.ui.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -23,6 +20,10 @@ class DetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        setHasOptionsMenu(true)
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -53,6 +54,15 @@ class DetailsFragment : Fragment() {
         }
         passMeasurementIdToViewModel()
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_app_bar_detailed_view, menu)
     }
 
 
