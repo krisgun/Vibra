@@ -6,6 +6,7 @@ import android.hardware.*
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Process
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.navigation.NavController
@@ -171,7 +172,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private fun registerSensor() {
-        mSensorThread = HandlerThread("Sensor Thread", Thread.MAX_PRIORITY)
+        mSensorThread = HandlerThread("Sensor Thread", Process.THREAD_PRIORITY_MORE_FAVORABLE)
         mSensorThread.start()
         mSensorHandler = Handler(mSensorThread.looper)
 
