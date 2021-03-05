@@ -66,7 +66,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     val progressData: LiveData<Int>
         get() = _progressData
 
+    private val _sensorData = MutableLiveData<String>()
+    val sensorData: LiveData<String>
+        get() = _sensorData
+
     init {
+        _sensorData.value = "No sensor data available."
         _progressData.value = 0
     }
 
@@ -154,6 +159,11 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
+
+            if(countLines % 25 == 0) {
+                _sensorData.postValue("x: ${event.values[0]}\n y: ${event.values[1]}\n z: ${event.values[2]}")
+            }
+
             //Write sensor data to file
             fileWriter.write(String.format("%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
             countLines++
@@ -166,6 +176,9 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         mSensorHandler = Handler(mSensorThread.looper)
 
         sensorManager.let { sm ->
+
+            Log.d(TAG, "Accelerometer list: ${sm.getSensorList(Sensor.TYPE_ACCELEROMETER)}")
+
             sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER).let {
                 sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME, mSensorHandler) //ca 50 per sekund med GAME
             }

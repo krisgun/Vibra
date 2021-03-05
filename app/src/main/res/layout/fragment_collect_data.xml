@@ -76,6 +76,16 @@
             android:max="@{collectDataVM.maxProgress}"
             android:progress="@{collectDataVM.progressData}" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{collectDataVM.sensorData}"
+            tools:text="Sensor data"
+            app:layout_constraintBottom_toTopOf="@+id/materialButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/materialButton"
             android:layout_width="120dp"
