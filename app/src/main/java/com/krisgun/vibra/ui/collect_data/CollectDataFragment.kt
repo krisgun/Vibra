@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentCollectDataBinding
@@ -22,7 +23,7 @@ private const val TAG = "CollectData"
 class CollectDataFragment : Fragment() {
 
     private lateinit var binding: FragmentCollectDataBinding
-    private val viewModel: CollectDataViewModel by activityViewModels()
+    private val viewModel: CollectDataViewModel by navGraphViewModels(R.id.navigation_collect_and_dialog)
 
     private val args: CollectDataFragmentArgs by navArgs()
 
@@ -78,7 +79,6 @@ class CollectDataFragment : Fragment() {
         if (bottomNavBar != null) {
             bottomNavBar.visibility = View.VISIBLE
         }
-        activity?.viewModelStore?.clear()
     }
 
     private fun passMeasurementToViewModel() {

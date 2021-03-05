@@ -14,6 +14,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
+import com.krisgun.vibra.R
 
 import com.krisgun.vibra.databinding.DialogStopMeasurementBinding
 import com.krisgun.vibra.ui.collect_data.CollectDataViewModel
@@ -23,7 +25,7 @@ private const val TAG = "CollectData"
 class StopMeasurementDialog : DialogFragment() {
 
     private lateinit var binding: DialogStopMeasurementBinding
-    private val collectDataViewModel: CollectDataViewModel by activityViewModels()
+    private val collectDataViewModel: CollectDataViewModel by navGraphViewModels(R.id.navigation_collect_and_dialog)
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +55,6 @@ class StopMeasurementDialog : DialogFragment() {
         val detailAction =
             StopMeasurementDialogDirections
                     .actionStopMeasurementDialogToNavigationDetails(collectDataViewModel.onSave())
-        activity?.viewModelStore?.clear()
         navController.navigate(detailAction)
     }
 
@@ -61,7 +62,6 @@ class StopMeasurementDialog : DialogFragment() {
         collectDataViewModel.onDiscard()
         val measureAction = StopMeasurementDialogDirections
                 .actionStopMeasurementDialogToNavigationMeasure()
-        activity?.viewModelStore?.clear()
         navController.navigate(measureAction)
     }
 

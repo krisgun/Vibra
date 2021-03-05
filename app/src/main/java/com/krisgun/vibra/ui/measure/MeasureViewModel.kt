@@ -63,8 +63,7 @@ class MeasureViewModel : ObservableViewModel() {
         measurementRepository.addMeasurement(measurement)
 
         //Prepare navigation action
-        val action = MeasureFragmentDirections.
-            actionNavigationMeasureToNavigationCollectData(measurement.id)
+        val action = MeasureFragmentDirections.actionNavigationMeasureToNavigationCollect(measurement.id)
 
         //Navigate to collect data view
         navController.navigate(action)
