@@ -11,6 +11,7 @@ import androidx.lifecycle.*
 import androidx.navigation.NavController
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
+import com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialogDirections
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -206,8 +207,22 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             measurementRepository.updateMeasurement(measurement)
 
             val action = CollectDataFragmentDirections
-                    .actionNavigationCollectDataToStopMeasurementDialog(measurement.id)
+                    .actionNavigationCollectDataToStopMeasurementDialog()
             navController.navigate(action)
         }
+    }
+
+    /**
+     * Dialog handling
+     */
+
+    fun onDiscard() {
+        Log.d(TAG, "Discard pressed.")
+        measurementLiveData.value?.let { measurementRepository.deleteMeasurement(it) }
+    }
+
+    fun onSave(): UUID {
+        Log.d(TAG, "Save pressed.")
+        return measurement.id
     }
 }

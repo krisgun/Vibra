@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,7 +22,7 @@ private const val TAG = "CollectData"
 class CollectDataFragment : Fragment() {
 
     private lateinit var binding: FragmentCollectDataBinding
-    private lateinit var viewModel: CollectDataViewModel
+    private val viewModel: CollectDataViewModel by activityViewModels()
 
     private val args: CollectDataFragmentArgs by navArgs()
 
@@ -54,8 +55,6 @@ class CollectDataFragment : Fragment() {
                 false
         )
 
-        viewModel = ViewModelProvider(this).get(CollectDataViewModel::class.java)
-
         binding.apply {
             collectDataVM = viewModel
             lifecycleOwner = viewLifecycleOwner
@@ -79,6 +78,7 @@ class CollectDataFragment : Fragment() {
         if (bottomNavBar != null) {
             bottomNavBar.visibility = View.VISIBLE
         }
+        activity?.viewModelStore?.clear()
     }
 
     private fun passMeasurementToViewModel() {

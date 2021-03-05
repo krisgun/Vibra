@@ -64,9 +64,6 @@
         android:id="@+id/stopMeasurementDialog"
         android:name="com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialog"
         android:label="StopMeasurementDialog" >
-        <argument
-            android:name="measurement_id"
-            app:argType="java.util.UUID" />
         <action
             android:id="@+id/action_stopMeasurementDialog_to_navigation_details"
             app:destination="@id/navigation_details" />

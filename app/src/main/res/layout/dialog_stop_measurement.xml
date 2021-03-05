@@ -5,8 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="dialogVM"
-            type="com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementViewModel" />
+            name="viewModel"
+            type="com.krisgun.vibra.ui.collect_data.CollectDataViewModel" />
+
+        <variable
+            name="dialogFragment"
+            type="com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +68,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView5"
                     tools:text="@string/save"
                     android:text="@string/save"
-                    android:onClick="@{() -> dialogVM.onSave()}"
+                    android:onClick="@{() -> dialogFragment.onSaveButton()}"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog" />
 
                 <com.google.android.material.button.MaterialButton
@@ -78,11 +82,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView5"
                     tools:text="@string/discard"
                     android:text="@string/discard"
-                    android:onClick="@{() -> dialogVM.onDiscard()}"
+                    android:onClick="@{() -> dialogFragment.onDiscardButton()}"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </com.google.android.material.card.MaterialCardView>
 
