@@ -24,7 +24,9 @@
         tools:layout="@layout/fragment_history" >
         <action
             android:id="@+id/action_navigation_history_to_navigation_details"
-            app:destination="@id/navigation_details" />
+            app:destination="@id/navigation_details"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit" />
     </fragment>
 
     <fragment
@@ -61,7 +63,8 @@
                 app:destination="@id/stopMeasurementDialog" />
             <action
                 android:id="@+id/action_navigation_collect_data_to_navigation_details"
-                app:destination="@id/navigation_details" />
+                app:destination="@id/navigation_details"
+                app:enterAnim="@anim/slide_in_right" />
         </fragment>
         <dialog
             android:id="@+id/stopMeasurementDialog"
