@@ -21,7 +21,8 @@
     <string name="minutes_abbreviation">m</string>
     <string name="seconds_abbreviation">s</string>
     <string name="empty_timer_input">00</string>
-    <string name="dialog_save_or_discard">Discard or save the measurement? Pressing Back will discard.</string>
+    <string name="dialog_save_or_discard">Discard or save measurement?</string>
+    <string name="back_press_will_discard">Pressing Back will discard.</string>
     <string name="save">Save</string>
     <string name="discard">Discard</string>
     <string name="resume">Resume</string>

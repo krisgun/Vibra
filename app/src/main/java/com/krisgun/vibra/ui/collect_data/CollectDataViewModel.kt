@@ -38,7 +38,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     //Timer
     private lateinit var countDownTimer: CountDownTimer
     private var timerDuration = 0L
-    private var isTimerFinished = false
+    var isTimerFinished = false
     private var actualDuration = 0
 
     //Progressbar
@@ -94,6 +94,8 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun stopCollectingData() {
+
+        //Unregister listener and measure time
         unregisterSensor()
         endTime = System.currentTimeMillis()
         val duration = (endTime - startTime).also {
@@ -102,7 +104,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
 
-        //Unregister listener and close filewriter
+        // Close filewriter
         try {
             fileWriter.close()
             Log.d(TAG, "Closed FileWriter. Wrote $countLines lines in $duration ms.")
@@ -110,7 +112,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             e.printStackTrace()
         }
 
-        //Update duration if measurement is stopped before timer runs out
+        countDownTimer.cancel()
     }
 
     /**
@@ -198,7 +200,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
      * Button handling
      */
     fun onStop() {
-        countDownTimer.cancel()
         stopCollectingData()
         if (!isTimerFinished) {
             measurement.duration_seconds = actualDuration
@@ -208,13 +209,5 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                     .actionNavigationCollectDataToStopMeasurementDialog(measurement.id)
             navController.navigate(action)
         }
-    }
-
-    /**
-     * Lifecycle
-     */
-    fun stopCollectingAndCancelTimer() {
-        stopCollectingData()
-        countDownTimer.cancel()
     }
 }
