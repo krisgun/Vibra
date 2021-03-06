@@ -31,12 +31,12 @@ class CollectDataFragment : Fragment() {
 
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.hide()
-        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.bottom_navigation)
+        val bottomNavBar: BottomNavigationView? = activity.findViewById(R.id.bottom_navigation)
         if (bottomNavBar != null) {
             bottomNavBar.visibility = View.GONE
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+        activity.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 viewModel.onStop()
             }
@@ -78,7 +78,7 @@ class CollectDataFragment : Fragment() {
 
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.show()
-        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.bottom_navigation)
+        val bottomNavBar: BottomNavigationView? = activity.findViewById(R.id.bottom_navigation)
         if (bottomNavBar != null) {
             bottomNavBar.visibility = View.VISIBLE
         }

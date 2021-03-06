@@ -78,4 +78,8 @@
                 app:destination="@id/navigation_measure" />
         </dialog>
     </navigation>
+    <fragment
+        android:id="@+id/measureSettingsFragment"
+        android:name="com.krisgun.vibra.ui.measure.settings.MeasureSettingsFragment"
+        android:label="MeasureSettingsFragment" />
 </navigation>
