@@ -18,7 +18,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="148dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/duration_minutes"
-                android:layout_width="wrap_content"
+                android:layout_width="68dp"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
@@ -46,7 +46,7 @@
 
             <TextView
                 android:id="@+id/duration_seconds"
-                android:layout_width="wrap_content"
+                android:layout_width="68dp"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
@@ -54,7 +54,7 @@
                 android:text="@{Converter.durationToPaddedSeconds(collectDataVM.durationData)}"
                 android:textAppearance="?attr/textAppearanceHeadline2"
                 android:textColor="?android:attr/colorPrimary"
-                tools:text="30" />
+                tools:text="30"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,12 +69,12 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:max="@{collectDataVM.maxProgress}"
-            android:progress="@{collectDataVM.progressData}"
+            android:layout_marginTop="148dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            android:max="@{collectDataVM.maxProgress}"
+            android:progress="@{collectDataVM.progressData}" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -90,13 +90,13 @@
             android:id="@+id/materialButton"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="84dp"
+            android:layout_marginBottom="96dp"
             android:background="@drawable/button_rounded"
-            android:onClick="@{() -> collectDataVM.onStop()}"
             android:text="@string/stop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="@{() -> collectDataVM.onStop()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
