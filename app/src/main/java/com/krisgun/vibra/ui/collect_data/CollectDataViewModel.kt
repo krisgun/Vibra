@@ -166,7 +166,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             }
 
             //Write sensor data to file
-            fileWriter.write(String.format("%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
+            fileWriter.write(String.format(Locale.US,"%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
             countLines++
         }
     }
