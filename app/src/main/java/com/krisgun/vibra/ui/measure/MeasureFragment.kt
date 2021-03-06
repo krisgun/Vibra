@@ -2,6 +2,7 @@ package com.krisgun.vibra.ui.measure
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -45,5 +46,15 @@ class MeasureFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_measure, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.settings -> {
+                Toast.makeText(requireContext(), "Settings clicked!", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }
