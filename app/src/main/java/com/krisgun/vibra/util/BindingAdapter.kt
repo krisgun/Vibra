@@ -3,6 +3,8 @@ package com.krisgun.vibra.util
 import android.graphics.Color
 import android.util.Log
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Description
@@ -12,10 +14,21 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.google.android.material.slider.Slider
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
 
 private const val TAG = "BindingAdapter"
+
+@InverseBindingAdapter(attribute = "android:value")
+fun getSliderValue(slider: Slider) = slider.value
+
+@BindingAdapter("android:valueAttrChanged")
+fun setSliderListeners(slider: Slider, attrChange: InverseBindingListener) {
+    slider.addOnChangeListener { _, _, _ ->
+        attrChange.onChange()
+    }
+}
 
 @BindingAdapter("android:setLineChartData")
 fun setLineChartData(view: LineChart, data: Array<FloatArray>?) {

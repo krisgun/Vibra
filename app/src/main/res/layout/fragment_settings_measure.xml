@@ -3,16 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="com.krisgun.vibra.util.Converter" />
+
+        <variable
+            name="measureSettingsVM"
+            type="com.krisgun.vibra.ui.measure.settings.MeasureSettingsViewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true" >
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -46,9 +58,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:stepSize="1.0"
-                android:value="250"
-                android:valueFrom="1.0"
-                android:valueTo="500.0"
+                android:value="@={measureSettingsVM.samplingFrequency}"
+                android:valueFrom="@{measureSettingsVM.minFrequency}"
+                android:valueTo="@{measureSettingsVM.maxFrequency}"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -59,7 +71,10 @@
                 android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
                 android:inputType="number"
-                android:text="250"
+                android:maxLength="3"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:text="@={Converter.frequencyToString(measureSettingsVM.samplingFrequency)}"
                 android:textColor="@color/material_on_surface_emphasis_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/slider"

@@ -76,10 +76,13 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     //Signal Processing
-    implementation('com.github.psambit9791:jdsp:0.5.0') {
+    implementation('com.github.psambit9791:jdsp:0.6.0') {
         exclude group: 'org.apache.maven.surefire', module: 'common-java5'
         exclude group: 'org.apache.maven.surefire', module: 'surefire-api'
     }
+
+    //Settings
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 
     //Testing
     testImplementation 'junit:junit:4.+'

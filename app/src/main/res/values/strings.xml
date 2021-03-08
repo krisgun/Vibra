@@ -29,4 +29,6 @@
     <string name="raw_data_graph">Raw Data</string>
     <string name="power_spectrum_graph">Power Spectrum</string>
     <string name="sampling_frequency">Sampling Frequency (Hz)</string>
+
+    <string name="prefs_sampling_frequency">SHARED_PREFS_SAMPLING_FREQUENCY</string>
 </resources>
