@@ -1,7 +1,6 @@
 package com.krisgun.vibra.database
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.krisgun.vibra.data.Measurement
@@ -22,7 +21,7 @@ class MeasurementRepository private constructor(context: Context){
 
     private val measurementDao = database.measurementDao()
     private val executor = Executors.newSingleThreadExecutor()
-    private val filesDir = context.applicationContext.filesDir
+    private val filesDir = context.applicationContext.getExternalFilesDir(null)?.absolutePath
 
     fun getMeasurements(): LiveData<List<Measurement>> = measurementDao.getMeasurements()
 

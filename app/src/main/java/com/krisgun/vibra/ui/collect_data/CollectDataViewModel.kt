@@ -87,7 +87,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             fileWriter = FileWriter(file, true)
             if (file.length() == 0L) {
                 Log.d(TAG, "Wrote CSV header.")
-                fileWriter.write("Timestamp,X (m/s^2),Y (m/s^2),Z (m/s^2)")
+                fileWriter.write("Timestamp,X (m/s^2),Y (m/s^2),Z (m/s^2)\n")
             }
         } catch (e: IOException) {
             e.printStackTrace()

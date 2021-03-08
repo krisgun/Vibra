@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentMeasureBinding
 
@@ -19,6 +21,7 @@ class MeasureFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navController = findNavController()
         setHasOptionsMenu(true)
     }
 
@@ -29,7 +32,6 @@ class MeasureFragment : Fragment() {
     ): View? {
         measureViewModel =
                 ViewModelProvider(this).get(MeasureViewModel::class.java)
-        navController = findNavController()
 
         val binding = FragmentMeasureBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -47,4 +49,11 @@ class MeasureFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_measure, menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController)
+                || return super.onOptionsItemSelected(item)
+    }
+
+
 }
