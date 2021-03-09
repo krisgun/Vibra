@@ -95,7 +95,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
         startTime = System.currentTimeMillis()
         registerSensor()
-        //Start timer
         startTimer(timerDuration)
 
     }
@@ -134,6 +133,10 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 Log.d(TAG, "Timer finished.")
                 stopCollectingData()
 
+                //Update measurement sampling frequency
+                measurement.sampling_frequency = countLines / actualDuration
+                measurementRepository.updateMeasurement(measurement)
+
                 //Navigate to detail view
                 val action = CollectDataFragmentDirections
                         .actionNavigationCollectDataToNavigationDetails(measurement.id)
@@ -161,7 +164,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
 
-            if(countLines % 25 == 0) {
+            if(countLines % (measurement.sampling_frequency / 2) == 0) {
                 _sensorData.postValue("x: ${event.values[0]}\n y: ${event.values[1]}\n z: ${event.values[2]}")
             }
 
@@ -178,10 +181,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
         sensorManager.let { sm ->
 
-            Log.d(TAG, "Accelerometer list: ${sm.getSensorList(Sensor.TYPE_ACCELEROMETER)}")
+            val sensorDelay = ((1F / measurement.sampling_frequency) * 1000000F).roundToInt()
+
+            Log.d(TAG, "Accelerometer list: ${sm.getSensorList(Sensor.TYPE_ACCELEROMETER)}, currDelay: $sensorDelay")
 
             sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER).let {
-                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME, mSensorHandler) //ca 50 per sekund med GAME
+                sm.registerListener(this, it, sensorDelay, mSensorHandler) //ca 50 per sekund med GAME
             }
         }
         Log.d(TAG, "Registered Sensor Listener")
@@ -218,6 +223,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         stopCollectingData()
         if (!isTimerFinished) {
             measurement.duration_seconds = actualDuration
+            measurement.sampling_frequency = countLines / actualDuration
             measurementRepository.updateMeasurement(measurement)
 
             val action = CollectDataFragmentDirections

@@ -4,6 +4,7 @@
     <SeekBarPreference
         android:key="@string/prefs_sampling_frequency"
         android:title="@string/sampling_frequency"
+        android:summary="@string/sampling_frequency_info"
         android:max="100"
         android:icon="@drawable/ic_frequency"
         android:defaultValue="50"

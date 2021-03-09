@@ -1,5 +1,6 @@
 package com.krisgun.vibra.ui.measure
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
+import androidx.preference.PreferenceManager
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentMeasureBinding
 
@@ -43,6 +45,8 @@ class MeasureFragment : Fragment() {
     }
 
     private fun setUpNavigation() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        measureViewModel.samplingFrequency = sharedPreferences.getInt(getString(R.string.prefs_sampling_frequency), 50)
         measureViewModel.setNavController(navController)
     }
 

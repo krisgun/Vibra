@@ -58,4 +58,9 @@ object Converter {
     fun frequencyToString(value: Float): String {
         return value.toInt().toString()
     }
+
+    @JvmStatic
+    fun detailsFrequencyToString(value: Int): String {
+        return "$value Hz"
+    }
 }

@@ -6,6 +6,7 @@ import android.widget.EditText
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.NavController
+import androidx.preference.PreferenceManager
 import com.krisgun.vibra.BR
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
@@ -24,6 +25,7 @@ class MeasureViewModel : ObservableViewModel() {
     var isButtonDisabled = ObservableBoolean()
     private var isSecondsZero = false
     private var isMinutesZero = false
+    var samplingFrequency: Int = 0
 
     init {
         isButtonDisabled.set(true)
@@ -57,7 +59,7 @@ class MeasureViewModel : ObservableViewModel() {
     fun onStart() {
         val measurementDuration: Int = (durationMinutes.toInt() * 60) + durationSeconds.toInt()
         //Create Measurement obj
-        val measurement = Measurement(duration_seconds = measurementDuration)
+        val measurement = Measurement(duration_seconds = measurementDuration, sampling_frequency = samplingFrequency)
 
         //Add measurement to database
         measurementRepository.addMeasurement(measurement)
