@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SeekBarPreference
+        android:key="@string/prefs_sampling_frequency"
+        android:title="@string/sampling_frequency"
+        android:max="100"
+        android:icon="@drawable/ic_frequency"
+        android:defaultValue="50"
+        app:showSeekBarValue="true"
+        app:seekBarIncrement="10"
+        app:adjustable="true"
+        app:min="10" />
 
 </PreferenceScreen>
