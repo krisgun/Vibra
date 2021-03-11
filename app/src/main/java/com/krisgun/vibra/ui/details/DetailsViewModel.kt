@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.github.psambit9791.jdsp.filter.Butterworth
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.SignalProcessing
@@ -46,10 +47,19 @@ class DetailsViewModel : ViewModel() {
     private fun getTotalAcceleration(rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Pair<Float, Float>> {
 
         val totAccResult = SignalProcessing.totalAccelerationAmplitude(rawData)
+        /**
+         * TODO: Save result to file when done and check if already such file exists.
+         */
+
+        var filterArray: DoubleArray = totAccResult.map { it.toDouble() }.toDoubleArray()
+        val lowpassFilter = Butterworth(filterArray, measurement.sampling_frequency.toDouble())
+
+        filterArray = lowpassFilter.lowPassFilter(12, 0.3)
+
         val resultTuples: MutableList<Pair<Float, Float>> = mutableListOf()
 
         for (i in totAccResult.indices) {
-            resultTuples.add(Pair(rawData[i].first, totAccResult[i]))
+            resultTuples.add(Pair(rawData[i].first, filterArray[i].toFloat()))
         }
         return resultTuples.toList()
     }

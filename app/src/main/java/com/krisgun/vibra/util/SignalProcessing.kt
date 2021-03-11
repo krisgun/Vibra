@@ -3,7 +3,6 @@ package com.krisgun.vibra.util
 import android.util.Log
 import kotlin.math.sqrt
 import kotlin.math.pow
-import com.github.psambit9791.jdsp.*
 import kotlin.math.sign
 
 private const val TAG = "SignalProcessing"
@@ -100,10 +99,6 @@ class SignalProcessing {
                 }
             }
 
-            for (i in moaArray.indices) {
-                Log.d(TAG, moaArray[i].contentToString())
-            }
-
             /**
              * Find for each time step which MOA to use
              */
@@ -111,8 +106,8 @@ class SignalProcessing {
             var indexLastMax = 1
 
             for (i in timePoints.indices) {
-                if (indexLastMax < moaArray.size) {
-                    if (timePoints[i] == moaArray[indexLastMax + 1][1]) {
+                if (indexLastMax < moaArray.size - 1) {
+                    if (timePoints[i] == moaArray[indexLastMax + 1][0]) {
                         indexLastMax++
                     }
                 }
@@ -128,7 +123,6 @@ class SignalProcessing {
                 val sign = sign(rawX[i]*moaArray[lastmax][1] + rawY[i]*moaArray[lastmax][2] + rawZ[i]*moaArray[lastmax][3])
                 oscSign.add(sign)
             }
-
             return oscSign
         }
 
