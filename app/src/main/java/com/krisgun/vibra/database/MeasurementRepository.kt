@@ -50,8 +50,7 @@ class MeasurementRepository private constructor(context: Context){
     fun getRawDataFile(measurement: Measurement): File = File(filesDir, measurement.rawDataFileName)
 
     /**
-     * Returns a Pair with timestamp, xData, yData, zData
-     * Rewrite to return triple instead of 2D array
+     * Returns a Pair with (timestamp, (xData, yData, zData))
      */
     fun getRawDataTuple(measurement: Measurement): List<Pair<Float, Triple<Float, Float, Float>>> {
         val file: File = getRawDataFile(measurement)
