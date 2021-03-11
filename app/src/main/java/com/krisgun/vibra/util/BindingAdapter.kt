@@ -31,21 +31,32 @@ fun setSliderListeners(slider: Slider, attrChange: InverseBindingListener) {
 }
 
 @BindingAdapter("android:setLineChartData")
-fun setLineChartData(view: LineChart, data: Array<FloatArray>?) {
+fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float, Float>>>?) {
     view.setNoDataText("Loading Graph Data..")
     if (data != null) {
-        val initTime = data[0][0]
 
-        val xLineDataSet = LineDataSet(rawDataToEntryList(data[1], data[0], initTime), "xAcc (m/s^2)")
+        val entryListX: MutableList<Entry> = mutableListOf()
+        val entryListY: MutableList<Entry> = mutableListOf()
+        val entryListZ: MutableList<Entry> = mutableListOf()
+
+        val initTime = data[0].first
+        data.forEachIndexed { i, _ ->
+            val dataPointTime = ((data[i].first - initTime) / 1000000000F)
+            entryListX.add(Entry(dataPointTime, data[i].second.first))
+            entryListY.add(Entry(dataPointTime, data[i].second.second))
+            entryListZ.add(Entry(dataPointTime, data[i].second.third))
+        }
+
+        val xLineDataSet = LineDataSet(entryListX, "xAcc (m/s^2)")
         xLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         xLineDataSet.setDrawCircles(false)
 
-        val yLineDataSet = LineDataSet(rawDataToEntryList(data[2], data[0], initTime), "yAcc (m/s^2)")
+        val yLineDataSet = LineDataSet(entryListY, "yAcc (m/s^2)")
         yLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         yLineDataSet.color = R.color.purple_700
         yLineDataSet.setDrawCircles(false)
 
-        val zLineDataSet = LineDataSet(rawDataToEntryList(data[3], data[0], initTime), "zAcc (m/s^2)")
+        val zLineDataSet = LineDataSet(entryListZ, "zAcc (m/s^2)")
         zLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         zLineDataSet.color = R.color.black
         zLineDataSet.setDrawCircles(false)
@@ -65,17 +76,38 @@ fun setLineChartData(view: LineChart, data: Array<FloatArray>?) {
         view.data = lineData
         view.invalidate()
     }
-
-
 }
 
-fun rawDataToEntryList(dataArray: FloatArray, timeArray: FloatArray, initTime: Float): List<Entry> {
+@BindingAdapter("android:setPCALineChartData")
+fun setPCALineChartData(view: LineChart, data: List<Pair<Float, Float>>?) {
 
-    val entryList: MutableList<Entry> = mutableListOf()
+    view.setNoDataText("Loading Graph Data..")
+    if (data != null) {
 
-    dataArray.forEachIndexed { i, dataPointValue ->
-        val dataPointTime = ((timeArray[i] - initTime) / 1000000000F)
-        entryList.add(Entry(dataPointTime, dataPointValue))
+        val initTime = data[0].first
+        val entryList: MutableList<Entry> = mutableListOf()
+
+        data.forEach {
+            val dataPointTime = ((it.first - initTime) / 1000000000F)
+            entryList.add(Entry(dataPointTime, it.second))
+        }
+
+        val lineDataSet = LineDataSet(entryList, "Acc (m/s^2)")
+        lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+        lineDataSet.setDrawCircles(false)
+
+        val dataSets: MutableList<ILineDataSet> = mutableListOf()
+        dataSets.add(lineDataSet)
+
+        val lineData = LineData(dataSets)
+
+        val description = view.description
+        description.text = "Accelerometer Data"
+
+        view.setBackgroundColor(view.resources.getColor(R.color.white))
+
+        view.data = lineData
+        view.invalidate()
     }
-    return entryList.toList()
+
 }

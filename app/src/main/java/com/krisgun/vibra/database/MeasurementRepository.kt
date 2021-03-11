@@ -49,33 +49,32 @@ class MeasurementRepository private constructor(context: Context){
 
     fun getRawDataFile(measurement: Measurement): File = File(filesDir, measurement.rawDataFileName)
 
-    //Simple test gave 4ms on 30k lines
-    fun getRawData2DArray(measurement: Measurement): Array<FloatArray> {
+    /**
+     * Returns a Pair with timestamp, xData, yData, zData
+     * Rewrite to return triple instead of 2D array
+     */
+    fun getRawDataTuple(measurement: Measurement): List<Pair<Float, Triple<Float, Float, Float>>> {
         val file: File = getRawDataFile(measurement)
 
-        val timeMutableList: MutableList<Float> = mutableListOf()
-        val xMutableList: MutableList<Float> = mutableListOf()
-        val yMutableList: MutableList<Float> = mutableListOf()
-        val zMutableList: MutableList<Float> = mutableListOf()
+        val rawDataTripleList: MutableList<Pair<Float, Triple<Float, Float, Float>>> = mutableListOf()
 
         file.forEachLine { eachLine ->
             if (!eachLine.contains("Timestamp")) { //Check if title row
 
                 eachLine.split(",").also { splitList ->
-                    timeMutableList.add(splitList[0].toFloat())
-                    xMutableList.add(splitList[1].toFloat())
-                    yMutableList.add(splitList[2].toFloat())
-                    zMutableList.add(splitList[3].toFloat())
+                    rawDataTripleList.add(
+                            Pair(
+                                    splitList[0].toFloat(),
+                            Triple(
+                                    splitList[1].toFloat(),
+                                    splitList[2].toFloat(),
+                                    splitList[3].toFloat()
+                            )
+                    ))
                 }
             }
         }
-
-        val timeFloatArray: FloatArray = timeMutableList.toFloatArray()
-        val xFloatArray: FloatArray = xMutableList.toFloatArray()
-        val yFloatArray: FloatArray = yMutableList.toFloatArray()
-        val zFloatArray: FloatArray = zMutableList.toFloatArray()
-
-        return arrayOf(timeFloatArray, xFloatArray, yFloatArray, zFloatArray)
+        return rawDataTripleList
     }
 
     /**

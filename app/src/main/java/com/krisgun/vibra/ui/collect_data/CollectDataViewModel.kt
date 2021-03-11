@@ -107,6 +107,11 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         val duration = (endTime - startTime).also {
             if (actualDuration == 0) {
                 actualDuration = (it / 1000.0).roundToInt()
+
+                //Update measurement sampling frequency
+                measurement.sampling_frequency = (countLines / (it / 1000.0)).roundToInt()
+
+                Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration (sec): $actualDuration")
             }
         }
 
@@ -133,8 +138,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 Log.d(TAG, "Timer finished.")
                 stopCollectingData()
 
-                //Update measurement sampling frequency
-                measurement.sampling_frequency = countLines / actualDuration
+                //Update DB
                 measurementRepository.updateMeasurement(measurement)
 
                 //Navigate to detail view
@@ -223,7 +227,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         stopCollectingData()
         if (!isTimerFinished) {
             measurement.duration_seconds = actualDuration
-            measurement.sampling_frequency = countLines / actualDuration
             measurementRepository.updateMeasurement(measurement)
 
             val action = CollectDataFragmentDirections
