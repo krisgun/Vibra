@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.github.psambit9791.jdsp.transform.PCA
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.SignalProcessing
@@ -27,9 +26,9 @@ class DetailsViewModel : ViewModel() {
     val rawDataLiveData: LiveData<List<Pair<Float, Triple<Float, Float, Float>>>>
         get() = _rawDataLiveData
 
-    private val _pcaDataLiveData = MutableLiveData<List<Pair<Float, Float>>>()
-    val pcaDataLiveData: LiveData<List<Pair<Float, Float>>>
-    get() = _pcaDataLiveData
+    private val _totAccelDataLiveData = MutableLiveData<List<Pair<Float, Float>>>()
+    val totAccelDataLiveData: LiveData<List<Pair<Float, Float>>>
+    get() = _totAccelDataLiveData
 
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
@@ -40,16 +39,13 @@ class DetailsViewModel : ViewModel() {
         val rawData = measurementRepository.getRawDataTuple(measurement)
         _rawDataLiveData.value = rawData
 
-        val pcaData = getTotalAcceleration(rawData)
-        _pcaDataLiveData.value = pcaData
+        val totalAccelerationData = getTotalAcceleration(rawData)
+        _totAccelDataLiveData.value = totalAccelerationData
     }
 
     private fun getTotalAcceleration(rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Pair<Float, Float>> {
-        val accData: MutableList<Triple<Float, Float, Float>> = mutableListOf()
-        rawData.forEach { accData.add(it.second) }
 
-        val totAccResult = SignalProcessing.totalAccelerationAmplitude(accData)
-
+        val totAccResult = SignalProcessing.totalAccelerationAmplitude(rawData)
         val resultTuples: MutableList<Pair<Float, Float>> = mutableListOf()
 
         for (i in totAccResult.indices) {
