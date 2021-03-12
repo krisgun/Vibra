@@ -86,7 +86,6 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         try {
             fileWriter = FileWriter(file, true)
             if (file.length() == 0L) {
-                Log.d(TAG, "Wrote CSV header.")
                 fileWriter.write("Timestamp,X (m/s^2),Y (m/s^2),Z (m/s^2)\n")
             }
         } catch (e: IOException) {
@@ -109,16 +108,16 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 actualDuration = (it / 1000.0).roundToInt()
 
                 //Update measurement sampling frequency
-                measurement.sampling_frequency = (countLines / (it / 1000.0)).roundToInt()
+                measurement.sampling_frequency = (countLines / (it / 1000.0))
+                measurement.num_of_datapoints = countLines
 
-                Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration (sec): $actualDuration")
+                Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration: $it ms\t $countLines lines")
             }
         }
 
         // Close filewriter
         try {
             fileWriter.close()
-            Log.d(TAG, "Closed FileWriter. Wrote $countLines lines in $duration ms.")
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -131,6 +130,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
      */
     private fun startTimer(millisTimerDuration: Long) {
         countDownTimer = object : CountDownTimer(millisTimerDuration, 1000) {
+
             override fun onFinish() {
                 _durationData.postValue(0)
                 _progressData.postValue(maxProgress)
@@ -168,7 +168,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
 
-            if(countLines % (measurement.sampling_frequency / 2) == 0) {
+            if(countLines % (measurement.sampling_frequency / 2) == 0.0) {
                 _sensorData.postValue("x: ${event.values[0]}\n y: ${event.values[1]}\n z: ${event.values[2]}")
             }
 
@@ -186,18 +186,14 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         sensorManager.let { sm ->
 
             val sensorDelay = ((1F / measurement.sampling_frequency) * 1000000F).roundToInt()
-
-            Log.d(TAG, "Accelerometer list: ${sm.getSensorList(Sensor.TYPE_ACCELEROMETER)}, currDelay: $sensorDelay")
-
+            Log.d(TAG, "Sensor delay: $sensorDelay")
             sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER).let {
                 sm.registerListener(this, it, sensorDelay, mSensorHandler) //ca 50 per sekund med GAME
             }
         }
-        Log.d(TAG, "Registered Sensor Listener")
     }
 
     private fun unregisterSensor() {
-        Log.d(TAG, "Unregistered Sensor Listener")
         sensorManager.unregisterListener(this)
         mSensorThread.quitSafely()
     }

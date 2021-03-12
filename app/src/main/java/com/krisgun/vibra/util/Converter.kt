@@ -1,8 +1,7 @@
 @file:JvmName("Converter")
 package com.krisgun.vibra.util
 
-import android.widget.EditText
-import androidx.databinding.InverseMethod
+import java.util.Locale
 
 object Converter {
     @JvmStatic
@@ -44,23 +43,13 @@ object Converter {
         }
     }
 
-    @InverseMethod("frequencyToString")
     @JvmStatic
-    fun frequencyToFloat(value: String): Float {
-        return if (value.isEmpty()) {
-            0F
-        } else {
-            value.toFloat()
-        }
+    fun detailsFrequencyToString(value: Double): String {
+        return String.format(Locale.US, "%.2f Hz", value)
     }
 
     @JvmStatic
-    fun frequencyToString(value: Float): String {
-        return value.toInt().toString()
-    }
-
-    @JvmStatic
-    fun detailsFrequencyToString(value: Int): String {
-        return "$value Hz"
+    fun dataPointsToString(value: Int): String {
+        return "$value data points"
     }
 }

@@ -126,6 +126,10 @@ class SignalProcessing {
             return oscSign
         }
 
+        fun singleSidedAmplitudeSpectrum() {
+
+        }
+
     }
 
 

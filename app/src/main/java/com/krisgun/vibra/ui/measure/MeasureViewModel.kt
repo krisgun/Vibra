@@ -59,7 +59,7 @@ class MeasureViewModel : ObservableViewModel() {
     fun onStart() {
         val measurementDuration: Int = (durationMinutes.toInt() * 60) + durationSeconds.toInt()
         //Create Measurement obj
-        val measurement = Measurement(duration_seconds = measurementDuration, sampling_frequency = samplingFrequency)
+        val measurement = Measurement(duration_seconds = measurementDuration, sampling_frequency = samplingFrequency.toDouble())
 
         //Add measurement to database
         measurementRepository.addMeasurement(measurement)

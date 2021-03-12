@@ -51,15 +51,17 @@ class DetailsViewModel : ViewModel() {
          * TODO: Save result to file when done and check if already such file exists.
          */
 
-        var filterArray: DoubleArray = totAccResult.map { it.toDouble() }.toDoubleArray()
-        val lowpassFilter = Butterworth(filterArray, measurement.sampling_frequency.toDouble())
-
-        filterArray = lowpassFilter.lowPassFilter(12, 0.3)
+        /**
+         * LowPass Butterworth Filter
+         */
+        //var filterArray: DoubleArray = totAccResult.map { it.toDouble() }.toDoubleArray()
+        //val lowpassFilter = Butterworth(filterArray, measurement.sampling_frequency.toDouble())
+        //filterArray = lowpassFilter.lowPassFilter(12, 0.3)
 
         val resultTuples: MutableList<Pair<Float, Float>> = mutableListOf()
 
         for (i in totAccResult.indices) {
-            resultTuples.add(Pair(rawData[i].first, filterArray[i].toFloat()))
+            resultTuples.add(Pair(rawData[i].first, totAccResult[i]))
         }
         return resultTuples.toList()
     }
