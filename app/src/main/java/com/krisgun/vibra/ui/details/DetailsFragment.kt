@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.NavigationUI
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentDetailsBinding
 
@@ -71,7 +70,7 @@ class DetailsFragment : Fragment() {
         viewModel.measurementLiveData.observe(viewLifecycleOwner,
             Observer { measurement ->
                 measurement?.let {
-                    viewModel.setMeasurement(measurement)
+                    viewModel.setChartData(measurement)
                 }
             }
         )

@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.github.psambit9791.jdsp.filter.Butterworth
+import com.github.psambit9791.jdsp.signal.peaks.FindPeak
+import com.github.psambit9791.jdsp.signal.peaks.Peak
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.SignalProcessing
@@ -31,17 +33,31 @@ class DetailsViewModel : ViewModel() {
     val totAccelDataLiveData: LiveData<List<Pair<Float, Float>>>
     get() = _totAccelDataLiveData
 
+    private val _amplitudeSpectrumLiveData = MutableLiveData<List<Pair<Double, Double>>>()
+    val amplitudeSpectrumLiveData: LiveData<List<Pair<Double, Double>>>
+        get() = _amplitudeSpectrumLiveData
+
+    private val _amplitudeSpectrumPeaksLiveData = MutableLiveData<List<Int>>()
+    val amplitudeSpectrumPeaksLiveData: LiveData<List<Int>>
+        get() = _amplitudeSpectrumPeaksLiveData
+
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
     }
 
-    fun setMeasurement(measurement: Measurement) {
+    fun setChartData(measurement: Measurement) {
         this.measurement = measurement
         val rawData = measurementRepository.getRawDataTuple(measurement)
         _rawDataLiveData.value = rawData
 
         val totalAccelerationData = getTotalAcceleration(rawData)
         _totAccelDataLiveData.value = totalAccelerationData
+
+        val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData)
+        _amplitudeSpectrumLiveData.value = amplitudeSpectrumData
+
+        val amplitudeSpectrumPeaks = getAmplitudeSpectrumPeaks(amplitudeSpectrumData)
+        _amplitudeSpectrumPeaksLiveData.value = amplitudeSpectrumPeaks
     }
 
     private fun getTotalAcceleration(rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Pair<Float, Float>> {
@@ -64,6 +80,19 @@ class DetailsViewModel : ViewModel() {
             resultTuples.add(Pair(rawData[i].first, totAccResult[i]))
         }
         return resultTuples.toList()
+    }
+
+    private fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Float, Float>>): List<Pair<Double, Double>> {
+        return SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
+    }
+
+
+    private fun getAmplitudeSpectrumPeaks(amplitudeSpectrumData: List<Pair<Double, Double>>): List<Int> {
+        val p1Signal = amplitudeSpectrumData.map { it.second }.toDoubleArray()
+
+        val fp = FindPeak(p1Signal)
+        val out: Peak = fp.detectPeaks()
+        return out.filterByProminence(0.5, 5.0).toList()
     }
 
 }

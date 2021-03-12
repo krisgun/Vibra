@@ -32,7 +32,7 @@ fun setSliderListeners(slider: Slider, attrChange: InverseBindingListener) {
 
 @BindingAdapter("android:setLineChartData")
 fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float, Float>>>?) {
-    view.setNoDataText("Loading Graph Data..")
+    view.setNoDataText("Loading graph data...")
     if (data != null) {
 
         val entryListX: MutableList<Entry> = mutableListOf()
@@ -78,10 +78,10 @@ fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float
     }
 }
 
-@BindingAdapter("android:setPCALineChartData")
-fun setPCALineChartData(view: LineChart, data: List<Pair<Float, Float>>?) {
+@BindingAdapter("android:setTotAccLineChartData")
+fun setTotAccLineChartData(view: LineChart, data: List<Pair<Float, Float>>?) {
 
-    view.setNoDataText("Loading Graph Data..")
+    view.setNoDataText("Loading graph data...")
     if (data != null) {
 
         val initTime = data[0].first
@@ -103,6 +103,52 @@ fun setPCALineChartData(view: LineChart, data: List<Pair<Float, Float>>?) {
 
         val description = view.description
         description.text = "Accelerometer Data"
+
+        view.setBackgroundColor(view.resources.getColor(R.color.white))
+
+        view.data = lineData
+        view.invalidate()
+    }
+
+}
+
+@BindingAdapter(value = ["android:amplitudeSpectrumData", "android:amplitudeSpectrumPeaks"], requireAll = true)
+fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Double>>?, peaks: List<Int>?) {
+    view.setNoDataText("Loading graph data...")
+
+    if(data != null && peaks != null) {
+
+        val entryList = mutableListOf<Entry>()
+        val peakEntryList = mutableListOf<Entry>()
+
+        data.forEach {
+            entryList.add(Entry(it.first.toFloat(), it.second.toFloat()))
+        }
+        peaks.forEach {
+            peakEntryList.add(Entry(data[it].first.toFloat(), data[it].second.toFloat()))
+        }
+
+        val lineDataSet = LineDataSet(entryList, "|P1(f)| / Hz")
+        val peakDataSet = LineDataSet(peakEntryList, "Peaks")
+
+        lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+        lineDataSet.setDrawCircles(false)
+
+
+        peakDataSet.axisDependency = YAxis.AxisDependency.LEFT
+        peakDataSet.enableDashedLine(0F, 1F, 0F) //This will hide lines between points
+        peakDataSet.setCircleColor(view.resources.getColor(R.color.red))
+        peakDataSet.color = view.resources.getColor(R.color.red)
+        peakDataSet.setDrawValues(false)
+
+        val dataSets: MutableList<ILineDataSet> = mutableListOf()
+        dataSets.add(lineDataSet)
+        dataSets.add(peakDataSet)
+
+        val lineData = LineData(dataSets)
+
+        val description = view.description
+        description.text = "Amplitude Spectrum"
 
         view.setBackgroundColor(view.resources.getColor(R.color.white))
 

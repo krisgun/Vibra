@@ -1,6 +1,9 @@
 package com.krisgun.vibra.util
 
 import android.util.Log
+import com.github.psambit9791.jdsp.transform.DiscreteFourier
+import org.apache.commons.math3.stat.Frequency
+import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.math.pow
 import kotlin.math.sign
@@ -126,8 +129,53 @@ class SignalProcessing {
             return oscSign
         }
 
-        fun singleSidedAmplitudeSpectrum() {
+        /**
+         * Returns data for a single-sided amplitude spectrum. In the form of:
+         * Pair<FrequencyRange, P1(f)>
+         */
+        fun singleSidedAmplitudeSpectrum(totalAcceleration: List<Pair<Float, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
 
+            val accelData: MutableList<Float> = totalAcceleration.map { it.second } as MutableList<Float>
+            /**
+             * Input signal needs to be even
+             */
+            var numberOfPoints = accelData.size
+            if (numberOfPoints.rem(2) != 0) {
+                numberOfPoints--
+                accelData.removeLast()
+            }
+
+            /**
+             * Perform a FFT on the signal
+             */
+            val accelDoubleArray = accelData.map { it.toDouble()}.toDoubleArray()
+            val fft = DiscreteFourier(accelDoubleArray)
+            fft.dft()
+            val spectrum = fft.returnAbsolute(true)
+
+            /**
+             * Compute the amplitude spectrum
+             */
+            val p2: MutableList<Double> = mutableListOf()
+            spectrum.forEach { spectrumData ->
+                p2.add(abs( spectrumData.div(numberOfPoints) ))
+            }
+            val p1 = p2.subList(0, numberOfPoints / 2)
+            for(i in 1..p1.size-2) {
+                p1[i] = 2*p1[i]
+            }
+
+            val f = DoubleArray((numberOfPoints / 2) + 1) { it.toDouble() }
+            for (i in f.indices) {
+                f[i] = (f[i]*samplingFrequency).div(numberOfPoints)
+            }
+
+            val amplitudeSpectrumData = mutableListOf<Pair<Double, Double>>()
+
+            for (i in p1.indices) {
+                amplitudeSpectrumData.add(Pair(f[i], p1[i]))
+            }
+            return amplitudeSpectrumData
         }
 
     }
