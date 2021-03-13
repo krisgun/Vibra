@@ -41,7 +41,7 @@ class SignalProcessing {
          * calculation. Returns a list of signs.
          */
         private fun findOscillationSign(totalAccelerationAmplitude: List<Float>,
-                                rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Float> {
+                                        rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Float> {
             // Separate raw sensor data into lists
             val timePoints = rawData.map { it.first }
             val rawX = rawData.map { it.second.first }
@@ -81,14 +81,14 @@ class SignalProcessing {
              * Main oscillation axis
              * The MOA is defined as the direction of the most recent maximum of the acceleration amplitude AA
              */
-            val moaArray: Array<FloatArray> = Array(tList.size) {FloatArray(4) {0F} }
+            val moaArray: Array<FloatArray> = Array(tList.size) { FloatArray(4) { 0F } }
             moaArray[0][0] = timePoints[0]
             moaArray[0][1] = xList[0]
             moaArray[0][2] = yList[0]
             moaArray[0][3] = zList[0]
 
-            for(i in 1 until tList.size) {
-                if (((xList[i] * moaArray[i-1][1]) + (yList[i] * moaArray[i-1][2]) + (zList[i] * moaArray[i-1][3])) > 0) {
+            for (i in 1 until tList.size) {
+                if (((xList[i] * moaArray[i - 1][1]) + (yList[i] * moaArray[i - 1][2]) + (zList[i] * moaArray[i - 1][3])) > 0) {
 
                     moaArray[i][0] = timePoints[i]
                     moaArray[i][1] = xList[i]
@@ -123,7 +123,7 @@ class SignalProcessing {
             val oscSign = mutableListOf<Float>()
             for (i in timePoints.indices) {
                 val lastmax = totList[i]
-                val sign = sign(rawX[i]*moaArray[lastmax][1] + rawY[i]*moaArray[lastmax][2] + rawZ[i]*moaArray[lastmax][3])
+                val sign = sign(rawX[i] * moaArray[lastmax][1] + rawY[i] * moaArray[lastmax][2] + rawZ[i] * moaArray[lastmax][3])
                 oscSign.add(sign)
             }
             return oscSign
@@ -136,6 +136,14 @@ class SignalProcessing {
         fun singleSidedAmplitudeSpectrum(totalAcceleration: List<Pair<Float, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
 
             val accelData: MutableList<Float> = totalAcceleration.map { it.second } as MutableList<Float>
+
+            /**
+             * LowPass Butterworth Filter
+             */
+            //var filterArray: DoubleArray = totAccResult.map { it.toDouble() }.toDoubleArray()
+            //val lowpassFilter = Butterworth(filterArray, measurement.sampling_frequency.toDouble())
+            //filterArray = lowpassFilter.lowPassFilter(12, 0.3)
+
             /**
              * Input signal needs to be even
              */
@@ -148,7 +156,7 @@ class SignalProcessing {
             /**
              * Perform a FFT on the signal
              */
-            val accelDoubleArray = accelData.map { it.toDouble()}.toDoubleArray()
+            val accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
             val fft = DiscreteFourier(accelDoubleArray)
             fft.dft()
             val spectrum = fft.returnAbsolute(true)
@@ -158,16 +166,16 @@ class SignalProcessing {
              */
             val p2: MutableList<Double> = mutableListOf()
             spectrum.forEach { spectrumData ->
-                p2.add(abs( spectrumData.div(numberOfPoints) ))
+                p2.add(abs(spectrumData.div(numberOfPoints)))
             }
             val p1 = p2.subList(0, numberOfPoints / 2)
-            for(i in 1..p1.size-2) {
-                p1[i] = 2*p1[i]
+            for (i in 1..p1.size - 2) {
+                p1[i] = 2 * p1[i]
             }
 
             val f = DoubleArray((numberOfPoints / 2) + 1) { it.toDouble() }
             for (i in f.indices) {
-                f[i] = (f[i]*samplingFrequency).div(numberOfPoints)
+                f[i] = (f[i] * samplingFrequency).div(numberOfPoints)
             }
 
             val amplitudeSpectrumData = mutableListOf<Pair<Double, Double>>()
@@ -178,7 +186,56 @@ class SignalProcessing {
             return amplitudeSpectrumData
         }
 
+        fun powerSpectrum(totalAcceleration: List<Pair<Float, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
+
+            val accelData: MutableList<Float> = totalAcceleration.map { it.second } as MutableList<Float>
+
+            /**
+             * Input signal needs to be even
+             */
+            var numberOfPoints = accelData.size
+            if (numberOfPoints.rem(2) != 0) {
+                numberOfPoints--
+                accelData.removeLast()
+            }
+
+            /**
+             * Perform a FFT on the signal
+             */
+            val accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
+            val fft = DiscreteFourier(accelDoubleArray)
+            fft.dft()
+            val spectrum = fft.returnAbsolute(true).toMutableList()
+            Log.d(TAG, "original spectrum list size: ${spectrum.size}")
+            spectrum.subList((numberOfPoints / 2) + 1, spectrum.size).clear()
+            Log.d(TAG, "modified spectrum list size: ${spectrum.size}")
+
+            /**
+             * Create Power data
+             */
+            val psdx: MutableList<Double> = mutableListOf()
+            spectrum.forEach { spectrumData ->
+                psdx.add(
+                        (1.0 / (samplingFrequency * numberOfPoints)) * (abs(spectrumData).pow(2))
+                )
+            }
+            for (i in 1..psdx.size - 2) {
+                psdx[i] = 2 * psdx[i]
+            }
+
+            /**
+             * Create list of frequency range
+             */
+            val freq = DoubleArray((numberOfPoints / 2) + 1) { it.toDouble() }
+            for (i in freq.indices) {
+                freq[i] = (freq[i] * samplingFrequency).div(numberOfPoints)
+            }
+
+            val powerSpectrumData = mutableListOf<Pair<Double, Double>>()
+            for (i in freq.indices) {
+                powerSpectrumData.add(Pair(freq[i], psdx[i]))
+            }
+            return powerSpectrumData
+        }
     }
-
-
 }

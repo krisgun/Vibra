@@ -17,18 +17,9 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.slider.Slider
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
+import kotlin.math.log10
 
 private const val TAG = "BindingAdapter"
-
-@InverseBindingAdapter(attribute = "android:value")
-fun getSliderValue(slider: Slider) = slider.value
-
-@BindingAdapter("android:valueAttrChanged")
-fun setSliderListeners(slider: Slider, attrChange: InverseBindingListener) {
-    slider.addOnChangeListener { _, _, _ ->
-        attrChange.onChange()
-    }
-}
 
 @BindingAdapter("android:setLineChartData")
 fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float, Float>>>?) {
@@ -124,6 +115,7 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
         data.forEach {
             entryList.add(Entry(it.first.toFloat(), it.second.toFloat()))
         }
+        Log.d(TAG, "peaks: $peaks")
         peaks.forEach {
             peakEntryList.add(Entry(data[it].first.toFloat(), data[it].second.toFloat()))
         }
@@ -157,3 +149,35 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
     }
 
 }
+
+@BindingAdapter("android:powerSpectrumData")
+fun setPowerSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Double>>?) {
+    if(data != null) {
+
+        val entryList = mutableListOf<Entry>()
+        val peakEntryList = mutableListOf<Entry>()
+
+        data.forEach {
+            entryList.add(Entry(it.first.toFloat(), 10*log10(it.second.toFloat())))
+        }
+
+        val lineDataSet = LineDataSet(entryList, "Power/Frequency (dB/Hz)")
+
+        lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+        lineDataSet.setDrawCircles(false)
+
+        val dataSets: MutableList<ILineDataSet> = mutableListOf()
+        dataSets.add(lineDataSet)
+
+        val lineData = LineData(dataSets)
+
+        val description = view.description
+        description.text = "Power Spectrum"
+
+        view.setBackgroundColor(view.resources.getColor(R.color.white))
+
+        view.data = lineData
+        view.invalidate()
+    }
+}
+

@@ -25,6 +25,9 @@ class DetailsViewModel : ViewModel() {
             measurementRepository.getMeasurement(id)
         }
 
+    /**
+     * UI LiveData
+     */
     private val _rawDataLiveData = MutableLiveData<List<Pair<Float, Triple<Float, Float, Float>>>>()
     val rawDataLiveData: LiveData<List<Pair<Float, Triple<Float, Float, Float>>>>
         get() = _rawDataLiveData
@@ -41,12 +44,20 @@ class DetailsViewModel : ViewModel() {
     val amplitudeSpectrumPeaksLiveData: LiveData<List<Int>>
         get() = _amplitudeSpectrumPeaksLiveData
 
+    private val _powerSpectrumLiveData = MutableLiveData<List<Pair<Double, Double>>>()
+    val powerSpectrumLiveData: LiveData<List<Pair<Double, Double>>>
+        get() = _powerSpectrumLiveData
+
+    /**
+     * Fetching UI-data
+     */
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
     }
 
     fun setChartData(measurement: Measurement) {
         this.measurement = measurement
+
         val rawData = measurementRepository.getRawDataTuple(measurement)
         _rawDataLiveData.value = rawData
 
@@ -58,6 +69,9 @@ class DetailsViewModel : ViewModel() {
 
         val amplitudeSpectrumPeaks = getAmplitudeSpectrumPeaks(amplitudeSpectrumData)
         _amplitudeSpectrumPeaksLiveData.value = amplitudeSpectrumPeaks
+
+        val powerSpectrumData = getPowerSpectrumData(totalAccelerationData)
+        _powerSpectrumLiveData.value = powerSpectrumData
     }
 
     private fun getTotalAcceleration(rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Pair<Float, Float>> {
@@ -66,13 +80,6 @@ class DetailsViewModel : ViewModel() {
         /**
          * TODO: Save result to file when done and check if already such file exists.
          */
-
-        /**
-         * LowPass Butterworth Filter
-         */
-        //var filterArray: DoubleArray = totAccResult.map { it.toDouble() }.toDoubleArray()
-        //val lowpassFilter = Butterworth(filterArray, measurement.sampling_frequency.toDouble())
-        //filterArray = lowpassFilter.lowPassFilter(12, 0.3)
 
         val resultTuples: MutableList<Pair<Float, Float>> = mutableListOf()
 
@@ -86,13 +93,16 @@ class DetailsViewModel : ViewModel() {
         return SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
     }
 
-
     private fun getAmplitudeSpectrumPeaks(amplitudeSpectrumData: List<Pair<Double, Double>>): List<Int> {
         val p1Signal = amplitudeSpectrumData.map { it.second }.toDoubleArray()
 
         val fp = FindPeak(p1Signal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByProminence(0.5, 5.0).toList()
+        return out.filterByHeight(0.5, 10.0).toList()
+    }
+
+    private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Float, Float>>):List<Pair<Double, Double>> {
+        return SignalProcessing.powerSpectrum(totalAccelerationData, measurement.sampling_frequency)
     }
 
 }
