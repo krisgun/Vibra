@@ -155,7 +155,6 @@ fun setPowerSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Doubl
     if(data != null) {
 
         val entryList = mutableListOf<Entry>()
-        val peakEntryList = mutableListOf<Entry>()
 
         data.forEach {
             entryList.add(Entry(it.first.toFloat(), 10*log10(it.second.toFloat())))

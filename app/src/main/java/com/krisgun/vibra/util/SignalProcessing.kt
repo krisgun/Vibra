@@ -209,6 +209,9 @@ class SignalProcessing {
             Log.d(TAG, "original spectrum list size: ${spectrum.size}")
             spectrum.subList((numberOfPoints / 2) + 1, spectrum.size).clear()
             Log.d(TAG, "modified spectrum list size: ${spectrum.size}")
+            /**
+             * TODO: Fix spectrum size list reduction
+             */
 
             /**
              * Create Power data
