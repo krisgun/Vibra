@@ -1,10 +1,13 @@
 package com.krisgun.vibra.ui.collect_data.dialog
 
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -49,6 +52,12 @@ class StopMeasurementDialog : DialogFragment() {
             dialogFragment = this@StopMeasurementDialog
         }
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
     fun onSaveButton() {
