@@ -1,22 +1,13 @@
 package com.krisgun.vibra.util
 
-import android.graphics.Color
-import android.util.Log
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.google.android.material.slider.Slider
 import com.krisgun.vibra.R
-import com.krisgun.vibra.data.Measurement
 import kotlin.math.log10
 
 private const val TAG = "BindingAdapter"
@@ -115,7 +106,6 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
         data.forEach {
             entryList.add(Entry(it.first.toFloat(), it.second.toFloat()))
         }
-        Log.d(TAG, "peaks: $peaks")
         peaks.forEach {
             peakEntryList.add(Entry(data[it].first.toFloat(), data[it].second.toFloat()))
         }

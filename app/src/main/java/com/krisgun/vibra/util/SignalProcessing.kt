@@ -178,7 +178,9 @@ class SignalProcessing {
             val amplitudeSpectrumData = mutableListOf<Pair<Double, Double>>()
 
             for (i in p1.indices) {
-                amplitudeSpectrumData.add(Pair(f[i], p1[i]))
+                if (f[i] != 0.0) {
+                    amplitudeSpectrumData.add(Pair(f[i], p1[i]))
+                }
             }
             return amplitudeSpectrumData
         }
@@ -195,8 +197,6 @@ class SignalProcessing {
                 numberOfPoints--
                 accelData.removeLast()
             }
-
-
 
             var accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
             /**
@@ -238,7 +238,9 @@ class SignalProcessing {
 
             val powerSpectrumData = mutableListOf<Pair<Double, Double>>()
             for (i in freq.indices) {
-                powerSpectrumData.add(Pair(freq[i], psdx[i]))
+                if (freq[i] != 0.0) {
+                    powerSpectrumData.add(Pair(freq[i], psdx[i]))
+                }
             }
             return powerSpectrumData
         }
