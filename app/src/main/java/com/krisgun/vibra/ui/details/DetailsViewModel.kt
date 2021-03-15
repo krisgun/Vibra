@@ -64,13 +64,13 @@ class DetailsViewModel : ViewModel() {
         val totalAccelerationData = getTotalAcceleration(rawData)
         _totAccelDataLiveData.value = totalAccelerationData
 
-        val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData)
+        val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
         _amplitudeSpectrumLiveData.value = amplitudeSpectrumData
 
         val amplitudeSpectrumPeaks = getAmplitudeSpectrumPeaks(amplitudeSpectrumData)
         _amplitudeSpectrumPeaksLiveData.value = amplitudeSpectrumPeaks
 
-        val powerSpectrumData = getPowerSpectrumData(totalAccelerationData)
+        val powerSpectrumData = getPowerSpectrumData(totalAccelerationData, measurement.sampling_frequency)
         _powerSpectrumLiveData.value = powerSpectrumData
     }
 
@@ -89,8 +89,9 @@ class DetailsViewModel : ViewModel() {
         return resultTuples.toList()
     }
 
-    private fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Float, Float>>): List<Pair<Double, Double>> {
-        return SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
+    private fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Float, Float>>, samplingFrequency: Double):
+            List<Pair<Double, Double>> {
+        return SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, samplingFrequency)
     }
 
     private fun getAmplitudeSpectrumPeaks(amplitudeSpectrumData: List<Pair<Double, Double>>): List<Int> {
@@ -98,11 +99,12 @@ class DetailsViewModel : ViewModel() {
 
         val fp = FindPeak(p1Signal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByHeight(0.5, 10.0).toList()
+        return out.filterByProminence(0.5, 10.0).toList()
     }
 
-    private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Float, Float>>):List<Pair<Double, Double>> {
-        return SignalProcessing.powerSpectrum(totalAccelerationData, measurement.sampling_frequency)
+    private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Float, Float>>, samplingFrequency: Double):
+            List<Pair<Double, Double>> {
+        return SignalProcessing.powerSpectrum(totalAccelerationData, samplingFrequency)
     }
 
 }

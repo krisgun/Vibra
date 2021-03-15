@@ -1,5 +1,6 @@
 package com.krisgun.vibra.ui.collect_data
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ class CollectDataFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val activity = activity as AppCompatActivity
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         activity.supportActionBar?.hide()
         val bottomNavBar: BottomNavigationView? = activity.findViewById(R.id.bottom_navigation)
         if (bottomNavBar != null) {
@@ -77,6 +79,7 @@ class CollectDataFragment : Fragment() {
         super.onDestroyView()
 
         val activity = activity as AppCompatActivity
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
         activity.supportActionBar?.show()
         val bottomNavBar: BottomNavigationView? = activity.findViewById(R.id.bottom_navigation)
         if (bottomNavBar != null) {

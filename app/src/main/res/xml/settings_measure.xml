@@ -6,7 +6,7 @@
         android:title="@string/sampling_frequency"
         android:summary="@string/sampling_frequency_info"
         android:max="100"
-        android:icon="@drawable/ic_frequency"
+        android:icon="@drawable/ic_sampling_frequency"
         android:defaultValue="50"
         app:showSeekBarValue="true"
         app:seekBarIncrement="10"

@@ -1,8 +1,8 @@
 package com.krisgun.vibra.util
 
 import android.util.Log
+import com.github.psambit9791.jdsp.filter.Butterworth
 import com.github.psambit9791.jdsp.transform.DiscreteFourier
-import org.apache.commons.math3.stat.Frequency
 import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.math.pow
@@ -123,7 +123,11 @@ class SignalProcessing {
             val oscSign = mutableListOf<Float>()
             for (i in timePoints.indices) {
                 val lastmax = totList[i]
-                val sign = sign(rawX[i] * moaArray[lastmax][1] + rawY[i] * moaArray[lastmax][2] + rawZ[i] * moaArray[lastmax][3])
+                val sign = sign(
+                        rawX[i]
+                        * moaArray[lastmax][1] + rawY[i]
+                        * moaArray[lastmax][2] + rawZ[i]
+                        * moaArray[lastmax][3])
                 oscSign.add(sign)
             }
             return oscSign
@@ -136,13 +140,6 @@ class SignalProcessing {
         fun singleSidedAmplitudeSpectrum(totalAcceleration: List<Pair<Float, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
 
             val accelData: MutableList<Float> = totalAcceleration.map { it.second } as MutableList<Float>
-
-            /**
-             * LowPass Butterworth Filter
-             */
-            //var filterArray: DoubleArray = totAccResult.map { it.toDouble() }.toDoubleArray()
-            //val lowpassFilter = Butterworth(filterArray, measurement.sampling_frequency.toDouble())
-            //filterArray = lowpassFilter.lowPassFilter(12, 0.3)
 
             /**
              * Input signal needs to be even
@@ -199,19 +196,24 @@ class SignalProcessing {
                 accelData.removeLast()
             }
 
+
+
+            var accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
             /**
-             * Perform a FFT on the signal
+             * LowPass Butterworth Filter
+
+            val lowpassFilter = Butterworth(accelDoubleArray, samplingFrequency)
+            accelDoubleArray = lowpassFilter.lowPassFilter(12, 0.35)
+            */
+
+            /**
+             * Perform an FFT on the signal
              */
-            val accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
             val fft = DiscreteFourier(accelDoubleArray)
             fft.dft()
             val spectrum = fft.returnAbsolute(true).toMutableList()
-            Log.d(TAG, "original spectrum list size: ${spectrum.size}")
-            spectrum.subList((numberOfPoints / 2) + 1, spectrum.size).clear()
-            Log.d(TAG, "modified spectrum list size: ${spectrum.size}")
-            /**
-             * TODO: Fix spectrum size list reduction
-             */
+
+            Log.d(TAG, "$spectrum")
 
             /**
              * Create Power data
