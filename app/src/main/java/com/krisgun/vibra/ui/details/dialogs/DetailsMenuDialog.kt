@@ -48,12 +48,21 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
         navController.navigate(action)
     }
 
+    fun onRename() {
+        val action = DetailsMenuDialogDirections
+            .actionDetailsMenuDialogToRenameMeasurementDialog()
+        this.dismiss()
+        navController.navigate(action)
+    }
+
     private fun passMeasurementIdToViewModel() {
         val id = args.measurementId
         viewModel.setMeasurementId(id)
         viewModel.measurementLiveData.observe(viewLifecycleOwner,
                 Observer { measurement ->
                     measurement?.let {
+                        viewModel.measurement = measurement
+                        viewModel.titleText = measurement.title
                     }
                 }
         )

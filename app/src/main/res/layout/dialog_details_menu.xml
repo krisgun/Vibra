@@ -85,7 +85,8 @@
             app:layout_constraintTop_toBottomOf="@id/share_cl"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:onClick="@{() -> dialogFragment.onRename()}">
 
             <ImageView
                 android:id="@+id/imageView7"

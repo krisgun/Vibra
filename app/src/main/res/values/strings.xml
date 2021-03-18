@@ -26,7 +26,8 @@
     <string name="dialog_save_or_discard">Save measurement?</string>
     <string name="back_press_will_discard">Pressing Back will discard.</string>
     <string name="delete_measurement">Delete Measurement?</string>
-    <string name="delete_measurement_info">Deleting will be permanent.</string>
+    <string name="delete_measurement_info">This action results in <b>permanent</b> deletion.</string>
+    <string name="rename_measurement">Rename measurement</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="discard">Discard</string>

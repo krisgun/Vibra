@@ -104,7 +104,14 @@
             <action
                 android:id="@+id/action_detailsMenuDialog_to_deleteMeasurementDialog"
                 app:destination="@id/deleteMeasurementDialog" />
+            <action
+                android:id="@+id/action_detailsMenuDialog_to_renameMeasurementDialog"
+                app:destination="@id/renameMeasurementDialog" />
         </dialog>
+        <dialog
+            android:id="@+id/renameMeasurementDialog"
+            android:name="com.krisgun.vibra.ui.details.dialogs.RenameMeasurementDialog"
+            android:label="RenameMeasurementDialog" />
     </navigation>
     <fragment
         android:id="@+id/measureSettingsFragment"

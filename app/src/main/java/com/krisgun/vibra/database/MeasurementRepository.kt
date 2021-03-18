@@ -38,6 +38,27 @@ class MeasurementRepository private constructor(context: Context){
         }
     }
 
+    fun renameDataFiles(oldMeasurement: Measurement, newMeasurement: Measurement) {
+        executor.execute {
+            getRawDataFile(oldMeasurement).renameTo(File(filesDir, newMeasurement.rawDataFileName))
+            getTotalAccelerationFile(oldMeasurement).let {
+                if (it.exists()) {
+                    it.renameTo(File(filesDir, newMeasurement.totalAccelerationFileName))
+                }
+            }
+            getPowerSpectrumFile(oldMeasurement).let {
+                if (it.exists()) {
+                    it.renameTo(File(filesDir, newMeasurement.powerSpectrumFileName))
+                }
+            }
+            getAmplitudeSpectrumFile(oldMeasurement).let {
+                if (it.exists()) {
+                    it.renameTo(File(filesDir, newMeasurement.amplitudeSpectrumFileName))
+                }
+            }
+        }
+    }
+
     fun addMeasurement(measurement: Measurement) {
         executor.execute {
             measurementDao.addMeasurement(measurement)

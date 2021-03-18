@@ -6,7 +6,6 @@ import android.widget.EditText
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.navigation.NavController
-import androidx.preference.PreferenceManager
 import com.krisgun.vibra.BR
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
