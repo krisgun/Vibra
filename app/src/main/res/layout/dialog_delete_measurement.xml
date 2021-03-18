@@ -6,7 +6,7 @@
     <data>
         <variable
             name="dialogFragment"
-            type="com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialog" />
+            type="com.krisgun.vibra.ui.details.dialogs.DeleteMeasurementDialog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="@string/dialog_save_or_discard"
+                    android:text="@string/delete_measurement"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                     android:textColor="@color/material_on_surface_emphasis_high_type"
@@ -42,7 +42,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@string/dialog_save_or_discard" />
+                    tools:text="@string/delete_measurement" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -50,12 +50,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:text="@string/back_press_will_discard"
+                    android:text="@string/delete_measurement_info"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                     android:textColor="@color/material_on_surface_emphasis_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView4"
-                    tools:text="@string/back_press_will_discard" />
+                    tools:text="@string/delete_measurement_info" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/materialButton2"
@@ -65,13 +65,12 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
-                    android:onClick="@{() -> dialogFragment.onSaveButton()}"
-                    android:text="@string/save"
+                    android:onClick="@{() -> dialogFragment.onDelete()}"
+                    android:text="@string/delete"
                     android:textAllCaps="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5"
-                    tools:text="@string/save" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
@@ -80,13 +79,12 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:onClick="@{() -> dialogFragment.onDiscardButton()}"
-                    android:text="@string/discard"
+                    android:onClick="@{() -> dialogFragment.onCancel()}"
+                    android:text="@string/cancel"
                     android:textAllCaps="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/materialButton2"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5"
-                    tools:text="@string/discard" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -95,4 +93,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
-

@@ -7,11 +7,16 @@
         <variable
             name="detailsMenuVM"
             type="com.krisgun.vibra.ui.details.dialogs.DetailsMenuViewModel" />
+
+        <variable
+            name="dialogFragment"
+            type="com.krisgun.vibra.ui.details.dialogs.DetailsMenuDialog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp">
 
 
         <TextView
@@ -113,13 +118,13 @@
             android:id="@+id/delete_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rename_cl"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:onClick="@{() -> dialogFragment.onDelete()}" >
 
             <ImageView
                 android:id="@+id/delete_icon"

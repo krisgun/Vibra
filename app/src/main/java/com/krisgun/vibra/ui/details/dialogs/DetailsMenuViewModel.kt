@@ -21,4 +21,8 @@ class DetailsMenuViewModel : ViewModel() {
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
     }
+
+    fun deleteMeasurement() {
+        measurementLiveData.value?.let { measurementRepository.deleteMeasurement(it) }
+    }
 }

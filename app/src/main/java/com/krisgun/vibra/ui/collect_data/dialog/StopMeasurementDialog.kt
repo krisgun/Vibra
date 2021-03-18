@@ -48,7 +48,6 @@ class StopMeasurementDialog : DialogFragment() {
                 false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = collectDataViewModel
             dialogFragment = this@StopMeasurementDialog
         }
         return binding.root

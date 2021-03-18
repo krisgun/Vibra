@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.DialogDetailsMenuBinding
 import com.krisgun.vibra.ui.details.DetailsFragmentArgs
 
@@ -18,7 +20,7 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
     private lateinit var binding: DialogDetailsMenuBinding
     private lateinit var navController: NavController
     private val args: DetailsMenuDialogArgs by navArgs()
-    private lateinit var viewModel: DetailsMenuViewModel
+    private val viewModel: DetailsMenuViewModel by navGraphViewModels(R.id.navigation_details_menu)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,6 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewModel =  ViewModelProvider(this).get(DetailsMenuViewModel::class.java)
         binding = DialogDetailsMenuBinding.inflate(
                 inflater,
                 container,
@@ -34,9 +35,17 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
         ).apply {
             lifecycleOwner = viewLifecycleOwner
             detailsMenuVM = viewModel
+            dialogFragment = this@DetailsMenuDialog
         }
         passMeasurementIdToViewModel()
         return binding.root
+    }
+
+    fun onDelete() {
+        val action = DetailsMenuDialogDirections
+                .actionDetailsMenuDialogToDeleteMeasurementDialog()
+        this.dismiss()
+        navController.navigate(action)
     }
 
     private fun passMeasurementIdToViewModel() {

@@ -29,7 +29,7 @@
             app:exitAnim="@anim/fragment_open_exit" />
         <action
             android:id="@+id/action_navigation_history_to_detailsMenuDialog"
-            app:destination="@id/detailsMenuDialog" />
+            app:destination="@id/navigation_details_menu" />
     </fragment>
 
     <fragment
@@ -49,7 +49,7 @@
             app:destination="@id/navigation_history" />
         <action
             android:id="@+id/action_navigation_details_to_detailsMenuDialog"
-            app:destination="@id/detailsMenuDialog" />
+            app:destination="@id/navigation_details_menu" />
     </fragment>
     <navigation android:id="@+id/navigation_collect_and_dialog"
         app:startDestination="@id/navigation_collect_data">
@@ -84,16 +84,30 @@
                 app:destination="@id/navigation_measure" />
         </dialog>
     </navigation>
+    <navigation android:id="@+id/navigation_details_menu"
+        app:startDestination="@id/detailsMenuDialog">
+        <argument
+            android:name="measurement_id"
+            app:argType="java.util.UUID" />
+        <dialog
+            android:id="@+id/deleteMeasurementDialog"
+            android:name="com.krisgun.vibra.ui.details.dialogs.DeleteMeasurementDialog"
+            android:label="DeleteMeasurementDialog" />
+
+        <dialog
+            android:id="@+id/detailsMenuDialog"
+            android:name="com.krisgun.vibra.ui.details.dialogs.DetailsMenuDialog"
+            android:label="DetailsMenuDialog">
+            <argument
+                android:name="measurement_id"
+                app:argType="java.util.UUID" />
+            <action
+                android:id="@+id/action_detailsMenuDialog_to_deleteMeasurementDialog"
+                app:destination="@id/deleteMeasurementDialog" />
+        </dialog>
+    </navigation>
     <fragment
         android:id="@+id/measureSettingsFragment"
         android:name="com.krisgun.vibra.ui.measure.settings.MeasureSettingsFragment"
         android:label="Measurement" />
-    <dialog
-        android:id="@+id/detailsMenuDialog"
-        android:name="com.krisgun.vibra.ui.details.dialogs.DetailsMenuDialog"
-        android:label="DetailsMenuDialog" >
-        <argument
-            android:name="measurementId"
-            app:argType="java.util.UUID" />
-    </dialog>
 </navigation>
