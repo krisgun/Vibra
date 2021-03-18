@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Measurement abcdef"
+            android:text="@{detailsMenuVM.measurementLiveData.title}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
 
             app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/title_text" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="?android:attr/selectableItemBackground"
             android:id="@+id/share_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,7 +109,7 @@
             android:id="@+id/delete_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
+            android:paddingBottom="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rename_cl">

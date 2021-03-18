@@ -28,8 +28,6 @@ class DetailsFragment : Fragment() {
         navController = findNavController()
 
         setHasOptionsMenu(true)
-
-
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (navController.previousBackStackEntry?.destination?.id  == R.id.navigation_collect_data) {
