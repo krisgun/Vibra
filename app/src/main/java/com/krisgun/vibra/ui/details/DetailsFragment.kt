@@ -1,31 +1,37 @@
 package com.krisgun.vibra.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.onNavDestinationSelected
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentDetailsBinding
+
+private const val TAG = "DetailsView"
 
 class DetailsFragment : Fragment() {
 
     private lateinit var viewModel: DetailsViewModel
+    private lateinit var navController: NavController
     private val args: DetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navController = findNavController()
 
         setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+
 
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val navController = findNavController()
                 if (navController.previousBackStackEntry?.destination?.id  == R.id.navigation_collect_data) {
                     navController.popBackStack(R.id.navigation_measure, false)
                 } else
@@ -50,6 +56,7 @@ class DetailsFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             detailsVM = viewModel
         }
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
         passMeasurementIdToViewModel()
         return binding.root
     }
@@ -61,6 +68,11 @@ class DetailsFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_detailed_view, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController)
+                || return super.onOptionsItemSelected(item)
     }
 
 

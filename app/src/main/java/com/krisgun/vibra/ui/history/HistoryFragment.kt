@@ -8,7 +8,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.krisgun.vibra.R
@@ -18,9 +21,11 @@ import kotlinx.android.synthetic.main.fragment_history.*
 class HistoryFragment : Fragment(), RecyclerViewClickListener {
 
     private lateinit var viewModel: HistoryViewModel
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navController = findNavController()
         setHasOptionsMenu(true)
     }
 
@@ -59,7 +64,7 @@ class HistoryFragment : Fragment(), RecyclerViewClickListener {
                 (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
                 val action = HistoryFragmentDirections
                     .actionNavigationHistoryToNavigationDetails(measurement.id)
-                Navigation.findNavController(view).navigate(action)
+                navController.navigate(action)
             }
         }
     }
@@ -67,4 +72,10 @@ class HistoryFragment : Fragment(), RecyclerViewClickListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.top_app_bar_history, menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController)
+                || return super.onOptionsItemSelected(item)
+    }
+
 }

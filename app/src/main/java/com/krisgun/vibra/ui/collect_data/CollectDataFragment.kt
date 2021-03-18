@@ -33,10 +33,6 @@ class CollectDataFragment : Fragment() {
         val activity = activity as AppCompatActivity
         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         activity.supportActionBar?.hide()
-        val bottomNavBar: BottomNavigationView? = activity.findViewById(R.id.bottom_navigation)
-        if (bottomNavBar != null) {
-            bottomNavBar.visibility = View.GONE
-        }
 
         activity.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -62,6 +58,11 @@ class CollectDataFragment : Fragment() {
             collectDataVM = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
+        val bottomNavBar: BottomNavigationView? = activity?.findViewById(R.id.bottom_navigation)
+        if (bottomNavBar != null) {
+            bottomNavBar.visibility = View.GONE
+        }
+
         passMeasurementToViewModel()
         return binding.root
     }

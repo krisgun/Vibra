@@ -13,7 +13,7 @@ import kotlin.math.log10
 private const val TAG = "BindingAdapter"
 
 @BindingAdapter("android:setLineChartData")
-fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float, Float>>>?) {
+fun setLineChartData(view: LineChart, data: List<Pair<Long, Triple<Float, Float, Float>>>?) {
     view.setNoDataText("Loading graph data...")
     if (data != null) {
 
@@ -23,7 +23,7 @@ fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float
 
         val initTime = data[0].first
         data.forEachIndexed { i, _ ->
-            val dataPointTime = ((data[i].first - initTime) / 1000000000F)
+            val dataPointTime = ((data[i].first - initTime).div(1000000000F))
             entryListX.add(Entry(dataPointTime, data[i].second.first))
             entryListY.add(Entry(dataPointTime, data[i].second.second))
             entryListZ.add(Entry(dataPointTime, data[i].second.third))
@@ -61,7 +61,7 @@ fun setLineChartData(view: LineChart, data: List<Pair<Float, Triple<Float, Float
 }
 
 @BindingAdapter("android:setTotAccLineChartData")
-fun setTotAccLineChartData(view: LineChart, data: List<Pair<Float, Float>>?) {
+fun setTotAccLineChartData(view: LineChart, data: List<Pair<Long, Float>>?) {
 
     view.setNoDataText("Loading graph data...")
     if (data != null) {
@@ -70,7 +70,7 @@ fun setTotAccLineChartData(view: LineChart, data: List<Pair<Float, Float>>?) {
         val entryList: MutableList<Entry> = mutableListOf()
 
         data.forEach {
-            val dataPointTime = ((it.first - initTime) / 1000000000F)
+            val dataPointTime = ((it.first - initTime).div(1000000000F))
             entryList.add(Entry(dataPointTime, it.second))
         }
 
@@ -110,7 +110,7 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
             peakEntryList.add(Entry(data[it].first.toFloat(), data[it].second.toFloat()))
         }
 
-        val lineDataSet = LineDataSet(entryList, "|P1(f)| / Hz")
+        val lineDataSet = LineDataSet(entryList, "Amplitude/Frequency  (|P1(f)| / Hz)")
         val peakDataSet = LineDataSet(peakEntryList, "Peaks")
 
         lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
@@ -142,6 +142,7 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
 
 @BindingAdapter("android:powerSpectrumData")
 fun setPowerSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Double>>?) {
+    view.setNoDataText("Loading graph data...")
     if(data != null) {
 
         val entryList = mutableListOf<Entry>()

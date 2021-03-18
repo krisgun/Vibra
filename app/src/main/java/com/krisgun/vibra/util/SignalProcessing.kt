@@ -17,7 +17,7 @@ class SignalProcessing {
         /**
          * This function calculates the resulting total acceleration amplitude.
          */
-        fun totalAccelerationAmplitude(rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Float> {
+        fun totalAccelerationAmplitude(rawData: List<Pair<Long, Triple<Float, Float, Float>>>): List<Float> {
 
             val totAccResult: MutableList<Float> = mutableListOf()
             val rawAccelerationData = rawData.map { it.second }
@@ -41,7 +41,7 @@ class SignalProcessing {
          * calculation. Returns a list of signs.
          */
         private fun findOscillationSign(totalAccelerationAmplitude: List<Float>,
-                                        rawData: List<Pair<Float, Triple<Float, Float, Float>>>): List<Float> {
+                                        rawData: List<Pair<Long, Triple<Float, Float, Float>>>): List<Float> {
             // Separate raw sensor data into lists
             val timePoints = rawData.map { it.first }
             val rawX = rawData.map { it.second.first }
@@ -82,7 +82,7 @@ class SignalProcessing {
              * The MOA is defined as the direction of the most recent maximum of the acceleration amplitude AA
              */
             val moaArray: Array<FloatArray> = Array(tList.size) { FloatArray(4) { 0F } }
-            moaArray[0][0] = timePoints[0]
+            moaArray[0][0] = timePoints[0].toFloat()
             moaArray[0][1] = xList[0]
             moaArray[0][2] = yList[0]
             moaArray[0][3] = zList[0]
@@ -90,12 +90,12 @@ class SignalProcessing {
             for (i in 1 until tList.size) {
                 if (((xList[i] * moaArray[i - 1][1]) + (yList[i] * moaArray[i - 1][2]) + (zList[i] * moaArray[i - 1][3])) > 0) {
 
-                    moaArray[i][0] = timePoints[i]
+                    moaArray[i][0] = timePoints[i].toFloat()
                     moaArray[i][1] = xList[i]
                     moaArray[i][2] = yList[i]
                     moaArray[i][3] = zList[i]
                 } else {
-                    moaArray[i][0] = timePoints[i]
+                    moaArray[i][0] = timePoints[i].toFloat()
                     moaArray[i][1] = -xList[i]
                     moaArray[i][2] = -yList[i]
                     moaArray[i][3] = -zList[i]
@@ -110,7 +110,7 @@ class SignalProcessing {
 
             for (i in timePoints.indices) {
                 if (indexLastMax < moaArray.size - 1) {
-                    if (timePoints[i] == moaArray[indexLastMax + 1][0]) {
+                    if (timePoints[i].toFloat() == moaArray[indexLastMax + 1][0]) {
                         indexLastMax++
                     }
                 }
@@ -137,7 +137,7 @@ class SignalProcessing {
          * Returns data for a single-sided amplitude spectrum. In the form of:
          * Pair<FrequencyRange, P1(f)>
          */
-        fun singleSidedAmplitudeSpectrum(totalAcceleration: List<Pair<Float, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
+        fun singleSidedAmplitudeSpectrum(totalAcceleration: List<Pair<Long, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
 
             val accelData: MutableList<Float> = totalAcceleration.map { it.second } as MutableList<Float>
 
@@ -185,7 +185,7 @@ class SignalProcessing {
             return amplitudeSpectrumData
         }
 
-        fun powerSpectrum(totalAcceleration: List<Pair<Float, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
+        fun powerSpectrum(totalAcceleration: List<Pair<Long, Float>>, samplingFrequency: Double): List<Pair<Double, Double>> {
 
             val accelData: MutableList<Float> = totalAcceleration.map { it.second } as MutableList<Float>
 
@@ -198,7 +198,7 @@ class SignalProcessing {
                 accelData.removeLast()
             }
 
-            var accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
+            val accelDoubleArray = accelData.map { it.toDouble() }.toDoubleArray()
             /**
              * LowPass Butterworth Filter
 
@@ -212,8 +212,6 @@ class SignalProcessing {
             val fft = DiscreteFourier(accelDoubleArray)
             fft.dft()
             val spectrum = fft.returnAbsolute(true).toMutableList()
-
-            Log.d(TAG, "$spectrum")
 
             /**
              * Create Power data

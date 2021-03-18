@@ -8,4 +8,12 @@
         android:title="@string/share"
         android:contentDescription="@string/content_description_share"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/measureSettingsFragment"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/settings"
+        android:menuCategory="secondary"
+        android:contentDescription="@string/content_description_settings"
+        app:showAsAction="ifRoom" />
 </menu>

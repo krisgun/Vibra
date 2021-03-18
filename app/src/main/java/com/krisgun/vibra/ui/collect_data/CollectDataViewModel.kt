@@ -45,10 +45,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
     //Progressbar
     var maxProgress = 100
+
     //Benchmarking
     private var countLines = 0
     private var startTime = 0L
     private var endTime = 0L
+    private var timestamps = mutableListOf<Long>()
 
     private val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
@@ -86,13 +88,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         try {
             fileWriter = FileWriter(file, true)
             if (file.length() == 0L) {
-                fileWriter.write("Timestamp,X (m/s^2),Y (m/s^2),Z (m/s^2)\n")
+                fileWriter.write("Timestamp (ns),X (m/s^2),Y (m/s^2),Z (m/s^2)\n")
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        startTime = System.currentTimeMillis()
         registerSensor()
         startTimer(timerDuration)
 
@@ -102,13 +103,16 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
         //Unregister listener and measure time
         unregisterSensor()
-        endTime = System.currentTimeMillis()
-        val duration = (endTime - startTime).also {
+        startTime = timestamps.first()
+        endTime = timestamps.last()
+        countLines = timestamps.size
+
+        (endTime - startTime).also {
             if (actualDuration == 0) {
-                actualDuration = (it / 1000.0).roundToInt()
+                actualDuration = (it / 1000000000.0).roundToInt()
 
                 //Update measurement sampling frequency
-                measurement.sampling_frequency = (countLines / (it / 1000.0))
+                measurement.sampling_frequency = (countLines / (it / 1000000000.0))
                 measurement.num_of_datapoints = countLines
 
                 Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration: $it ms\t $countLines lines")
@@ -174,6 +178,8 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
             //Write sensor data to file
             fileWriter.write(String.format(Locale.US,"%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
+
+            timestamps.add(event.timestamp)
             countLines++
         }
     }
