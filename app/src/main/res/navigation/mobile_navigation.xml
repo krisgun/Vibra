@@ -27,6 +27,9 @@
             app:destination="@id/navigation_details"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit" />
+        <action
+            android:id="@+id/action_navigation_history_to_detailsMenuDialog"
+            app:destination="@id/detailsMenuDialog" />
     </fragment>
 
     <fragment
@@ -44,6 +47,9 @@
         <action
             android:id="@+id/action_navigation_details_to_navigation_history"
             app:destination="@id/navigation_history" />
+        <action
+            android:id="@+id/action_navigation_details_to_detailsMenuDialog"
+            app:destination="@id/detailsMenuDialog" />
     </fragment>
     <navigation android:id="@+id/navigation_collect_and_dialog"
         app:startDestination="@id/navigation_collect_data">
@@ -82,4 +88,12 @@
         android:id="@+id/measureSettingsFragment"
         android:name="com.krisgun.vibra.ui.measure.settings.MeasureSettingsFragment"
         android:label="Measurement" />
+    <dialog
+        android:id="@+id/detailsMenuDialog"
+        android:name="com.krisgun.vibra.ui.details.dialogs.DetailsMenuDialog"
+        android:label="DetailsMenuDialog" >
+        <argument
+            android:name="measurementId"
+            app:argType="java.util.UUID" />
+    </dialog>
 </navigation>

@@ -57,7 +57,9 @@ class HistoryFragment : Fragment(), RecyclerViewClickListener {
     override fun onRecyclerViewItemClick(view: View, measurement: Measurement) {
         when (view.id) {
             R.id.list_item_more -> {
-                Toast.makeText(requireContext(), "Menu clicked!", Toast.LENGTH_SHORT).show()
+                val action = HistoryFragmentDirections
+                        .actionNavigationHistoryToDetailsMenuDialog(measurement.id)
+                navController.navigate(action)
             }
 
             R.id.constraint_layout -> {
