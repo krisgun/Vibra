@@ -3,17 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/share"
-        android:icon="@drawable/ic_baseline_share_24"
-        android:title="@string/share"
-        android:contentDescription="@string/content_description_share"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/measureSettingsFragment"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/settings"
         android:menuCategory="secondary"
         android:contentDescription="@string/content_description_settings"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:menuCategory="container"
+        android:title="@string/content_description_more"
+        android:contentDescription="@string/content_description_more"
+        app:showAsAction="always" />
 </menu>

@@ -69,8 +69,13 @@ class DetailsFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(navController)
-                || return super.onOptionsItemSelected(item)
+
+        when (item.itemId) {
+            R.id.more -> navController.navigate(DetailsFragmentDirections
+                    .actionNavigationDetailsToDetailsMenuDialog(viewModel.measurementLiveData.value!!.id))
+            else -> item.onNavDestinationSelected(navController)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

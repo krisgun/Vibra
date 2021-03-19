@@ -43,8 +43,6 @@ class DeleteMeasurementDialog : DialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-
-
     fun onDelete() {
         detailsMenuViewModel.deleteMeasurement()
         this.dismiss()
@@ -53,6 +51,4 @@ class DeleteMeasurementDialog : DialogFragment() {
     fun onCancel() {
         this.dismiss()
     }
-
-
 }
