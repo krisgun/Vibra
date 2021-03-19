@@ -1,9 +1,14 @@
 package com.krisgun.vibra.ui.details.dialogs
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -14,6 +19,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.DialogDetailsMenuBinding
 import com.krisgun.vibra.ui.details.DetailsFragmentArgs
+import java.lang.IllegalArgumentException
+
+private const val TAG = "DetailsMenu"
 
 class DetailsMenuDialog : BottomSheetDialogFragment() {
 
@@ -53,6 +61,35 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
             .actionDetailsMenuDialogToRenameMeasurementDialog()
         this.dismiss()
         navController.navigate(action)
+    }
+
+    fun onShare() {
+        Log.d(TAG, "Share clicked!")
+        val rawFileUri: Uri? = try {
+            FileProvider.getUriForFile(
+                requireActivity(),
+                "com.krisgun.vibra.fileprovider",
+                viewModel.getRawDataFile()
+            )
+        } catch (e: IllegalArgumentException) {
+            Log.e(TAG, "File cannot be shared: ${viewModel.getRawDataFile()}")
+            null
+        }
+
+        if (rawFileUri != null)  {
+            Log.d(TAG, "Raw file URI: $rawFileUri")
+            Intent(Intent.ACTION_SEND).apply {
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                putExtra(Intent.EXTRA_STREAM, rawFileUri)
+                type = requireActivity().contentResolver.getType(rawFileUri)
+            }.also { intent ->
+                val chooserIntent = Intent.createChooser(intent, "Raw CSV Data")
+                startActivity(chooserIntent)
+            }
+        } else {
+            Log.d(TAG, "Raw file URI is null")
+        }
+        this.dismiss()
     }
 
     private fun passMeasurementIdToViewModel() {

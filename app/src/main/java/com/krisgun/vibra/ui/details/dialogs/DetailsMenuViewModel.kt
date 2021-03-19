@@ -10,13 +10,14 @@ import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.ObservableViewModel
 import com.krisgun.vibra.BR
+import java.io.File
 import java.util.UUID
 
 private const val TAG = "DetailsMenu"
 
 class DetailsMenuViewModel : ObservableViewModel()  {
 
-    private val measurementRepository = MeasurementRepository.get()
+    val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
     val measurementsData: LiveData<List<Measurement>> = measurementRepository.getMeasurements()
     lateinit var measurement: Measurement
@@ -47,6 +48,10 @@ class DetailsMenuViewModel : ObservableViewModel()  {
         measurementLiveData.value?.let { measurementRepository.deleteMeasurement(it) }
     }
 
+    fun getRawDataFile(): File {
+        return measurementRepository.getRawDataFile(measurement)
+    }
+
     fun renameMeasurement(newTitle: String = titleText): Boolean {
         val oldMeasurement = this.measurement
         val newMeasurement = oldMeasurement.copy().apply {
@@ -58,10 +63,10 @@ class DetailsMenuViewModel : ObservableViewModel()  {
                 return false
             }
         }
-
         measurementRepository.renameDataFiles(oldMeasurement, newMeasurement).also {
             measurementRepository.updateMeasurement(newMeasurement)
         }
         return true
     }
+
 }
