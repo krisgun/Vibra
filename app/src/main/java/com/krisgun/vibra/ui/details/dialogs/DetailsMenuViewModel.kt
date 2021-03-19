@@ -18,7 +18,9 @@ class DetailsMenuViewModel : ObservableViewModel()  {
 
     private val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
+    val measurementsData: LiveData<List<Measurement>> = measurementRepository.getMeasurements()
     lateinit var measurement: Measurement
+    lateinit var measurementsList: List<Measurement>
 
     var isRenameButtonEnabled = ObservableBoolean()
     @get:Bindable
@@ -45,17 +47,21 @@ class DetailsMenuViewModel : ObservableViewModel()  {
         measurementLiveData.value?.let { measurementRepository.deleteMeasurement(it) }
     }
 
-    fun renameMeasurement(newTitle: String = titleText) {
+    fun renameMeasurement(newTitle: String = titleText): Boolean {
         val oldMeasurement = this.measurement
         val newMeasurement = oldMeasurement.copy().apply {
             title = newTitle
         }
-        /**
-         * TODO: Check for duplicate file-names
-         */
-        //See if it logs correctly before applying changes
-        //Log.d(TAG, "oldTitle: ${oldMeasurement.title}\tnewTitle: ${newMeasurement.title}")
-        measurementRepository.renameDataFiles(oldMeasurement, newMeasurement)
-        measurementRepository.updateMeasurement(newMeasurement)
+
+        measurementsList.forEach {
+            if (it.title == newTitle) {
+                return false
+            }
+        }
+
+        measurementRepository.renameDataFiles(oldMeasurement, newMeasurement).also {
+            measurementRepository.updateMeasurement(newMeasurement)
+        }
+        return true
     }
 }

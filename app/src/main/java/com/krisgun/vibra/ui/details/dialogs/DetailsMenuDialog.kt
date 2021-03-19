@@ -65,6 +65,10 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
                         viewModel.titleText = measurement.title
                     }
                 }
+
         )
+        viewModel.measurementsData.observe(viewLifecycleOwner, Observer {
+            viewModel.measurementsList = it
+        })
     }
 }
