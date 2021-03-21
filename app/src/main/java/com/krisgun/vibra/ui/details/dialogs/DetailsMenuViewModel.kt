@@ -59,11 +59,11 @@ class DetailsMenuViewModel : ObservableViewModel()  {
     fun renameMeasurement(newTitle: String = titleText): Boolean {
         val oldMeasurement = this.measurement
         val newMeasurement = oldMeasurement.copy().apply {
-            title = newTitle
+            title = newTitle.trim()
         }
 
         measurementsList.forEach {
-            if (it.title == newTitle) {
+            if (it.title == newMeasurement.title) {
                 return false
             }
         }
@@ -82,7 +82,6 @@ class DetailsMenuViewModel : ObservableViewModel()  {
     }
 
     var isShareButtonEnabled = ObservableBoolean()
-
     fun handleShareButton() {
         var anyBoxTrue = false
         for (checkBox in checkBoxBooleans) {
@@ -98,6 +97,12 @@ class DetailsMenuViewModel : ObservableViewModel()  {
                     handleShareButton()
                 }
             })
+        }
+    }
+
+    fun setCheckBoxPreferences(preferences: List<Boolean>) {
+        checkBoxBooleans.forEachIndexed { index, observableBoolean ->
+            observableBoolean.set(preferences[index])
         }
     }
 

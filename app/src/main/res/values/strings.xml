@@ -10,7 +10,7 @@
     <string name="content_description_settings">Settings</string>
     <string name="share_data">Share data</string>
     <string name="share">Share</string>
-    <string name="choose_data">Choose data</string>
+    <string name="choose_data">Choose data (as CSV)</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
     <string name="content_description_share">Share</string>
@@ -46,4 +46,10 @@
     <string name="prefs_measure_duration_minutes">SHARED_PREFS_DURATION_MINUTES</string>
     <string name="prefs_measure_duration_seconds">SHARED_PREFS_DURATION_SECONDS</string>
     <string name="prefs_measure_countdown_seconds">SHARED_PREFS_DURATION_COUNTDOWN</string>
+
+    <string name="prefs_share">SHARED_PREFS_SHARE</string>
+    <string name="prefs_share_raw_data">SHARED_PREFS_SHARE_RAW_DATA</string>
+    <string name="prefs_share_total_acceleration">SHARED_PREFS_SHARE_TOTAL_ACCELERATION</string>
+    <string name="prefs_share_amplitude_spectrum">SHARED_PREFS_SHARE_AMPLITUDE_SPECTRUM</string>
+    <string name="prefs_share_power_spectrum">SHARED_PREFS_SHARE_POWER_SPECTRUM</string>
 </resources>

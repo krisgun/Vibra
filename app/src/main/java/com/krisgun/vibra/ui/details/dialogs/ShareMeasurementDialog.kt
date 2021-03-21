@@ -1,6 +1,8 @@
 package com.krisgun.vibra.ui.details.dialogs
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -23,11 +25,21 @@ class ShareMeasurementDialog: BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogShareMeasurementBinding
     private lateinit var navController: NavController
+    private lateinit var sharedPrefsShare: SharedPreferences
+
     private val viewModel: DetailsMenuViewModel by navGraphViewModels(R.id.navigation_details_menu)
+    private lateinit var sharedPrefsStrings: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
+
+        sharedPrefsStrings = listOf(
+                getString(R.string.prefs_share_raw_data),
+                getString(R.string.prefs_share_total_acceleration),
+                getString(R.string.prefs_share_amplitude_spectrum),
+                getString(R.string.prefs_share_power_spectrum)
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,7 +53,10 @@ class ShareMeasurementDialog: BottomSheetDialogFragment() {
             detailsMenuVM = viewModel
             dialogFragment = this@ShareMeasurementDialog
         }
+
         viewModel.handleShareButton()
+        getSharedPreferences()
+
         return binding.root
     }
 
@@ -49,6 +64,27 @@ class ShareMeasurementDialog: BottomSheetDialogFragment() {
         super.onStart()
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        with (sharedPrefsShare.edit()) {
+            sharedPrefsStrings.forEachIndexed { index, string ->
+                putBoolean(string, viewModel.checkBoxBooleans[index].get())
+            }
+            apply()
+        }
+    }
+
+    private fun getSharedPreferences() {
+        val isCheckedPrefValues = mutableListOf<Boolean>()
+        sharedPrefsShare = requireActivity().getSharedPreferences(getString(R.string.prefs_share), Context.MODE_PRIVATE)
+        sharedPrefsStrings.forEach { string ->
+            sharedPrefsShare
+                    .getBoolean(string, false)
+                    .also { isCheckedPrefValues.add(it) }
+        }
+        viewModel.setCheckBoxPreferences(isCheckedPrefValues)
     }
 
     fun onShare() {
