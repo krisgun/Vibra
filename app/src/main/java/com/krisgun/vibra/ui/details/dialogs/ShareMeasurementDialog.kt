@@ -52,33 +52,25 @@ class ShareMeasurementDialog: BottomSheetDialogFragment() {
     }
 
     fun onShare() {
-        /**
-        Log.d(TAG, "Share clicked!")
-        val rawFileUri: Uri? = try {
-        FileProvider.getUriForFile(
-        requireActivity(),
-        "com.krisgun.vibra.fileprovider",
-        viewModel.getRawDataFile()
-        )
-        } catch (e: IllegalArgumentException) {
-        Log.e(TAG, "File cannot be shared: ${viewModel.getRawDataFile()}")
-        null
+        val uriList = arrayListOf<Uri>()
+        viewModel.getDataFiles().forEach { file  ->
+            Log.d(TAG, file.absolutePath)
+            uriList.add(
+                    FileProvider.getUriForFile(
+                            requireContext(),
+                            "com.krisgun.vibra.fileprovider",
+                            file
+                    )
+            )
         }
-
-        if (rawFileUri != null)  {
-        Log.d(TAG, "Raw file URI: $rawFileUri")
-        Intent(Intent.ACTION_SEND).apply {
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        putExtra(Intent.EXTRA_STREAM, rawFileUri)
-        type = requireActivity().contentResolver.getType(rawFileUri)
+        Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriList)
+            type = "text/csv"
         }.also { intent ->
-        val chooserIntent = Intent.createChooser(intent, "Raw CSV Data")
-        startActivity(chooserIntent)
+            val chooserIntent = Intent.createChooser(intent, "CSV Data")
+            startActivity(chooserIntent)
         }
-        } else {
-        Log.d(TAG, "Raw file URI is null")
-        }
-         **/
         this.dismiss()
     }
 

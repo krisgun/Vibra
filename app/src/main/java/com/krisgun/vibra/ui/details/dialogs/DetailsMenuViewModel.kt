@@ -101,10 +101,10 @@ class DetailsMenuViewModel : ObservableViewModel()  {
         }
     }
 
-
-
-    fun getRawDataFile(): File {
-        return measurementRepository.getRawDataFile(measurement)
+    fun getDataFiles(): List<File> {
+        return measurementRepository.getAllFilesList(measurement).filterIndexed { index, _ ->
+            checkBoxBooleans[index].get()
+        }
     }
 
 }
