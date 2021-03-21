@@ -2,7 +2,9 @@ package com.krisgun.vibra.ui.details.dialogs
 
 import android.util.Log
 import androidx.databinding.Bindable
+import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -17,23 +19,14 @@ private const val TAG = "DetailsMenu"
 
 class DetailsMenuViewModel : ObservableViewModel()  {
 
-    val measurementRepository = MeasurementRepository.get()
+    /**
+     * Measurement data
+     */
+    private val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
     val measurementsData: LiveData<List<Measurement>> = measurementRepository.getMeasurements()
     lateinit var measurement: Measurement
     lateinit var measurementsList: List<Measurement>
-
-    var isRenameButtonEnabled = ObservableBoolean()
-    @get:Bindable
-    var titleText: String = ""
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.titleText)
-            if (value.isNotEmpty())
-                isRenameButtonEnabled.set(true)
-            else
-                isRenameButtonEnabled.set(false)
-        }
 
     val measurementLiveData: LiveData<Measurement?> =
             Transformations.switchMap(measurementIdLiveData) { id ->
@@ -48,9 +41,20 @@ class DetailsMenuViewModel : ObservableViewModel()  {
         measurementLiveData.value?.let { measurementRepository.deleteMeasurement(it) }
     }
 
-    fun getRawDataFile(): File {
-        return measurementRepository.getRawDataFile(measurement)
-    }
+    /**
+     * Rename measurement
+     */
+    var isRenameButtonEnabled = ObservableBoolean()
+    @get:Bindable
+    var titleText: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.titleText)
+            if (value.isNotEmpty())
+                isRenameButtonEnabled.set(true)
+            else
+                isRenameButtonEnabled.set(false)
+        }
 
     fun renameMeasurement(newTitle: String = titleText): Boolean {
         val oldMeasurement = this.measurement
@@ -67,6 +71,40 @@ class DetailsMenuViewModel : ObservableViewModel()  {
             measurementRepository.updateMeasurement(newMeasurement)
         }
         return true
+    }
+
+
+    /**
+     * Share measurement
+     */
+    enum class DataNames {
+        RAW_DATA, TOTAL_ACCELERATION, AMPLITUDE_SPECTRUM, POWER_SPECTRUM
+    }
+
+    var isShareButtonEnabled = ObservableBoolean()
+
+    fun handleShareButton() {
+        var anyBoxTrue = false
+        for (checkBox in checkBoxBooleans) {
+            if (checkBox.get()) anyBoxTrue = true
+        }
+        if (anyBoxTrue) isShareButtonEnabled.set(true) else isShareButtonEnabled.set(false)
+    }
+
+    val checkBoxBooleans = Array<ObservableBoolean>(DataNames.values().size) {
+        ObservableBoolean(true).apply {
+            addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+                override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                    handleShareButton()
+                }
+            })
+        }
+    }
+
+
+
+    fun getRawDataFile(): File {
+        return measurementRepository.getRawDataFile(measurement)
     }
 
 }

@@ -64,32 +64,10 @@ class DetailsMenuDialog : BottomSheetDialogFragment() {
     }
 
     fun onShare() {
-        Log.d(TAG, "Share clicked!")
-        val rawFileUri: Uri? = try {
-            FileProvider.getUriForFile(
-                requireActivity(),
-                "com.krisgun.vibra.fileprovider",
-                viewModel.getRawDataFile()
-            )
-        } catch (e: IllegalArgumentException) {
-            Log.e(TAG, "File cannot be shared: ${viewModel.getRawDataFile()}")
-            null
-        }
-
-        if (rawFileUri != null)  {
-            Log.d(TAG, "Raw file URI: $rawFileUri")
-            Intent(Intent.ACTION_SEND).apply {
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                putExtra(Intent.EXTRA_STREAM, rawFileUri)
-                type = requireActivity().contentResolver.getType(rawFileUri)
-            }.also { intent ->
-                val chooserIntent = Intent.createChooser(intent, "Raw CSV Data")
-                startActivity(chooserIntent)
-            }
-        } else {
-            Log.d(TAG, "Raw file URI is null")
-        }
+        val action = DetailsMenuDialogDirections
+                .actionDetailsMenuDialogToShareMeasurementDialog()
         this.dismiss()
+        navController.navigate(action)
     }
 
     private fun passMeasurementIdToViewModel() {

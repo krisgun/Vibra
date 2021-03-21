@@ -107,11 +107,18 @@
             <action
                 android:id="@+id/action_detailsMenuDialog_to_renameMeasurementDialog"
                 app:destination="@id/renameMeasurementDialog" />
+            <action
+                android:id="@+id/action_detailsMenuDialog_to_shareMeasurementDialog"
+                app:destination="@id/shareMeasurementDialog" />
         </dialog>
         <dialog
             android:id="@+id/renameMeasurementDialog"
             android:name="com.krisgun.vibra.ui.details.dialogs.RenameMeasurementDialog"
             android:label="RenameMeasurementDialog" />
+        <dialog
+            android:id="@+id/shareMeasurementDialog"
+            android:name="com.krisgun.vibra.ui.details.dialogs.ShareMeasurementDialog"
+            android:label="ShareMeasurementDialog" />
     </navigation>
     <fragment
         android:id="@+id/measureSettingsFragment"
