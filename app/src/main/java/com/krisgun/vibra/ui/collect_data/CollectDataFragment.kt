@@ -26,7 +26,6 @@ class CollectDataFragment : Fragment() {
 
     private val args: CollectDataFragmentArgs by navArgs()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -12,7 +12,7 @@ import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.ObservableViewModel
 
-private const val TAG = "MeasureViewModel"
+private const val TAG = "MeasureView"
 const val INITIAL_MINUTES = "00"
 const val INITIAL_SECONDS = "15"
 const val INITIAL_COUNTDOWN_SECONDS = "05"
@@ -69,10 +69,6 @@ class MeasureViewModel : ObservableViewModel() {
         //Navigate to collect data view
         navController.navigate(action)
     }
-
-    /**
-     * TODO: IMPLEMENT AFTER TEXT CHANGED. SINGLE DIGIT SHOULD BE PREPENDED WITH A 0. EX 1 -> 01
-     */
 
     fun afterTextChangedDurationMinutesText(text: Editable) {
         val textString = text.toString()

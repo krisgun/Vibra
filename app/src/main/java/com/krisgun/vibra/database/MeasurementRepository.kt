@@ -78,6 +78,18 @@ class MeasurementRepository private constructor(context: Context){
         }
     }
 
+    fun getAllFilesList(measurement: Measurement): List<File> {
+        val filesList = mutableListOf<File>()
+        filesList.apply {
+            add(getRawDataFile(measurement))
+            add(getTotalAccelerationFile(measurement))
+            add(getAmplitudeSpectrumFile(measurement))
+            add(getPowerSpectrumFile(measurement))
+        }.also {
+            return it
+        }
+    }
+
     fun getTotalAccelerationFile(measurement: Measurement): File = File(filesDir, measurement.totalAccelerationFileName)
     fun getAmplitudeSpectrumFile(measurement: Measurement): File = File(filesDir, measurement.amplitudeSpectrumFileName)
     fun getPowerSpectrumFile(measurement: Measurement): File = File(filesDir, measurement.powerSpectrumFileName)

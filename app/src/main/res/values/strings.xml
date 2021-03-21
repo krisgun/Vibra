@@ -38,4 +38,8 @@
     <string name="sampling_frequency_info">Actual frequency may vary depending on the sensor.</string>
 
     <string name="prefs_sampling_frequency">SHARED_PREFS_SAMPLING_FREQUENCY</string>
+    <string name="prefs_measure">SHARED_PREFS_MEASURE</string>
+    <string name="prefs_measure_duration_minutes">SHARED_PREFS_DURATION_MINUTES</string>
+    <string name="prefs_measure_duration_seconds">SHARED_PREFS_DURATION_SECONDS</string>
+    <string name="prefs_measure_countdown_seconds">SHARED_PREFS_DURATION_COUNTDOWN</string>
 </resources>
