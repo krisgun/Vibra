@@ -1,7 +1,6 @@
 package com.krisgun.vibra.ui.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +30,7 @@ class DetailsFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (navController.previousBackStackEntry?.destination?.id  == R.id.navigation_collect_data) {
-                    navController.popBackStack(R.id.navigation_measure, false)
+                    navController.popBackStack(R.id.measureFragment, false)
                 } else
                     navController.popBackStack()
             }

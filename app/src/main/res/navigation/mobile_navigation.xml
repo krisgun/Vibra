@@ -3,19 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_measure">
+    app:startDestination="@+id/navigation_measure_countdown">
 
-    <fragment
-        android:id="@+id/navigation_measure"
-        android:name="com.krisgun.vibra.ui.measure.MeasureFragment"
-        android:label="@string/title_measure"
-        tools:layout="@layout/fragment_measure" >
-        <action
-            android:id="@+id/action_navigation_measure_to_navigation_collect"
-            app:destination="@id/navigation_collect_and_dialog"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
-    </fragment>
+    <navigation
+        android:id="@+id/navigation_measure_countdown"
+        app:startDestination="@id/measureFragment" >
+
+        <fragment
+            android:id="@+id/measureFragment"
+            android:name="com.krisgun.vibra.ui.measure.MeasureFragment"
+            android:label="@string/title_measure"
+            tools:layout="@layout/fragment_measure" >
+            <action
+                android:id="@+id/action_navigation_measure_to_navigation_collect"
+                app:destination="@id/navigation_collect_and_dialog"
+                app:enterAnim="@anim/slide_in_right" />
+            <action
+                android:id="@+id/action_navigation_measure_to_countDownDialog"
+                app:destination="@id/countDownDialog" />
+        </fragment>
+        <dialog
+            android:id="@+id/countDownDialog"
+            android:name="com.krisgun.vibra.ui.measure.dialogs.CountDownDialog"
+            android:label="CountDownDialog"
+            tools:layout="@layout/dialog_countdown">
+
+            <action
+                android:id="@+id/action_countDownDialog_to_navigation_collect_and_dialog"
+                app:destination="@id/navigation_collect_and_dialog"
+                app:enterAnim="@anim/slide_in_right"/>
+        </dialog>
+
+    </navigation>
 
     <fragment
         android:id="@+id/navigation_history"
@@ -75,13 +94,14 @@
         <dialog
             android:id="@+id/stopMeasurementDialog"
             android:name="com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialog"
-            android:label="StopMeasurementDialog">
+            android:label="StopMeasurementDialog"
+            tools:layout="@layout/dialog_stop_measurement">
             <action
                 android:id="@+id/action_stopMeasurementDialog_to_navigation_details"
                 app:destination="@id/navigation_details" />
             <action
                 android:id="@+id/action_stopMeasurementDialog_to_navigation_measure"
-                app:destination="@id/navigation_measure" />
+                app:destination="@id/navigation_measure_countdown" />
         </dialog>
     </navigation>
     <navigation android:id="@+id/navigation_details_menu"

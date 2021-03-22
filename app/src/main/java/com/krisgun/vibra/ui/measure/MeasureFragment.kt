@@ -3,12 +3,12 @@ package com.krisgun.vibra.ui.measure
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.preference.PreferenceManager
 import com.krisgun.vibra.R
@@ -18,7 +18,7 @@ private const val TAG = "MeasureView"
 
 class MeasureFragment : Fragment() {
 
-    private lateinit var measureViewModel: MeasureViewModel
+    private val measureViewModel: MeasureViewModel by navGraphViewModels(R.id.navigation_measure_countdown)
     private lateinit var navController: NavController
     private lateinit var sharedMeasurePref: SharedPreferences
 
@@ -33,8 +33,6 @@ class MeasureFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        measureViewModel =
-                ViewModelProvider(this).get(MeasureViewModel::class.java)
 
         val binding = FragmentMeasureBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_measure"
+        android:id="@+id/navigation_measure_countdown"
         android:icon="@drawable/ic_outline_add_circle_outline_24"
         android:title="@string/title_measure" />
 
