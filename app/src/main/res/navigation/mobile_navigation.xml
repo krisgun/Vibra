@@ -17,7 +17,8 @@
             <action
                 android:id="@+id/action_navigation_measure_to_navigation_collect"
                 app:destination="@id/navigation_collect_and_dialog"
-                app:enterAnim="@anim/slide_in_right" />
+                app:enterAnim="@anim/fragment_fade_enter"
+                app:exitAnim="@anim/fragment_fade_exit" />
             <action
                 android:id="@+id/action_navigation_measure_to_countDownDialog"
                 app:destination="@id/countDownDialog" />
