@@ -46,6 +46,9 @@ class DeleteMeasurementDialog : DialogFragment() {
     fun onDelete() {
         detailsMenuViewModel.deleteMeasurement()
         this.dismiss()
+        if (navController.previousBackStackEntry?.destination?.id == R.id.navigation_details) {
+            navController.navigateUp()
+        }
     }
 
     fun onCancel() {

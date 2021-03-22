@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return if (navController.previousBackStackEntry?.destination?.id  == R.id.navigation_collect_data) {
-            navController.popBackStack(R.id.navigation_measure_countdown, false)
+            navController.popBackStack(R.id.measureFragment, false)
         } else
             navController.popBackStack()
     }
