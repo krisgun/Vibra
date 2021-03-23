@@ -38,10 +38,18 @@
     <string name="total_acceleration">Total Acceleration</string>
     <string name="amplitude_spectrum">Amplitude Spectrum</string>
     <string name="power_spectrum_graph">Power Spectrum</string>
-    <string name="sampling_frequency">Desired Sampling Frequency (Hz)</string>
-    <string name="sampling_frequency_info">Actual frequency may vary depending on the sensor.</string>
+    <string name="sampling_frequency">Sampling Frequency (Hz)</string>
+    <string name="sampling_frequency_info">Actual frequency may vary depending on the sensor\'s capabilities.</string>
+    <string name="input_a_number">Input a number</string>
+    <string name="show_graphs">Graphs to be shown</string>
+    <string name="show_graphs_info">Select which graphs should be shown when viewing measurement data.</string>
+
+    <string name="measurement_settings">Data Collection</string>
+    <string name="measurement_details">Measurement Details</string>
+    <string name="signal_processing">Signal Processing</string>
 
     <string name="prefs_sampling_frequency">SHARED_PREFS_SAMPLING_FREQUENCY</string>
+    <string name="prefs_show_graphs_key">SHARED_PREFS_GRAHPS</string>
     <string name="prefs_measure">SHARED_PREFS_MEASURE</string>
     <string name="prefs_measure_duration_minutes">SHARED_PREFS_DURATION_MINUTES</string>
     <string name="prefs_measure_duration_seconds">SHARED_PREFS_DURATION_SECONDS</string>
@@ -52,4 +60,24 @@
     <string name="prefs_share_total_acceleration">SHARED_PREFS_SHARE_TOTAL_ACCELERATION</string>
     <string name="prefs_share_amplitude_spectrum">SHARED_PREFS_SHARE_AMPLITUDE_SPECTRUM</string>
     <string name="prefs_share_power_spectrum">SHARED_PREFS_SHARE_POWER_SPECTRUM</string>
+    
+    <string-array name="prefs_show_graphs_values">
+        <item>SHARED_PREFS_GRAPH_RAW_DATA</item>
+        <item>SHARED_PREFS_GRAPH_TOTAL_ACCELERATION</item>
+        <item>SHARED_PREFS_GRAPH_AMPLITUDE_SPECTRUM</item>
+        <item>SHARED_PREFS_GRAPH_POWER_SPECTRUM</item>
+    </string-array>
+    <string-array name="prefs_show_graphs">
+        <item>Raw Data</item>
+        <item>Total Acceleration</item>
+        <item>Amplitude Spectrum</item>
+        <item>Power Spectrum</item>
+    </string-array>
+    <string-array name="prefs_show_graphs_default">
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+    </string-array>
+
 </resources>

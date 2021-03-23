@@ -145,5 +145,5 @@
     <fragment
         android:id="@+id/measureSettingsFragment"
         android:name="com.krisgun.vibra.ui.measure.settings.MeasureSettingsFragment"
-        android:label="Measurement" />
+        android:label="Settings" />
 </navigation>

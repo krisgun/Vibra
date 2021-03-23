@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <SeekBarPreference
-        android:key="@string/prefs_sampling_frequency"
-        android:title="@string/sampling_frequency"
-        android:summary="@string/sampling_frequency_info"
-        android:max="100"
-        android:icon="@drawable/ic_sampling_frequency"
-        android:defaultValue="50"
-        app:showSeekBarValue="true"
-        app:seekBarIncrement="10"
-        app:adjustable="true"
-        app:min="10" />
 
+    <PreferenceCategory android:title="@string/measurement_settings" >
+        <EditTextPreference
+            android:key="@string/prefs_sampling_frequency"
+            android:title="@string/sampling_frequency"
+            android:summary="@string/sampling_frequency_info"
+            android:icon="@drawable/ic_sampling_frequency"
+            android:defaultValue="50" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/measurement_details">
+        <MultiSelectListPreference
+            android:key="@string/prefs_show_graphs_key"
+            android:title="@string/show_graphs"
+            android:summary="@string/show_graphs_info"
+            android:icon="@drawable/ic_baseline_bar_chart_24"
+            android:entries="@array/prefs_show_graphs"
+            android:entryValues="@array/prefs_show_graphs_values"
+            android:defaultValue="@array/prefs_show_graphs_values">
+        </MultiSelectListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/signal_processing">
+
+    </PreferenceCategory>
 </PreferenceScreen>

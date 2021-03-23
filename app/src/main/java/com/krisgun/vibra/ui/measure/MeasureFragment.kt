@@ -55,13 +55,15 @@ class MeasureFragment : Fragment() {
 
     private fun setupViewModel() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        measureViewModel.samplingFrequency = sharedPreferences.getInt(getString(R.string.prefs_sampling_frequency), 50)
+        val prefSamplingFrequency = sharedPreferences
+                .getString(getString(R.string.prefs_sampling_frequency), "50")?.toInt()
+        measureViewModel.samplingFrequency = prefSamplingFrequency ?: 50
 
         //Fetch duration minutes and seconds from shared preferences
-        sharedMeasurePref = requireActivity().getSharedPreferences(getString(R.string.prefs_measure), Context.MODE_PRIVATE) ?: return
+        sharedMeasurePref = requireActivity().getSharedPreferences(getString(R.string.prefs_measure), Context.MODE_PRIVATE)
         val durationMinutes = sharedMeasurePref.getString(getString(R.string.prefs_measure_duration_minutes), "00")
-        val durationSeconds = sharedMeasurePref.getString(getString(R.string.prefs_measure_duration_seconds), "15")
-        val countdownSeconds = sharedMeasurePref.getString(getString(R.string.prefs_measure_countdown_seconds), "05")
+        val durationSeconds = sharedMeasurePref.getString(getString(R.string.prefs_measure_duration_seconds), "00")
+        val countdownSeconds = sharedMeasurePref.getString(getString(R.string.prefs_measure_countdown_seconds), "00")
         if (durationMinutes != null && durationSeconds != null && countdownSeconds != null) {
             measureViewModel.durationMinutes = durationMinutes
             measureViewModel.durationSeconds = durationSeconds
