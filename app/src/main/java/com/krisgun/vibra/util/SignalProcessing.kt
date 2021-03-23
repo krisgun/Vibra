@@ -1,7 +1,5 @@
 package com.krisgun.vibra.util
 
-import android.util.Log
-import com.github.psambit9791.jdsp.filter.Butterworth
 import com.github.psambit9791.jdsp.transform.DiscreteFourier
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -161,11 +159,10 @@ class SignalProcessing {
             /**
              * Compute the amplitude spectrum
              */
-            val p2: MutableList<Double> = mutableListOf()
+            val p1: MutableList<Double> = mutableListOf()
             spectrum.forEach { spectrumData ->
-                p2.add(abs(spectrumData.div(numberOfPoints)))
+                p1.add(abs(spectrumData.div(numberOfPoints)))
             }
-            val p1 = p2.subList(0, numberOfPoints / 2)
             for (i in 1..p1.size - 2) {
                 p1[i] = 2 * p1[i]
             }
