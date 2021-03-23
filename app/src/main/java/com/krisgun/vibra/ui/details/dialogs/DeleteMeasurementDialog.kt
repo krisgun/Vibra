@@ -1,9 +1,9 @@
 package com.krisgun.vibra.ui.details.dialogs
 
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +11,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.navigation.ui.navigateUp
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.DialogDeleteMeasurementBinding
+
+private const val TAG = "DetailsMenu"
 
 class DeleteMeasurementDialog : DialogFragment() {
 
@@ -46,9 +49,10 @@ class DeleteMeasurementDialog : DialogFragment() {
     fun onDelete() {
         detailsMenuViewModel.deleteMeasurement()
         this.dismiss()
-        if (navController.previousBackStackEntry?.destination?.id == R.id.navigation_details) {
-            navController.navigateUp()
-        }
+        /**if (navController.previousBackStackEntry?.destination?.id == R.id.navigation_details) {
+            Log.d(TAG, "onDelete if")
+
+        }*/
     }
 
     fun onCancel() {
