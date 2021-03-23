@@ -5,6 +5,7 @@
 
     <data>
         <import type="com.krisgun.vibra.util.Converter" />
+        <import type="com.krisgun.vibra.util.DataNames" />
         <variable
             name="detailsVM"
             type="com.krisgun.vibra.ui.details.DetailsViewModel" />
@@ -147,7 +148,8 @@
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/detail_basic_info_cl">
+                    app:layout_constraintTop_toBottomOf="@+id/detail_basic_info_cl"
+                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.RAW_DATA.ordinal]}">
 
                     <TextView
                         android:id="@+id/raw_data_title"
@@ -177,7 +179,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="386dp"
                     android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@+id/raw_data_graph_cl">
+                    app:layout_constraintTop_toBottomOf="@+id/raw_data_graph_cl"
+                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.TOTAL_ACCELERATION.ordinal]}">
 
                     <TextView
                         android:id="@+id/total_acceleration_title"
@@ -207,7 +210,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="386dp"
                     android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/total_acceleration_graph_cl">
+                    app:layout_constraintTop_toBottomOf="@id/total_acceleration_graph_cl"
+                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.AMPLITUDE_SPECTRUM.ordinal]}">
 
                     <TextView
                         android:id="@+id/amplitude_spectrum_title"
@@ -239,7 +243,8 @@
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/amplitude_spectrum_cl">
+                    app:layout_constraintTop_toBottomOf="@id/amplitude_spectrum_cl"
+                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.POWER_SPECTRUM.ordinal]}">
 
 
                     <TextView

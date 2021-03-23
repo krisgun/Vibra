@@ -62,10 +62,10 @@
     <string name="prefs_share_power_spectrum">SHARED_PREFS_SHARE_POWER_SPECTRUM</string>
     
     <string-array name="prefs_show_graphs_values">
-        <item>SHARED_PREFS_GRAPH_RAW_DATA</item>
-        <item>SHARED_PREFS_GRAPH_TOTAL_ACCELERATION</item>
-        <item>SHARED_PREFS_GRAPH_AMPLITUDE_SPECTRUM</item>
-        <item>SHARED_PREFS_GRAPH_POWER_SPECTRUM</item>
+        <item>RAW_DATA</item>
+        <item>TOTAL_ACCELERATION</item>
+        <item>AMPLITUDE_SPECTRUM</item>
+        <item>POWER_SPECTRUM</item>
     </string-array>
     <string-array name="prefs_show_graphs">
         <item>Raw Data</item>

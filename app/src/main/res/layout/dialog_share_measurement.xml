@@ -10,7 +10,7 @@
         <variable
             name="detailsMenuVM"
             type="com.krisgun.vibra.ui.details.dialogs.DetailsMenuViewModel" />
-        <import type="com.krisgun.vibra.ui.details.dialogs.DetailsMenuViewModel.DataNames" />
+        <import type="com.krisgun.vibra.util.DataNames" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

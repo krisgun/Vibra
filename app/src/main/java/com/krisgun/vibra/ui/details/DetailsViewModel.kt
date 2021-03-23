@@ -1,6 +1,7 @@
 package com.krisgun.vibra.ui.details
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -9,6 +10,7 @@ import com.github.psambit9791.jdsp.signal.peaks.FindPeak
 import com.github.psambit9791.jdsp.signal.peaks.Peak
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
+import com.krisgun.vibra.util.DataNames
 import com.krisgun.vibra.util.SignalProcessing
 import java.util.UUID
 import java.util.concurrent.Executors
@@ -130,4 +132,25 @@ class DetailsViewModel : ViewModel() {
         }
     }
 
+
+    /**
+     * Preferences handling
+     */
+
+    private val _graphVisibleLiveData = MutableLiveData<List<Int>>()
+    val graphVisibleLiveData: LiveData<List<Int>>
+        get() = _graphVisibleLiveData
+
+    fun setGraphVisibleBooleans(isGraphVisiblePrefSet: MutableSet<String>) {
+        val isGraphVisibleList = mutableListOf<Int>()
+        val dataFiles = DataNames.values()
+        dataFiles.forEach {
+            if (isGraphVisiblePrefSet.contains(it.name)) {
+                isGraphVisibleList.add(View.VISIBLE)
+            } else {
+                isGraphVisibleList.add(View.GONE)
+            }
+        }
+        _graphVisibleLiveData.value = isGraphVisibleList
+    }
 }

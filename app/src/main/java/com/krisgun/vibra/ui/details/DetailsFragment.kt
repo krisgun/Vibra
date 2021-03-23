@@ -1,6 +1,7 @@
 package com.krisgun.vibra.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.onNavDestinationSelected
+import androidx.preference.PreferenceManager
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentDetailsBinding
 
@@ -54,7 +56,7 @@ class DetailsFragment : Fragment() {
             detailsVM = viewModel
         }
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
-        passMeasurementIdToViewModel()
+        setUpViewModel()
         return binding.root
     }
 
@@ -78,7 +80,7 @@ class DetailsFragment : Fragment() {
     }
 
 
-    private fun passMeasurementIdToViewModel() {
+    private fun setUpViewModel() {
         val id = args.measurementId
         viewModel.setMeasurementId(id)
         viewModel.measurementLiveData.observe(viewLifecycleOwner,
@@ -88,5 +90,12 @@ class DetailsFragment : Fragment() {
                 }
             }
         )
+        getSharedPreferences()
+    }
+
+    private fun getSharedPreferences() {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+        sharedPrefs.getStringSet(getString(R.string.prefs_show_graphs_key), mutableSetOf())
+                ?.let { viewModel.setGraphVisibleBooleans(it) }
     }
 }
