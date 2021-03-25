@@ -68,6 +68,7 @@ class DetailsViewModel : ViewModel() {
 
             val totalAccelerationData = getTotalAcceleration(rawData)
             _totAccelDataLiveData.postValue(totalAccelerationData)
+            getTotalAccelerationPeaks(totalAccelerationData)
 
             val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
             _amplitudeSpectrumLiveData.postValue(amplitudeSpectrumData)
@@ -100,6 +101,20 @@ class DetailsViewModel : ViewModel() {
         }
     }
 
+    private fun getTotalAccelerationPeaks(totalAccelerationData: List<Pair<Long, Float>>): List<Int> {
+        val accSignal = totalAccelerationData.map { it.second.toDouble() }.toDoubleArray()
+        val fp = FindPeak(accSignal)
+        val out: Peak = fp.detectPeaks()
+        val peakList = out.filterByProminence(10.0, 80.0).toList()
+        peakList.forEach { Log.d(TAG, "index: $it, val: ${accSignal[it]}; ") }
+        return peakList
+    }
+
+    private fun getTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>,
+                                                    peaks: List<Int>) {
+
+    }
+
     private fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
             List<Pair<Double, Double>> {
 
@@ -117,7 +132,7 @@ class DetailsViewModel : ViewModel() {
 
         val fp = FindPeak(p1Signal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByProminence(0.5, 10.0).toList()
+        return out.filterByProminence(0.25, 10.0).toList()
     }
 
     private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
