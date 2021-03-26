@@ -34,15 +34,23 @@
     <string name="cancel">Cancel</string>
     <string name="discard">Discard</string>
     <string name="resume">Resume</string>
-    <string name="raw_data_graph">Raw Data</string>
+    <string name="raw_data_graph">Accelerometer Data</string>
     <string name="total_acceleration">Total Acceleration</string>
     <string name="amplitude_spectrum">Amplitude Spectrum</string>
     <string name="power_spectrum_graph">Power Spectrum</string>
     <string name="sampling_frequency">Sampling Frequency (Hz)</string>
     <string name="sampling_frequency_info">Actual frequency may vary depending on the sensor\'s capabilities.</string>
     <string name="input_a_number">Input a number</string>
-    <string name="show_graphs">Graphs to be shown</string>
+    <string name="show_graphs">Graphs to be Shown</string>
     <string name="show_graphs_info">Select which graphs should be shown when viewing measurement data.</string>
+    <string name="prefs_total_acceleration_info">Adjust parameters related to calculating the total acceleration.</string>
+    <string name="sign_maxima_thresh_title">Maxima Threshold for Finding Sign</string>
+    <string name="sign_maxima_thresh_summary">Threshold for finding indices for the maxima in the acceleration vector.</string>
+    <string name="tot_acc_peak_lower_thresh_title">Lower Peak Threshold</string>
+    <string name="tot_acc_peak_upper_thresh_title">Upper Peak Threshold</string>
+    <string name="tot_acc_peak_lower_thresh_summary">Lower threshold for finding peaks, value in m/s^2.</string>
+    <string name="tot_acc_peak_upper_thresh_summary">Upper threshold for finding peaks, value in m/s^2.</string>
+    <string name="prefs_amplitude_spectrum_info">Adjust parameters related to the amplitude spectrum.</string>
 
     <string name="measurement_settings">Data Collection</string>
     <string name="measurement_details">Measurement Details</string>
@@ -60,7 +68,14 @@
     <string name="prefs_share_total_acceleration">SHARED_PREFS_SHARE_TOTAL_ACCELERATION</string>
     <string name="prefs_share_amplitude_spectrum">SHARED_PREFS_SHARE_AMPLITUDE_SPECTRUM</string>
     <string name="prefs_share_power_spectrum">SHARED_PREFS_SHARE_POWER_SPECTRUM</string>
-    
+
+    <string name="prefs_total_acceleration">SHARED_PREFS_TOTAL_ACCELERATION</string>
+    <string name="prefs_tot_acc_maxima_thresh_in_find_sign">SHARED_PREFS_SIGN_FIND_MAXIMA_THRESH</string>
+    <string name="prefs_tot_acc_peak_lower_thresh">SHARED_PREFS_TOT_ACC_PEAK_LOWER_THRESH</string>
+    <string name="prefs_tot_acc_peak_upper_thresh">SHARED_PREFS_TOT_ACC_PEAK_UPPER_THRESH</string>
+
+    <string name="prefs_amplitude_spectrum"></string>
+
     <string-array name="prefs_show_graphs_values">
         <item>RAW_DATA</item>
         <item>TOTAL_ACCELERATION</item>
@@ -68,10 +83,10 @@
         <item>POWER_SPECTRUM</item>
     </string-array>
     <string-array name="prefs_show_graphs">
-        <item>Raw Data</item>
-        <item>Total Acceleration</item>
-        <item>Amplitude Spectrum</item>
-        <item>Power Spectrum</item>
+        <item>@string/raw_data_graph</item>
+        <item>@string/total_acceleration</item>
+        <item>@string/amplitude_spectrum</item>
+        <item>@string/power_spectrum_graph</item>
     </string-array>
     <string-array name="prefs_show_graphs_default">
         <item>true</item>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Find Oscillation Sign" />
+
+    <EditTextPreference
+        android:key="@string/prefs_tot_acc_maxima_thresh_in_find_sign"
+        android:title="@string/sign_maxima_thresh_title"
+        android:summary="@string/sign_maxima_thresh_summary"
+        android:defaultValue="0.8" />
+
+    <PreferenceCategory android:title="Peak Thresholds" />
+
+    <EditTextPreference
+        android:key="@string/prefs_tot_acc_peak_upper_thresh"
+        android:title="@string/tot_acc_peak_upper_thresh_title"
+        android:summary="@string/tot_acc_peak_upper_thresh_summary"
+        android:defaultValue="78.0" />
+
+    <EditTextPreference
+        android:key="@string/prefs_tot_acc_peak_lower_thresh"
+        android:title="@string/tot_acc_peak_lower_thresh_title"
+        android:summary="@string/tot_acc_peak_lower_thresh_summary"
+        android:defaultValue="10.0" />
+
+
+</PreferenceScreen>

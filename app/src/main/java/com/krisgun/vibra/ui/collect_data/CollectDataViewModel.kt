@@ -115,7 +115,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
                 measurement.sampling_frequency = (countLines / (it / 1000000000.0))
                 measurement.num_of_datapoints = countLines
 
-                Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration: $it ms\t $countLines lines")
+                Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration: ${(it / 1000000.0)} ms\t $countLines lines")
             }
         }
 
@@ -195,6 +195,10 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             Log.d(TAG, "Sensor delay: $sensorDelay")
             sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER).let {
                 sm.registerListener(this, it, sensorDelay, mSensorHandler) //ca 50 per sekund med GAME
+            }
+
+            sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE).let {
+                Log.d(TAG, it.toString())
             }
         }
     }

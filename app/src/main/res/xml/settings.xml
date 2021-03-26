@@ -25,5 +25,17 @@
 
     <PreferenceCategory android:title="@string/signal_processing">
 
+        <Preference
+            android:key="@string/prefs_total_acceleration"
+            android:title="@string/total_acceleration"
+            android:summary="@string/prefs_total_acceleration_info">
+        </Preference>
+
+        <Preference
+            android:key="@string/prefs_amplitude_spectrum"
+            android:title="@string/amplitude_spectrum"
+            android:summary="@string/prefs_amplitude_spectrum_info">
+        </Preference>
+
     </PreferenceCategory>
 </PreferenceScreen>

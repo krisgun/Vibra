@@ -143,7 +143,22 @@
             android:label="ShareMeasurementDialog" />
     </navigation>
     <fragment
-        android:id="@+id/measureSettingsFragment"
-        android:name="com.krisgun.vibra.ui.measure.settings.MeasureSettingsFragment"
-        android:label="Settings" />
+        android:id="@+id/settingsFragment"
+        android:name="com.krisgun.vibra.ui.settings.SettingsFragment"
+        android:label="Settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_settingsTotalAccelerationFragment"
+            app:destination="@id/settingsTotalAccelerationFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_amplitudeSpectrumFragment"
+            app:destination="@id/amplitudeSpectrumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsTotalAccelerationFragment"
+        android:name="com.krisgun.vibra.ui.settings.TotalAccelerationFragment"
+        android:label="@string/total_acceleration" />
+    <fragment
+        android:id="@+id/amplitudeSpectrumFragment"
+        android:name="com.krisgun.vibra.ui.settings.AmplitudeSpectrumFragment"
+        android:label="Amplitude Spectrum" />
 </navigation>

@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        PreferenceManager.setDefaultValues(this, R.xml.settings_measure, false)
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false)
 
     }
 
