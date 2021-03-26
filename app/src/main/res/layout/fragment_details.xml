@@ -159,8 +159,7 @@
                         android:text="@string/raw_data_graph"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Raw Data" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/raw_data_line_chart"
@@ -187,14 +186,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Total Acceleration"
+                        android:text="@string/total_acceleration"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Total Acceleration" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/power_spectrum_line_chart"
+                        android:id="@+id/total_acceleration_line_chart"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="34dp"
@@ -206,11 +204,29 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/acc_peak_occurrences_cl"
+                    android:layout_width="match_parent"
+                    android:layout_height="386dp"
+                    android:layout_marginTop="34dp"
+                    app:layout_constraintTop_toBottomOf="@id/total_acceleration_graph_cl"
+                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.TOTAL_ACCELERATION.ordinal]}">>
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/acc_peak_occurrences"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:accelerationPeakOccurrences="@{detailsVM.accPeakOccurrencesLiveData}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/amplitude_spectrum_cl"
                     android:layout_width="match_parent"
                     android:layout_height="386dp"
                     android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/total_acceleration_graph_cl"
+                    app:layout_constraintTop_toBottomOf="@id/acc_peak_occurrences_cl"
                     android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.AMPLITUDE_SPECTRUM.ordinal]}">
 
                     <TextView

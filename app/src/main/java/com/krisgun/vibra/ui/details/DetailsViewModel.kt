@@ -12,6 +12,7 @@ import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.DataNames
 import com.krisgun.vibra.util.SignalProcessing
+import java.math.RoundingMode
 import java.util.UUID
 import java.util.concurrent.Executors
 
@@ -39,6 +40,10 @@ class DetailsViewModel : ViewModel() {
     private val _totAccelDataLiveData = MutableLiveData<List<Pair<Long, Float>>>()
     val totAccelDataLiveData: LiveData<List<Pair<Long, Float>>>
     get() = _totAccelDataLiveData
+
+    private val _accPeakOccurrencesLiveData = MutableLiveData<Map<Float, Int>>()
+    val accPeakOccurrencesLiveData: LiveData<Map<Float, Int>>
+        get() = _accPeakOccurrencesLiveData
 
     private val _amplitudeSpectrumLiveData = MutableLiveData<List<Pair<Double, Double>>>()
     val amplitudeSpectrumLiveData: LiveData<List<Pair<Double, Double>>>
@@ -68,7 +73,11 @@ class DetailsViewModel : ViewModel() {
 
             val totalAccelerationData = getTotalAcceleration(rawData)
             _totAccelDataLiveData.postValue(totalAccelerationData)
-            getTotalAccelerationPeaks(totalAccelerationData)
+            val totalAccelerationPeaks = getTotalAccelerationPeaks(totalAccelerationData)
+
+            val totalAccelertionPeakOccurences =
+                    getTotalAccelerationPeakOccurrences(totalAccelerationData, totalAccelerationPeaks)
+            _accPeakOccurrencesLiveData.postValue(totalAccelertionPeakOccurences)
 
             val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
             _amplitudeSpectrumLiveData.postValue(amplitudeSpectrumData)
@@ -105,14 +114,28 @@ class DetailsViewModel : ViewModel() {
         val accSignal = totalAccelerationData.map { it.second.toDouble() }.toDoubleArray()
         val fp = FindPeak(accSignal)
         val out: Peak = fp.detectPeaks()
-        val peakList = out.filterByProminence(10.0, 80.0).toList()
-        peakList.forEach { Log.d(TAG, "index: $it, val: ${accSignal[it]}; ") }
-        return peakList
+        return out.filterByProminence(10.0, 80.0).toList()
     }
 
     private fun getTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>,
-                                                    peaks: List<Int>) {
+                                                    peaks: List<Int>): Map<Float, Int> {
+        val peakValues = peaks.map {
+            totalAccelerationData[it]
+                    .second.toBigDecimal().setScale(1,  RoundingMode.HALF_UP)
+        }
 
+        val peakOccurrences = totalAccelerationData.filter {
+            peakValues.contains(
+                it.second.toBigDecimal().setScale(1, RoundingMode.HALF_UP)
+            )
+        }
+                .groupingBy { it.second.toBigDecimal().setScale(1, RoundingMode.HALF_UP) }
+                .eachCount()
+                .filterValues { it > 1 }
+                .mapKeys { it.key.toFloat() }
+                .toSortedMap()
+
+        return peakOccurrences
     }
 
     private fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):

@@ -1,11 +1,11 @@
 package com.krisgun.vibra.util
 
+import android.view.View
 import androidx.databinding.BindingAdapter
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.krisgun.vibra.R
 import kotlin.math.log10
@@ -54,7 +54,6 @@ fun setLineChartData(view: LineChart, data: List<Pair<Long, Triple<Float, Float,
         description.text = "Accelerometer Data"
 
         view.setBackgroundColor(view.resources.getColor(R.color.white))
-
         view.data = lineData
         view.invalidate()
     }
@@ -98,7 +97,7 @@ fun setTotAccLineChartData(view: LineChart, data: List<Pair<Long, Float>>?) {
 fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Double>>?, peaks: List<Int>?) {
     view.setNoDataText("Loading graph data...")
 
-    if(data != null && peaks != null) {
+    if (data != null && peaks != null) {
 
         val entryList = mutableListOf<Entry>()
         val peakEntryList = mutableListOf<Entry>()
@@ -143,7 +142,7 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
 @BindingAdapter("android:powerSpectrumData")
 fun setPowerSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Double>>?) {
     view.setNoDataText("Loading graph data...")
-    if(data != null) {
+    if (data != null) {
 
         val entryList = mutableListOf<Entry>()
 
@@ -167,6 +166,31 @@ fun setPowerSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Doubl
         view.setBackgroundColor(view.resources.getColor(R.color.white))
 
         view.data = lineData
+        view.invalidate()
+    }
+}
+
+@BindingAdapter("android:accelerationPeakOccurrences")
+fun setAccelerationPeakOccurrences(view: BarChart, data: Map<Float, Int>?) {
+    view.setNoDataText("Loading graph data...")
+
+    if (data != null) {
+
+        val entryList = mutableListOf<BarEntry>()
+        data.forEach { (acceleration, occurrences) ->
+            entryList.add(BarEntry(acceleration, occurrences.toFloat()))
+        }
+
+        val barDataSet = BarDataSet(entryList, "Occurrences / Acceleration Peak (m/s^2)")
+        barDataSet.barBorderWidth = 0.01f
+        barDataSet.setDrawValues(false)
+        val barData = BarData(barDataSet)
+        barData.barWidth = 0.05f
+
+        view.data = barData
+        view.setBackgroundColor(view.resources.getColor(R.color.white))
+        view.description.text = "Peak Occurrences"
+        view.setFitBars(true)
         view.invalidate()
     }
 }
