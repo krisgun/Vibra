@@ -51,6 +51,8 @@
     <string name="tot_acc_peak_lower_thresh_summary">Lower threshold for finding peaks, value in m/s^2.</string>
     <string name="tot_acc_peak_upper_thresh_summary">Upper threshold for finding peaks, value in m/s^2.</string>
     <string name="prefs_amplitude_spectrum_info">Adjust parameters related to the amplitude spectrum.</string>
+    <string name="amp_spec_peak_lower_thresh_summary">Lower threshold for finding amplitude peaks.</string>
+    <string name="amp_spec_peak_upper_thresh_summary">Upper threshold for finding amplitude peaks.</string>
 
     <string name="measurement_settings">Data Collection</string>
     <string name="measurement_details">Measurement Details</string>
@@ -74,7 +76,9 @@
     <string name="prefs_tot_acc_peak_lower_thresh">SHARED_PREFS_TOT_ACC_PEAK_LOWER_THRESH</string>
     <string name="prefs_tot_acc_peak_upper_thresh">SHARED_PREFS_TOT_ACC_PEAK_UPPER_THRESH</string>
 
-    <string name="prefs_amplitude_spectrum"></string>
+    <string name="prefs_amplitude_spectrum">SHARED_PREFS_AMPLITUDE_SPECTRUM</string>
+    <string name="prefs_amp_spec_peak_upper_thresh">SHARED_PREFS_AMP_SPEC_PEAK_UPPER_THRESH</string>
+    <string name="prefs_amp_spec_peak_lower_thresh">SHARED_PREFS_AMP_SPEC_PEAK_LOWER_THRESH</string>
 
     <string-array name="prefs_show_graphs_values">
         <item>RAW_DATA</item>

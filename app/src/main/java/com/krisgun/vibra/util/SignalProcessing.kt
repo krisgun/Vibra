@@ -15,7 +15,8 @@ class SignalProcessing {
         /**
          * This function calculates the resulting total acceleration amplitude.
          */
-        fun totalAccelerationAmplitude(rawData: List<Pair<Long, Triple<Float, Float, Float>>>): List<Float> {
+        fun totalAccelerationAmplitude(rawData: List<Pair<Long, Triple<Float, Float, Float>>>,
+                                       indexMaximaThreshold: Double): List<Float> {
 
             val totAccResult: MutableList<Float> = mutableListOf()
             val rawAccelerationData = rawData.map { it.second }
@@ -30,7 +31,7 @@ class SignalProcessing {
                 )
             }
 
-            val signList = findOscillationSign(totAccResult, rawData)
+            val signList = findOscillationSign(totAccResult, rawData, indexMaximaThreshold)
             return totAccResult.mapIndexed { index, data -> data * signList[index] }
         }
 
@@ -39,7 +40,8 @@ class SignalProcessing {
          * calculation. Returns a list of signs.
          */
         private fun findOscillationSign(totalAccelerationAmplitude: List<Float>,
-                                        rawData: List<Pair<Long, Triple<Float, Float, Float>>>): List<Float> {
+                                        rawData: List<Pair<Long, Triple<Float, Float, Float>>>,
+                                        indexMaximaThreshold: Double): List<Float> {
             // Separate raw sensor data into lists
             val timePoints = rawData.map { it.first }
             val rawX = rawData.map { it.second.first }
@@ -53,11 +55,10 @@ class SignalProcessing {
             val f1 = totalAccelerationAmplitude.subList(1, lastListIndex - 1) //original signal
             val f2 = totalAccelerationAmplitude.subList(0, lastListIndex - 2) //left shift
             val f3 = totalAccelerationAmplitude.subList(2, lastListIndex) //right shift
-            val threshold = 0.8
 
             val indexList: MutableList<Int> = mutableListOf()
             f1.forEachIndexed { index, f1Data ->
-                if (f1Data > f2[index] && f1Data > f3[index] && f1Data > threshold) {
+                if (f1Data > f2[index] && f1Data > f3[index] && f1Data > indexMaximaThreshold) {
                     indexList.add(index)
                 }
             }

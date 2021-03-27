@@ -75,9 +75,9 @@ class DetailsViewModel : ViewModel() {
             _totAccelDataLiveData.postValue(totalAccelerationData)
             val totalAccelerationPeaks = getTotalAccelerationPeaks(totalAccelerationData)
 
-            val totalAccelertionPeakOccurences =
+            val totalAccelerationPeakOccurrences =
                     getTotalAccelerationPeakOccurrences(totalAccelerationData, totalAccelerationPeaks)
-            _accPeakOccurrencesLiveData.postValue(totalAccelertionPeakOccurences)
+            _accPeakOccurrencesLiveData.postValue(totalAccelerationPeakOccurrences)
 
             val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
             _amplitudeSpectrumLiveData.postValue(amplitudeSpectrumData)
@@ -98,7 +98,7 @@ class DetailsViewModel : ViewModel() {
             measurementRepository.getTotalAccelerationFromFile(measurement)
 
         } else {
-            val totAccResult = SignalProcessing.totalAccelerationAmplitude(rawData)
+            val totAccResult = SignalProcessing.totalAccelerationAmplitude(rawData, findSignIndexMaximaThreshold)
             val resultTuples: MutableList<Pair<Long, Float>> = mutableListOf()
 
             for (i in totAccResult.indices) {
@@ -114,7 +114,7 @@ class DetailsViewModel : ViewModel() {
         val accSignal = totalAccelerationData.map { it.second.toDouble() }.toDoubleArray()
         val fp = FindPeak(accSignal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByProminence(10.0, 80.0).toList()
+        return out.filterByProminence(totAccPeakLowerThresh, totAccPeakUpperThresh).toList()
     }
 
     private fun getTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>,
@@ -155,7 +155,7 @@ class DetailsViewModel : ViewModel() {
 
         val fp = FindPeak(p1Signal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByProminence(0.25, 10.0).toList()
+        return out.filterByProminence(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
     }
 
     private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
@@ -174,7 +174,16 @@ class DetailsViewModel : ViewModel() {
     /**
      * Preferences handling
      */
+    // Total Acceleration
+    var findSignIndexMaximaThreshold: Double = 0.8
+    var totAccPeakUpperThresh: Double = 78.0
+    var totAccPeakLowerThresh: Double = 10.0
 
+    //Amplitude Spectrum
+    var ampSpecPeakUpperThresh: Double = 10.0
+    var ampSpecPeakLowerThresh: Double = 0.25
+
+    //Graph Visibility
     private val _graphVisibleLiveData = MutableLiveData<List<Int>>()
     val graphVisibleLiveData: LiveData<List<Int>>
         get() = _graphVisibleLiveData

@@ -11,17 +11,22 @@ class TotalAccelerationFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_total_acceleration, rootKey)
-        setMaximaThresholdInputListener()
+
+        listOf(
+            getString(R.string.prefs_tot_acc_maxima_thresh_in_find_sign),
+            getString(R.string.prefs_tot_acc_peak_upper_thresh),
+            getString(R.string.prefs_tot_acc_peak_lower_thresh)
+        ).forEach { setDecimalNumberInputListener(it) }
     }
 
-    private fun setMaximaThresholdInputListener() {
+    private fun setDecimalNumberInputListener(prefKey: String) {
         preferenceManager
-                .findPreference<EditTextPreference>(getString(R.string.prefs_tot_acc_maxima_thresh_in_find_sign))
-                ?.setOnBindEditTextListener { editText ->
-                    editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-                    editText.filters = arrayOf(*editText.filters, InputFilter.LengthFilter(5))
-                    editText.hint = getString(R.string.input_a_number)
-                    editText.selectAll()
-                }
+            .findPreference<EditTextPreference>(prefKey)
+            ?.setOnBindEditTextListener { editText ->
+                editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                editText.filters = arrayOf(*editText.filters, InputFilter.LengthFilter(5))
+                editText.hint = getString(R.string.input_a_number)
+                editText.selectAll()
+            }
     }
 }

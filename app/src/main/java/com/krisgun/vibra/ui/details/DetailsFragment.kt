@@ -81,6 +81,8 @@ class DetailsFragment : Fragment() {
 
 
     private fun setUpViewModel() {
+        getSharedPreferences()
+
         val id = args.measurementId
         viewModel.setMeasurementId(id)
         viewModel.measurementLiveData.observe(viewLifecycleOwner,
@@ -90,12 +92,28 @@ class DetailsFragment : Fragment() {
                 }
             }
         )
-        getSharedPreferences()
+
     }
 
     private fun getSharedPreferences() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
         sharedPrefs.getStringSet(getString(R.string.prefs_show_graphs_key), mutableSetOf())
                 ?.let { viewModel.setGraphVisibleBooleans(it) }
+
+        //Total Acceleration
+        sharedPrefs.getString(getString(R.string.prefs_tot_acc_maxima_thresh_in_find_sign), "0.8")
+            ?.let { viewModel.findSignIndexMaximaThreshold = it.toDouble() }
+
+        sharedPrefs.getString(getString(R.string.prefs_tot_acc_peak_upper_thresh), "78.0")
+            ?.let { viewModel.totAccPeakUpperThresh = it.toDouble() }
+
+        sharedPrefs.getString(getString(R.string.prefs_tot_acc_peak_lower_thresh), "10.0")
+            ?.let { viewModel.totAccPeakLowerThresh = it.toDouble() }
+
+        //Amplitude Spectrum
+        sharedPrefs.getString(getString(R.string.prefs_amp_spec_peak_upper_thresh), "10.0")
+            ?.let { viewModel.ampSpecPeakUpperThresh = it.toDouble() }
+        sharedPrefs.getString(getString(R.string.prefs_amp_spec_peak_lower_thresh), "0.25")
+            ?.let { viewModel.ampSpecPeakLowerThresh = it.toDouble() }
     }
 }
