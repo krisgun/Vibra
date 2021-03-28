@@ -11,7 +11,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.navigation.ui.navigateUp
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.DialogDeleteMeasurementBinding
 

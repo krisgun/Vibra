@@ -1,16 +1,11 @@
 package com.krisgun.vibra.ui.details.dialogs
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,8 +13,6 @@ import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.DialogDetailsMenuBinding
-import com.krisgun.vibra.ui.details.DetailsFragmentArgs
-import java.lang.IllegalArgumentException
 
 private const val TAG = "DetailsMenu"
 

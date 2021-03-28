@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.DialogRenameMeasurementBinding
-import com.krisgun.vibra.ui.details.DetailsViewModel
 
 class RenameMeasurementDialog : DialogFragment() {
 

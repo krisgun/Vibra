@@ -5,7 +5,6 @@ import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import androidx.core.os.bundleOf
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData

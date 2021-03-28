@@ -1,6 +1,5 @@
 package com.krisgun.vibra.util
 
-import android.view.View
 import androidx.databinding.BindingAdapter
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart

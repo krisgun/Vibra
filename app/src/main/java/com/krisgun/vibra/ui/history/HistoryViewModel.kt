@@ -1,7 +1,6 @@
 package com.krisgun.vibra.ui.history
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository

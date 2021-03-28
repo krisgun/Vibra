@@ -12,7 +12,6 @@ import androidx.lifecycle.*
 import androidx.navigation.NavController
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
-import com.krisgun.vibra.ui.collect_data.dialog.StopMeasurementDialogDirections
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException

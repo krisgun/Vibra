@@ -3,7 +3,6 @@ package com.krisgun.vibra.ui.history
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
