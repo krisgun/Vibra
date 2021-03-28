@@ -77,6 +77,10 @@ class DetailsViewModel : ViewModel() {
 
             val totalAccelerationPeakOccurrences =
                     getTotalAccelerationPeakOccurrences(totalAccelerationData, totalAccelerationPeaks)
+            if  (totalAccelerationPeakOccurrences.isEmpty()) {
+                _showAccPeakOccurrences.postValue(View.GONE)
+                Log.d(TAG, totalAccelerationPeakOccurrences.toString())
+            }
             _accPeakOccurrencesLiveData.postValue(totalAccelerationPeakOccurrences)
 
             val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
@@ -134,7 +138,6 @@ class DetailsViewModel : ViewModel() {
                 .filterValues { it > 1 }
                 .mapKeys { it.key.toFloat() }
                 .toSortedMap()
-
         return peakOccurrences
     }
 
@@ -184,6 +187,10 @@ class DetailsViewModel : ViewModel() {
     var ampSpecPeakLowerThresh: Double = 0.25
 
     //Graph Visibility
+    private val _showAccPeakOccurrences = MutableLiveData<Int>()
+    val showAccPeakOccurrences: LiveData<Int>
+        get() = _showAccPeakOccurrences
+
     private val _graphVisibleLiveData = MutableLiveData<List<Int>>()
     val graphVisibleLiveData: LiveData<List<Int>>
         get() = _graphVisibleLiveData
@@ -198,6 +205,8 @@ class DetailsViewModel : ViewModel() {
                 isGraphVisibleList.add(View.GONE)
             }
         }
+        if (isGraphVisibleList[DataNames.TOTAL_ACCELERATION.ordinal] == View.GONE)
+            _showAccPeakOccurrences.value = View.GONE
         _graphVisibleLiveData.value = isGraphVisibleList
     }
 }
