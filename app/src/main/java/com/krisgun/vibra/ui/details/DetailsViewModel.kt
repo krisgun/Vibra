@@ -68,7 +68,7 @@ class DetailsViewModel : ViewModel() {
         executor.execute {
             this.measurement = measurement
 
-            val rawData = measurementRepository.getRawDataFromFile(measurement)
+            val rawData = measurementRepository.getRawAccDataFromFile(measurement)
             _rawDataLiveData.postValue(rawData)
 
             val totalAccelerationData = getTotalAcceleration(rawData)
@@ -79,7 +79,8 @@ class DetailsViewModel : ViewModel() {
                     getTotalAccelerationPeakOccurrences(totalAccelerationData, totalAccelerationPeaks)
             if  (totalAccelerationPeakOccurrences.isEmpty()) {
                 _showAccPeakOccurrences.postValue(View.GONE)
-                Log.d(TAG, totalAccelerationPeakOccurrences.toString())
+            } else {
+                _showAccPeakOccurrences.postValue(_graphVisibleLiveData.value?.get(DataNames.TOTAL_ACCELERATION.ordinal))
             }
             _accPeakOccurrencesLiveData.postValue(totalAccelerationPeakOccurrences)
 

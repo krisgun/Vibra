@@ -149,7 +149,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detail_basic_info_cl"
-                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.RAW_DATA.ordinal]}">
+                    android:visibility="@{detailsVM.graphVisibleLiveData[DataNames.RAW_ACC_DATA.ordinal]}">
 
                     <TextView
                         android:id="@+id/raw_data_title"

@@ -55,9 +55,9 @@ class MeasureFragment : Fragment() {
 
     private fun setupViewModel() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val prefSamplingFrequency = sharedPreferences
-                .getString(getString(R.string.prefs_sampling_frequency), "50")?.toInt()
-        measureViewModel.samplingFrequency = prefSamplingFrequency ?: 50
+        sharedPreferences.getString(getString(R.string.prefs_sampling_frequency), "50")?.let {
+                    measureViewModel.samplingFrequency = it.toInt()
+                }
 
         //Fetch duration minutes and seconds from shared preferences
         sharedMeasurePref = requireActivity().getSharedPreferences(getString(R.string.prefs_measure), Context.MODE_PRIVATE)

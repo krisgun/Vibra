@@ -34,11 +34,18 @@
     <string name="cancel">Cancel</string>
     <string name="discard">Discard</string>
     <string name="resume">Resume</string>
+
+    <string name="accelerometer">Accelerometer</string>
+    <string name="gyroscope">Gyroscope</string>
+    <string name="frequency">Frequency: </string>
+
     <string name="raw_data_graph">Accelerometer Data</string>
+    <string name="raw_gyro_data">Gyroscope Data</string>
     <string name="total_acceleration">Total Acceleration</string>
     <string name="amplitude_spectrum">Amplitude Spectrum</string>
     <string name="power_spectrum_graph">Power Spectrum</string>
     <string name="sampling_frequency">Sampling Frequency (Hz)</string>
+
     <string name="sampling_frequency_info">Actual frequency may vary depending on the sensor\'s capabilities.</string>
     <string name="input_a_number">Input a number</string>
     <string name="show_graphs">Graphs to be Shown</string>
@@ -59,14 +66,15 @@
     <string name="signal_processing">Signal Processing</string>
 
     <string name="prefs_sampling_frequency">SHARED_PREFS_SAMPLING_FREQUENCY</string>
-    <string name="prefs_show_graphs_key">SHARED_PREFS_GRAHPS</string>
+    <string name="prefs_show_graphs_key">SHARED_PREFS_GRAPHS</string>
     <string name="prefs_measure">SHARED_PREFS_MEASURE</string>
     <string name="prefs_measure_duration_minutes">SHARED_PREFS_DURATION_MINUTES</string>
     <string name="prefs_measure_duration_seconds">SHARED_PREFS_DURATION_SECONDS</string>
     <string name="prefs_measure_countdown_seconds">SHARED_PREFS_DURATION_COUNTDOWN</string>
 
     <string name="prefs_share">SHARED_PREFS_SHARE</string>
-    <string name="prefs_share_raw_data">SHARED_PREFS_SHARE_RAW_DATA</string>
+    <string name="prefs_share_acc_raw_data">SHARED_PREFS_SHARE_ACC_RAW_DATA</string>
+    <string name="prefs_share_gyro_raw_data">SHARED_PREFS_SHARE_GYRO_RAW_DATA</string>
     <string name="prefs_share_total_acceleration">SHARED_PREFS_SHARE_TOTAL_ACCELERATION</string>
     <string name="prefs_share_amplitude_spectrum">SHARED_PREFS_SHARE_AMPLITUDE_SPECTRUM</string>
     <string name="prefs_share_power_spectrum">SHARED_PREFS_SHARE_POWER_SPECTRUM</string>
@@ -81,7 +89,7 @@
     <string name="prefs_amp_spec_peak_lower_thresh">SHARED_PREFS_AMP_SPEC_PEAK_LOWER_THRESH</string>
 
     <string-array name="prefs_show_graphs_values">
-        <item>RAW_DATA</item>
+        <item>RAW_ACC_DATA</item>
         <item>TOTAL_ACCELERATION</item>
         <item>AMPLITUDE_SPECTRUM</item>
         <item>POWER_SPECTRUM</item>

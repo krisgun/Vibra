@@ -56,8 +56,12 @@ class DetailsFragment : Fragment() {
             detailsVM = viewModel
         }
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
-        setUpViewModel()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setUpViewModel()
     }
 
     override fun onDestroyView() {

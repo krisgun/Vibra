@@ -40,7 +40,7 @@ class MeasurementRepository private constructor(context: Context){
 
     fun renameDataFiles(oldMeasurement: Measurement, newMeasurement: Measurement) {
         executor.execute {
-            getRawDataFile(oldMeasurement).renameTo(File(filesDir, newMeasurement.rawDataFileName))
+            getRawAccDataFile(oldMeasurement).renameTo(File(filesDir, newMeasurement.rawAccFileName))
             getTotalAccelerationFile(oldMeasurement).let {
                 if (it.exists()) {
                     it.renameTo(File(filesDir, newMeasurement.totalAccelerationFileName))
@@ -69,7 +69,8 @@ class MeasurementRepository private constructor(context: Context){
         executor.execute {
 
             //Delete data-files
-            getRawDataFile(measurement).delete()
+            getRawAccDataFile(measurement).delete()
+            getRawGyroDataFile(measurement).let { if (it.exists()) it.delete() }
             getTotalAccelerationFile(measurement).let { if (it.exists()) it.delete() }
             getPowerSpectrumFile(measurement).let { if (it.exists()) it.delete() }
             getAmplitudeSpectrumFile(measurement).let { if (it.exists()) it.delete() }
@@ -81,7 +82,8 @@ class MeasurementRepository private constructor(context: Context){
     fun getAllFilesList(measurement: Measurement): List<File> {
         val filesList = mutableListOf<File>()
         filesList.apply {
-            add(getRawDataFile(measurement))
+            add(getRawAccDataFile(measurement))
+            add(getRawGyroDataFile(measurement))
             add(getTotalAccelerationFile(measurement))
             add(getAmplitudeSpectrumFile(measurement))
             add(getPowerSpectrumFile(measurement))
@@ -93,7 +95,8 @@ class MeasurementRepository private constructor(context: Context){
     fun getTotalAccelerationFile(measurement: Measurement): File = File(filesDir, measurement.totalAccelerationFileName)
     fun getAmplitudeSpectrumFile(measurement: Measurement): File = File(filesDir, measurement.amplitudeSpectrumFileName)
     fun getPowerSpectrumFile(measurement: Measurement): File = File(filesDir, measurement.powerSpectrumFileName)
-    fun getRawDataFile(measurement: Measurement): File = File(filesDir, measurement.rawDataFileName)
+    fun getRawAccDataFile(measurement: Measurement): File = File(filesDir, measurement.rawAccFileName)
+    fun getRawGyroDataFile(measurement: Measurement): File = File(filesDir, measurement.rawGyroFileName)
 
     fun getTotalAccelerationFromFile(measurement: Measurement): List<Pair<Long, Float>> {
         if (filesDir != null) {
@@ -205,8 +208,8 @@ class MeasurementRepository private constructor(context: Context){
     /**
      * Returns a List of Pairs in the form of: (timestamp, (xData, yData, zData))
      */
-    fun getRawDataFromFile(measurement: Measurement): List<Pair<Long, Triple<Float, Float, Float>>> {
-        val file: File = getRawDataFile(measurement)
+    fun getRawAccDataFromFile(measurement: Measurement): List<Pair<Long, Triple<Float, Float, Float>>> {
+        val file: File = getRawAccDataFile(measurement)
 
         val rawDataTripleList: MutableList<Pair<Long, Triple<Float, Float, Float>>> = mutableListOf()
 

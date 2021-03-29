@@ -12,8 +12,11 @@ data class Measurement(@PrimaryKey val id: UUID = UUID.randomUUID(),
                         var sampling_frequency: Double,
                         var num_of_datapoints: Int = 0) {
 
-    val rawDataFileName
-        get() = "${title}_RAW_SENSOR.csv"
+    val rawAccFileName
+        get() = "${title}_RAW_ACC_SENSOR.csv"
+
+    val rawGyroFileName
+        get() = "${title}_RAW_GYRO_SENSOR.csv"
 
     val totalAccelerationFileName
         get() = "${title}_TOTAL_ACC.csv"

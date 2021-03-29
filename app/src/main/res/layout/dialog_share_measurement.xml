@@ -55,14 +55,24 @@
                     tools:text="Choose data" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/raw_data_check_box"
+                    android:id="@+id/raw_acc_data_check_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="@string/raw_data_graph"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/choose_data_text"
-                    android:checked="@={detailsMenuVM.checkBoxBooleans[DataNames.RAW_DATA.ordinal]}"/>
+                    android:checked="@={detailsMenuVM.checkBoxBooleans[DataNames.RAW_ACC_DATA.ordinal]}"/>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/raw_gyro_data_check_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/raw_gyro_data"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/raw_acc_data_check_box"
+                    android:checked="@={detailsMenuVM.checkBoxBooleans[DataNames.RAW_GYRO_DATA.ordinal]}"/>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/total_acceleration_check_box"
@@ -70,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/raw_data_check_box"
+                    app:layout_constraintTop_toBottomOf="@id/raw_gyro_data_check_box"
                     android:text="@string/total_acceleration"
                     android:checked="@={detailsMenuVM.checkBoxBooleans[DataNames.TOTAL_ACCELERATION.ordinal]}"/>
 

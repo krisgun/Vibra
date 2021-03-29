@@ -29,8 +29,10 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     private lateinit var mSensorHandler: Handler
 
     //File objects
-    private lateinit var fileWriter: FileWriter
-    private lateinit var file: File
+    private lateinit var accelerometerFileWriter: FileWriter
+    private lateinit var accelerometerFile: File
+    private lateinit var gyroscopeFileWriter: FileWriter
+    private lateinit var gyroscopeFile: File
 
     //Fetched measurement object from DB
     private lateinit var measurement: Measurement
@@ -68,12 +70,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     val progressData: LiveData<Int>
         get() = _progressData
 
-    private val _sensorData = MutableLiveData<String>()
-    val sensorData: LiveData<String>
-        get() = _sensorData
-
     init {
-        _sensorData.value = "No sensor data available."
         _progressData.value = 0
     }
 
@@ -83,11 +80,21 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     fun startCollectingData() {
 
         //Open file writer and register sensor
-        Log.d(TAG, "Opening FileWriter with filename: ${file.name}")
+        Log.d(TAG, "Opening FileWriter with filename: ${accelerometerFile.name}")
         try {
-            fileWriter = FileWriter(file, true)
-            if (file.length() == 0L) {
-                fileWriter.write("Timestamp (ns),X (m/s^2),Y (m/s^2),Z (m/s^2)\n")
+            accelerometerFileWriter = FileWriter(accelerometerFile, true)
+            if (accelerometerFile.length() == 0L) {
+                accelerometerFileWriter.write("Timestamp (ns),X (m/s^2),Y (m/s^2),Z (m/s^2)\n")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        Log.d(TAG, "Opening FileWriter with filename: ${gyroscopeFile.name}")
+        try {
+            gyroscopeFileWriter = FileWriter(gyroscopeFile, true)
+            if (gyroscopeFile.length() == 0L) {
+                gyroscopeFileWriter.write("Timestamp (ns),X (rad/s),Y (rad/s),Z (rad/s)\n")
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -120,7 +127,12 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
         // Close filewriter
         try {
-            fileWriter.close()
+            accelerometerFileWriter.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        try {
+            gyroscopeFileWriter.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -171,15 +183,17 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
 
-            if(countLines % (measurement.sampling_frequency / 2) == 0.0) {
-                _sensorData.postValue("x: ${event.values[0]}\n y: ${event.values[1]}\n z: ${event.values[2]}")
+            when(event.sensor.type) {
+                Sensor.TYPE_ACCELEROMETER -> {
+                    timestamps.add(event.timestamp)
+                    countLines++
+                    accelerometerFileWriter.write(String.format(Locale.US,"%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
+                }
+                Sensor.TYPE_GYROSCOPE -> {
+                    gyroscopeFileWriter.write(String.format(Locale.US,"%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
+                }
             }
 
-            //Write sensor data to file
-            fileWriter.write(String.format(Locale.US,"%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]))
-
-            timestamps.add(event.timestamp)
-            countLines++
         }
     }
 
@@ -197,7 +211,7 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
             }
 
             sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE).let {
-                Log.d(TAG, it.toString())
+               sm.registerListener(this, it, sensorDelay, mSensorHandler)
             }
         }
     }
@@ -218,7 +232,8 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
         this.measurement = measurement
         timerDuration = measurement.duration_seconds.toLong() * 1000 //in ms
         _durationData.value = measurement.duration_seconds
-        file = measurementRepository.getRawDataFile(measurement)
+        accelerometerFile = measurementRepository.getRawAccDataFile(measurement)
+        gyroscopeFile = measurementRepository.getRawGyroDataFile(measurement)
     }
 
     fun setNavController(navController: NavController) {

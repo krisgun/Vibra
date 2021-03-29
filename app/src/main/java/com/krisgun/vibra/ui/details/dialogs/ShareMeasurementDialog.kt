@@ -35,7 +35,8 @@ class ShareMeasurementDialog: BottomSheetDialogFragment() {
         navController = findNavController()
 
         sharedPrefsStrings = listOf(
-                getString(R.string.prefs_share_raw_data),
+                getString(R.string.prefs_share_acc_raw_data),
+                getString(R.string.prefs_share_gyro_raw_data),
                 getString(R.string.prefs_share_total_acceleration),
                 getString(R.string.prefs_share_amplitude_spectrum),
                 getString(R.string.prefs_share_power_spectrum)
