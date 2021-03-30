@@ -3,6 +3,7 @@ package com.krisgun.vibra.ui.settings
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
@@ -16,7 +17,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setSamplingFrequencyInputListener()
         setOnTotalAccelerationClickListener()
         setOnAmplitudeSpectrumClickListener()
+        setonResetPreferencesClickListener()
     }
+
 
     private fun setSamplingFrequencyInputListener() {
         preferenceManager
@@ -51,5 +54,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     navController.navigate(action)
                     true
                 }
+    }
+
+    private fun setonResetPreferencesClickListener() {
+        preferenceManager.findPreference<Preference>(getString(R.string.prefs_reset_preferences))
+                ?.setOnPreferenceClickListener {
+                    preferenceManager.sharedPreferences.edit().clear().commit()
+                    findNavController().navigateUp()
+                    Toast.makeText(context, "Settings have now been reset.", Toast.LENGTH_SHORT).show()
+                    true
+        }
     }
 }

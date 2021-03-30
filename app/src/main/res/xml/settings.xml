@@ -39,4 +39,10 @@
         </Preference>
 
     </PreferenceCategory>
+    <PreferenceCategory android:title="Reset" >
+        <Preference
+            android:key="@string/prefs_reset_preferences"
+            android:title="@string/reset_preferences"
+            android:summary="@string/reset_preferences_summary" />
+    </PreferenceCategory>
 </PreferenceScreen>

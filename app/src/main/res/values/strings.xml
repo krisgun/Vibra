@@ -39,7 +39,7 @@
 
     <string name="accelerometer">Accelerometer</string>
     <string name="gyroscope">Gyroscope</string>
-    <string name="frequency">Frequency: </string>
+    <string name="frequency">Frequency:</string>
 
     <string name="raw_data_graph">Accelerometer Data</string>
     <string name="raw_gyro_data">Gyroscope Data</string>
@@ -62,6 +62,9 @@
     <string name="prefs_amplitude_spectrum_info">Adjust parameters related to the amplitude spectrum.</string>
     <string name="amp_spec_peak_lower_thresh_summary">Lower threshold for finding amplitude peaks.</string>
     <string name="amp_spec_peak_upper_thresh_summary">Upper threshold for finding amplitude peaks.</string>
+
+    <string name="reset_preferences">Reset Settings</string>
+    <string name="reset_preferences_summary">Reset settings to default values.</string>
 
     <string name="measurement_settings">Data Collection</string>
     <string name="measurement_details">Measurement Details</string>
@@ -89,6 +92,8 @@
     <string name="prefs_amplitude_spectrum">SHARED_PREFS_AMPLITUDE_SPECTRUM</string>
     <string name="prefs_amp_spec_peak_upper_thresh">SHARED_PREFS_AMP_SPEC_PEAK_UPPER_THRESH</string>
     <string name="prefs_amp_spec_peak_lower_thresh">SHARED_PREFS_AMP_SPEC_PEAK_LOWER_THRESH</string>
+
+    <string name="prefs_reset_preferences">SHARED_PREFS_RESET_PREFERENCES</string>
 
     <string-array name="prefs_show_graphs_values">
         <item>RAW_ACC_DATA</item>
