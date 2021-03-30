@@ -34,6 +34,7 @@
     <string name="cancel">Cancel</string>
     <string name="discard">Discard</string>
     <string name="resume">Resume</string>
+    <string name="optional_title">Title</string>
 
     <string name="accelerometer">Accelerometer</string>
     <string name="gyroscope">Gyroscope</string>

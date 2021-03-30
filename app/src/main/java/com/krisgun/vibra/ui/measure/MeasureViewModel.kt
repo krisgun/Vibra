@@ -2,7 +2,6 @@ package com.krisgun.vibra.ui.measure
 
 import android.os.CountDownTimer
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.databinding.Bindable
@@ -15,6 +14,7 @@ import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.ui.measure.dialogs.CountDownDialogDirections
+import com.krisgun.vibra.util.Event
 import com.krisgun.vibra.util.ObservableViewModel
 import kotlin.math.ceil
 
@@ -26,8 +26,13 @@ class MeasureViewModel : ObservableViewModel() {
     private lateinit var newMeasurement: Measurement
     lateinit var countDownTimer: CountDownTimer
     private val measurementRepository = MeasurementRepository.get()
+    val measurementsData: LiveData<List<Measurement>> = measurementRepository.getMeasurements()
     private var isSecondsZero = false
     private var isMinutesZero = false
+
+    private val _statusMessage = MutableLiveData<Event<String>>()
+    val statusMessage: LiveData<Event<String>>
+        get() = _statusMessage
 
     var isButtonDisabled = ObservableBoolean()
     var samplingFrequency: Int = 0
@@ -53,10 +58,21 @@ class MeasureViewModel : ObservableViewModel() {
             notifyPropertyChanged(BR.countdownSeconds)
         }
 
+    @get:Bindable
+    var measurementTitle: String = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.measurementTitle)
+        }
+
     fun createMeasurement() {
         val measurementDuration: Int = (durationMinutes.toInt() * 60) + durationSeconds.toInt()
         //Create Measurement obj
-        newMeasurement = Measurement(duration_seconds = measurementDuration, sampling_frequency = samplingFrequency.toDouble())
+        if (measurementTitle.isNotBlank()) {
+            newMeasurement = Measurement(title = measurementTitle.trim(), duration_seconds = measurementDuration, sampling_frequency = samplingFrequency.toDouble())
+        } else {
+            newMeasurement = Measurement(duration_seconds = measurementDuration, sampling_frequency = samplingFrequency.toDouble())
+        }
         //Add measurement to database
         measurementRepository.addMeasurement(newMeasurement)
     }
@@ -69,17 +85,27 @@ class MeasureViewModel : ObservableViewModel() {
      * Start Button OnClick-function
      */
     fun onStart() {
-        if (countdownSeconds.toInt() > 0) {
-            val action = MeasureFragmentDirections
-                    .actionNavigationMeasureToCountDownDialog()
-            navController.navigate(action)
+       measurementsData.value?.any { it.title == measurementTitle.trim() }?.let { //Check for duplicate title
+           if (it) {
+               _statusMessage.value = Event("A measurement with the same title already exists.")
+           }
+           else {
+               /**
+                * Navigate to countdown dialog or begin collecting data
+                */
+               if (countdownSeconds.toInt() > 0) {
+                   val action = MeasureFragmentDirections
+                           .actionNavigationMeasureToCountDownDialog()
+                   navController.navigate(action)
 
-        } else {
-            createMeasurement()
-            val action = MeasureFragmentDirections
-                    .actionNavigationMeasureToNavigationCollect(newMeasurement.id)
-            navController.navigate(action)
-        }
+               } else {
+                   createMeasurement()
+                   val action = MeasureFragmentDirections
+                           .actionNavigationMeasureToNavigationCollect(newMeasurement.id)
+                   navController.navigate(action)
+               }
+           }
+       }
     }
 
 

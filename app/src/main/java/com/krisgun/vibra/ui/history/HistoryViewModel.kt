@@ -8,8 +8,7 @@ import com.krisgun.vibra.database.MeasurementRepository
 class HistoryViewModel : ViewModel() {
 
     private val measurementRepository = MeasurementRepository.get()
-
-     val measurementsData: LiveData<List<Measurement>> = measurementRepository.getMeasurements()
+    val measurementsData: LiveData<List<Measurement>> = measurementRepository.getMeasurements()
 }
 
 

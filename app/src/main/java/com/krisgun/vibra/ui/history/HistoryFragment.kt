@@ -1,6 +1,7 @@
 package com.krisgun.vibra.ui.history
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.krisgun.vibra.R
 import com.krisgun.vibra.data.Measurement
 import kotlinx.android.synthetic.main.fragment_history.*
+
+private const val TAG = "HistoryView"
 
 class HistoryFragment : Fragment(), RecyclerViewClickListener {
 
@@ -36,7 +39,7 @@ class HistoryFragment : Fragment(), RecyclerViewClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        //Log.d(TAG, "initiate history")
         viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
 
         viewModel.measurementsData.observe(viewLifecycleOwner,

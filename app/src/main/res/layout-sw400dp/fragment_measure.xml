@@ -53,10 +53,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:contentDescription="@string/content_description_timer_icon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_baseline_timer_24"
-                        android:contentDescription="@string/content_description_timer_icon"/>
+                        app:srcCompat="@drawable/ic_baseline_timer_24" />
 
                     <TextView
                         android:id="@+id/duration_text"
@@ -82,20 +82,21 @@
                             android:id="@+id/duration_minutes"
                             android:layout_width="68dp"
                             android:layout_height="wrap_content"
+                            android:nextFocusDown="@id/duration_seconds"
+                            android:afterTextChanged="@{(text) -> measureVM.afterTextChangedDurationMinutesText(text)}"
+                            android:autofillHints="minutes"
                             android:background="@android:color/transparent"
                             android:gravity="center_horizontal"
                             android:inputType="number"
+                            android:labelFor="@id/duration_minutes"
+                            android:longClickable="false"
                             android:maxLength="2"
+                            android:selectAllOnFocus="true"
+                            android:text="@={measureVM.durationMinutes}"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
-                            android:autofillHints="minutes"
-                            android:labelFor="@id/duration_minutes"
-                            android:selectAllOnFocus="true"
-                            android:longClickable="false"
-                            android:text="@={measureVM.durationMinutes}"
-                            android:afterTextChanged ="@{(text) -> measureVM.afterTextChangedDurationMinutesText(text)}"
                             app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"
-                            tools:text="01"/>
+                            tools:text="01" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -110,20 +111,20 @@
                             android:id="@+id/duration_seconds"
                             android:layout_width="68dp"
                             android:layout_height="wrap_content"
+                            android:afterTextChanged="@{(text) -> measureVM.afterTextChangedDurationSecondsText(text)}"
+                            android:autofillHints="seconds"
                             android:background="@android:color/transparent"
                             android:gravity="center_horizontal"
                             android:inputType="number"
+                            android:labelFor="@id/duration_seconds"
+                            android:longClickable="false"
                             android:maxLength="2"
-                            tools:text="30"
+                            android:selectAllOnFocus="true"
+                            android:text="@={measureVM.durationSeconds}"
                             android:textAppearance="?attr/textAppearanceHeadline2"
                             android:textColor="?android:attr/colorPrimary"
-                            android:selectAllOnFocus="true"
-                            android:longClickable="false"
-                            android:autofillHints="seconds"
-                            android:labelFor="@id/duration_seconds"
-                            android:text="@={measureVM.durationSeconds}"
-                            android:afterTextChanged ="@{(text) -> measureVM.afterTextChangedDurationSecondsText(text)}"
-                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"/>
+                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"
+                            tools:text="30" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -159,10 +160,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:contentDescription="@string/content_description_more_time_icon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_baseline_more_time_24"
-                        android:contentDescription="@string/content_description_more_time_icon"/>
+                        app:srcCompat="@drawable/ic_baseline_more_time_24" />
 
                     <TextView
                         android:id="@+id/countdown_text"
@@ -189,21 +190,21 @@
                             android:id="@+id/countdown_seconds"
                             android:layout_width="47dp"
                             android:layout_height="wrap_content"
+                            android:afterTextChanged="@{(text) -> measureVM.afterTextChangedCountdownSecondsText(text)}"
+                            android:autofillHints="seconds"
                             android:background="@android:color/transparent"
                             android:fontFamily="sans-serif-light"
                             android:gravity="center_horizontal"
                             android:inputType="number"
-                            android:maxLength="2"
-                            android:textColor="?android:attr/colorPrimary"
-                            android:textSize="38sp"
-                            tools:text="05"
-                            android:autofillHints="seconds"
-                            android:selectAllOnFocus="true"
                             android:labelFor="@id/countdown_seconds"
                             android:longClickable="false"
+                            android:maxLength="2"
+                            android:selectAllOnFocus="true"
                             android:text="@={measureVM.countdownSeconds}"
-                            android:afterTextChanged ="@{(text) -> measureVM.afterTextChangedCountdownSecondsText(text)}"
-                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"/>
+                            android:textColor="?android:attr/colorPrimary"
+                            android:textSize="38sp"
+                            app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"
+                            tools:text="05" />
 
 
                         <TextView
@@ -218,19 +219,41 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/title_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/countdown_card">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/title_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/optional_title"
+                    android:text="@={measureVM.measurementTitle}"
+                    android:singleLine="true"
+                    android:inputType="textCapSentences" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/start_button"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="84dp"
                 android:background="@drawable/button_rounded"
                 android:enabled="@{!measureVM.isButtonDisabled}"
                 android:onClick="@{() -> measureVM.onStart()}"
                 android:text="@string/start"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_input_layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

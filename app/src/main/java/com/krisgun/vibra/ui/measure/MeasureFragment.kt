@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -71,6 +73,12 @@ class MeasureFragment : Fragment() {
         }
 
         measureViewModel.setNavController(navController)
+        measureViewModel.measurementsData.observe(viewLifecycleOwner, {})
+        measureViewModel.statusMessage.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
