@@ -39,6 +39,14 @@ class RenameMeasurementDialog : DialogFragment() {
             detailsMenuVM = viewModel
             dialogFragment = this@RenameMeasurementDialog
         }
+
+        viewModel.statusMessage.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
+            viewModel.titleLength = resources.getInteger(R.integer.title_max_length)
+        })
+
         return binding.root
     }
 
@@ -51,8 +59,6 @@ class RenameMeasurementDialog : DialogFragment() {
     fun onRename() {
         if (viewModel.renameMeasurement()) {
             this.dismiss()
-        } else {
-            Toast.makeText(context, "Measurement could not be renamed. Duplicate?", Toast.LENGTH_SHORT).show()
         }
     }
 

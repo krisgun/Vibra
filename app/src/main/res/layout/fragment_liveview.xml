@@ -106,13 +106,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    tools:text="9.82 m/s^2"
+                    android:layout_marginBottom="16dp"
                     android:text="@{Converter.accelerationToString(liveviewVM.accelSensorData[2])}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/accelerometer_card_z_title"
-                    app:layout_constraintTop_toBottomOf="@id/accelerometer_card_y_value" />
+                    app:layout_constraintTop_toBottomOf="@id/accelerometer_card_y_value"
+                    tools:text="9.82 m/s^2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -206,13 +206,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    tools:text="9.82 rad/s"
+                    android:layout_marginBottom="16dp"
                     android:text="@{Converter.gyroToString(liveviewVM.gyroSensorData[2])}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/gyroscope_card_z_title"
-                    app:layout_constraintTop_toBottomOf="@id/gyroscope_card_y_value" />
+                    app:layout_constraintTop_toBottomOf="@id/gyroscope_card_y_value"
+                    tools:text="9.82 rad/s" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

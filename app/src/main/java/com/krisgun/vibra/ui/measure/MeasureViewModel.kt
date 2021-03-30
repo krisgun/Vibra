@@ -34,6 +34,7 @@ class MeasureViewModel : ObservableViewModel() {
     val statusMessage: LiveData<Event<String>>
         get() = _statusMessage
 
+    var titleMaxLength = 128
     var isButtonDisabled = ObservableBoolean()
     var samplingFrequency: Int = 0
 
@@ -88,6 +89,8 @@ class MeasureViewModel : ObservableViewModel() {
        measurementsData.value?.any { it.title == measurementTitle.trim() }?.let { //Check for duplicate title
            if (it) {
                _statusMessage.value = Event("A measurement with the same title already exists.")
+           } else if (measurementTitle.length > titleMaxLength) {
+               _statusMessage.value = Event("Title exceeds character limit.")
            }
            else {
                /**

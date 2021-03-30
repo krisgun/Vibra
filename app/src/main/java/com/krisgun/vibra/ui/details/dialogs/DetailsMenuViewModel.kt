@@ -11,6 +11,7 @@ import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.ObservableViewModel
 import com.krisgun.vibra.BR
 import com.krisgun.vibra.util.DataNames
+import com.krisgun.vibra.util.Event
 import java.io.File
 import java.util.UUID
 
@@ -32,6 +33,10 @@ class DetailsMenuViewModel : ObservableViewModel()  {
                 measurementRepository.getMeasurement(id)
             }
 
+    private val _statusMessage = MutableLiveData<Event<String>>()
+    val statusMessage: LiveData<Event<String>>
+        get() = _statusMessage
+
     fun setMeasurementId(id: UUID) {
         measurementIdLiveData.value = id
     }
@@ -43,6 +48,7 @@ class DetailsMenuViewModel : ObservableViewModel()  {
     /**
      * Rename measurement
      */
+    var titleLength = 128
     var isRenameButtonEnabled = ObservableBoolean()
     @get:Bindable
     var titleText: String = ""
@@ -61,8 +67,14 @@ class DetailsMenuViewModel : ObservableViewModel()  {
             title = newTitle.trim()
         }
 
+        if (newMeasurement.title.length > titleLength) {
+            _statusMessage.value = Event("Title exceeds character limit.")
+            return false
+        }
+
         measurementsList.forEach {
             if (it.title == newMeasurement.title) {
+                _statusMessage.value = Event("A measurement with the same title already exists.")
                 return false
             }
         }

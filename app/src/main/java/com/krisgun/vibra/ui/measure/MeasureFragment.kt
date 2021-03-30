@@ -72,8 +72,13 @@ class MeasureFragment : Fragment() {
             measureViewModel.countdownSeconds = countdownSeconds
         }
 
+        measureViewModel.titleMaxLength = resources.getInteger(R.integer.title_max_length)
+
         measureViewModel.setNavController(navController)
-        measureViewModel.measurementsData.observe(viewLifecycleOwner, {})
+
+        measureViewModel.measurementsData.observe(viewLifecycleOwner, Observer {
+
+        })
         measureViewModel.statusMessage.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let { message ->
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

@@ -19,7 +19,8 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:clickable="true" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -31,13 +32,11 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/duration_card"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 app:cardElevation="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -56,12 +55,23 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_baseline_timer_24" />
 
+                    <TextView
+                        android:id="@+id/duration_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/duration"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        app:layout_constraintStart_toEndOf="@+id/timer_image"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
                         android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +79,7 @@
 
                         <EditText
                             android:id="@+id/duration_minutes"
-                            android:layout_width="72dp"
+                            android:layout_width="68dp"
                             android:layout_height="wrap_content"
                             android:afterTextChanged="@{(text) -> measureVM.afterTextChangedDurationMinutesText(text)}"
                             android:autofillHints="minutes"
@@ -98,7 +108,7 @@
 
                         <EditText
                             android:id="@+id/duration_seconds"
-                            android:layout_width="72dp"
+                            android:layout_width="68dp"
                             android:layout_height="wrap_content"
                             android:afterTextChanged="@{(text) -> measureVM.afterTextChangedDurationSecondsText(text)}"
                             android:autofillHints="seconds"
@@ -123,32 +133,19 @@
                             android:textColor="?android:attr/colorPrimary" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/duration_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/duration"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
-                        app:layout_constraintStart_toEndOf="@+id/timer_image"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/countdown_card"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="120dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 app:cardElevation="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/duration_card">
+                app:layout_constraintStart_toEndOf="@+id/duration_card"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -171,8 +168,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
                         android:text="@string/countdown"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/countdown_image"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,18 +221,19 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="@integer/title_max_length"
+                app:endIconMode="clear_text"
                 app:helperText="@string/optional_title"
                 app:helperTextEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/start_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/countdown_card">
+                app:layout_constraintTop_toBottomOf="@+id/duration_card">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title_edit_text"
@@ -251,14 +251,14 @@
                 android:id="@+id/start_button"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
                 android:background="@drawable/button_rounded"
                 android:enabled="@{!measureVM.isButtonDisabled}"
                 android:onClick="@{() -> measureVM.onStart()}"
                 android:text="@string/start"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/countdown_card" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
