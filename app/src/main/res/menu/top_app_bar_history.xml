@@ -7,7 +7,8 @@
         android:icon="@drawable/ic_baseline_filter_list_24"
         android:title="@string/filter_list"
         android:contentDescription="@string/content_description_filter_list"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 
     <item
         android:id="@+id/settingsFragment"
