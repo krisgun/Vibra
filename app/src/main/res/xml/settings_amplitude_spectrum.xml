@@ -3,14 +3,14 @@
     <PreferenceCategory android:title="Peak Thresholds" />
 
     <EditTextPreference
-        android:key="@string/prefs_amp_spec_peak_upper_thresh"
-        android:title="@string/tot_acc_peak_upper_thresh_title"
-        android:summary="@string/amp_spec_peak_upper_thresh_summary"
-        android:defaultValue="10.0" />
-
-    <EditTextPreference
         android:key="@string/prefs_amp_spec_peak_lower_thresh"
         android:title="@string/tot_acc_peak_lower_thresh_title"
         android:summary="@string/amp_spec_peak_lower_thresh_summary"
         android:defaultValue="0.25" />
+
+    <EditTextPreference
+        android:key="@string/prefs_amp_spec_peak_upper_thresh"
+        android:title="@string/tot_acc_peak_upper_thresh_title"
+        android:summary="@string/amp_spec_peak_upper_thresh_summary"
+        android:defaultValue="10.0" />
 </PreferenceScreen>
