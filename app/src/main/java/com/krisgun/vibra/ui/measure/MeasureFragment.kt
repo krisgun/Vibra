@@ -3,6 +3,7 @@ package com.krisgun.vibra.ui.measure
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.preference.PreferenceManager
 import com.krisgun.vibra.R
+import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.databinding.FragmentMeasureBinding
 
 private const val TAG = "MeasureView"
@@ -76,8 +78,9 @@ class MeasureFragment : Fragment() {
 
         measureViewModel.setNavController(navController)
 
-        measureViewModel.measurementsData.observe(viewLifecycleOwner, Observer {
-
+        measureViewModel.measurementsData.observe(viewLifecycleOwner, object : Observer<List<Measurement>> {
+            override fun onChanged(t: List<Measurement>?) {
+            }
         })
         measureViewModel.statusMessage.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let { message ->
