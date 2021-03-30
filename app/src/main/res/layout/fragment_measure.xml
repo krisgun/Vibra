@@ -59,7 +59,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginBottom="8dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,11 +69,12 @@
 
                         <EditText
                             android:id="@+id/duration_minutes"
-                            android:layout_width="72dp"
+                            android:layout_width="64dp"
                             android:layout_height="wrap_content"
                             android:afterTextChanged="@{(text) -> measureVM.afterTextChangedDurationMinutesText(text)}"
                             android:autofillHints="minutes"
                             android:background="@android:color/transparent"
+                            android:fontFamily="sans-serif-light"
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:labelFor="@id/duration_minutes"
@@ -82,7 +83,7 @@
                             android:nextFocusDown="@id/duration_seconds"
                             android:selectAllOnFocus="true"
                             android:text="@={measureVM.durationMinutes}"
-                            android:textAppearance="?attr/textAppearanceHeadline2"
+                            android:textAppearance="?attr/textAppearanceHeadline3"
                             android:textColor="?android:attr/colorPrimary"
                             app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"
                             tools:text="01" />
@@ -90,7 +91,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingEnd="20dp"
+                            android:paddingEnd="15dp"
                             android:text="@string/minutes_abbreviation"
                             android:textAppearance="?attr/textAppearanceHeadline5"
                             android:textColor="?android:attr/colorPrimary"
@@ -98,11 +99,12 @@
 
                         <EditText
                             android:id="@+id/duration_seconds"
-                            android:layout_width="72dp"
+                            android:layout_width="64dp"
                             android:layout_height="wrap_content"
                             android:afterTextChanged="@{(text) -> measureVM.afterTextChangedDurationSecondsText(text)}"
                             android:autofillHints="seconds"
                             android:background="@android:color/transparent"
+                            android:fontFamily="sans-serif-light"
                             android:gravity="center_horizontal"
                             android:inputType="number"
                             android:labelFor="@id/duration_seconds"
@@ -110,7 +112,7 @@
                             android:maxLength="2"
                             android:selectAllOnFocus="true"
                             android:text="@={measureVM.durationSeconds}"
-                            android:textAppearance="?attr/textAppearanceHeadline2"
+                            android:textAppearance="?attr/textAppearanceHeadline3"
                             android:textColor="?android:attr/colorPrimary"
                             app:onFocusChangeListener="@{(editText, hasFocus) -> measureVM.onFocusChangedTimerValidation(editText, hasFocus)}"
                             tools:text="30" />
@@ -141,7 +143,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/countdown_card"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
@@ -179,12 +181,13 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.6">
+                        app:layout_constraintTop_toBottomOf="@+id/countdown_text">
 
                         <EditText
                             android:id="@+id/countdown_seconds"

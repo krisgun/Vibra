@@ -3,12 +3,16 @@ package com.krisgun.vibra.ui.settings
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.krisgun.vibra.R
+import kotlin.math.ceil
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -18,6 +22,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setOnTotalAccelerationClickListener()
         setOnAmplitudeSpectrumClickListener()
         setonResetPreferencesClickListener()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view: View? = super.onCreateView(inflater, container, savedInstanceState)
+        view?.let {
+            //Adjust bottom padding for navbar
+            val density = requireActivity().resources.displayMetrics.density
+            val bottomNavInPx = ceil(56.0 * density).toInt()
+            listView.setPadding(0, 0, 0, bottomNavInPx)
+        }
+        return view
     }
 
 
