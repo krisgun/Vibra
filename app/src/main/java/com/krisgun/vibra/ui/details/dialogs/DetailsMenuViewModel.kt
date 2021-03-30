@@ -73,7 +73,7 @@ class DetailsMenuViewModel : ObservableViewModel()  {
         }
 
         measurementsList.forEach {
-            if (it.title == newMeasurement.title) {
+            if (it.title.equals(newMeasurement.title, ignoreCase = true)) {
                 _statusMessage.value = Event("A measurement with the same title already exists.")
                 return false
             }

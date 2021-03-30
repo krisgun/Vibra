@@ -86,7 +86,7 @@ class MeasureViewModel : ObservableViewModel() {
      * Start Button OnClick-function
      */
     fun onStart() {
-       measurementsData.value?.any { it.title == measurementTitle.trim() }?.let { //Check for duplicate title
+       measurementsData.value?.any { it.title.equals(measurementTitle.trim(), ignoreCase = true) }?.let { //Check for duplicate title
            if (it) {
                _statusMessage.value = Event("A measurement with the same title already exists.")
            } else if (measurementTitle.length > titleMaxLength) {
