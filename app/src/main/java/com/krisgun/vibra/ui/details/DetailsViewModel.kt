@@ -2,16 +2,16 @@ package com.krisgun.vibra.ui.details
 
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.github.psambit9791.jdsp.signal.peaks.FindPeak
 import com.github.psambit9791.jdsp.signal.peaks.Peak
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.DataNames
 import com.krisgun.vibra.util.SignalProcessing
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 import java.util.UUID
 import java.util.concurrent.Executors
@@ -23,7 +23,7 @@ class DetailsViewModel : ViewModel() {
     private val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
     private lateinit var measurement: Measurement
-    private val executor = Executors.newSingleThreadExecutor()
+    private val executor = Executors.newFixedThreadPool(4)
 
     val measurementLiveData: LiveData<Measurement?> =
         Transformations.switchMap(measurementIdLiveData) { id ->
@@ -39,7 +39,7 @@ class DetailsViewModel : ViewModel() {
 
     private val _totAccelDataLiveData = MutableLiveData<List<Pair<Long, Float>>>()
     val totAccelDataLiveData: LiveData<List<Pair<Long, Float>>>
-    get() = _totAccelDataLiveData
+        get() = _totAccelDataLiveData
 
     private val _accPeakOccurrencesLiveData = MutableLiveData<Map<Float, Int>>()
     val accPeakOccurrencesLiveData: LiveData<Map<Float, Int>>
@@ -56,6 +56,14 @@ class DetailsViewModel : ViewModel() {
     private val _powerSpectrumLiveData = MutableLiveData<List<Pair<Double, Double>>>()
     val powerSpectrumLiveData: LiveData<List<Pair<Double, Double>>>
         get() = _powerSpectrumLiveData
+
+    private val _amplitudeSpectrumResonance = MutableLiveData<Pair<Double, Double>>()
+    val amplitudeSpectrumResonance: LiveData<Pair<Double, Double>>
+        get() = _amplitudeSpectrumResonance
+
+    private val _powerSpectrumResonance = MutableLiveData<Pair<Double, Double>>()
+    val powerSpectrumResonance: LiveData<Pair<Double, Double>>
+        get() = _powerSpectrumResonance
 
     /**
      * Fetching UI-data
@@ -86,12 +94,14 @@ class DetailsViewModel : ViewModel() {
 
             val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
             _amplitudeSpectrumLiveData.postValue(amplitudeSpectrumData)
+            _amplitudeSpectrumResonance.postValue(amplitudeSpectrumData.maxByOrNull { it.second })
 
             val amplitudeSpectrumPeaks = getAmplitudeSpectrumPeaks(amplitudeSpectrumData)
             _amplitudeSpectrumPeaksLiveData.postValue(amplitudeSpectrumPeaks)
 
             val powerSpectrumData = getPowerSpectrumData(totalAccelerationData, measurement.sampling_frequency)
             _powerSpectrumLiveData.postValue(powerSpectrumData)
+            _powerSpectrumResonance.postValue(powerSpectrumData.maxByOrNull { it.second })
         }
     }
 
@@ -119,7 +129,7 @@ class DetailsViewModel : ViewModel() {
         val accSignal = totalAccelerationData.map { it.second.toDouble() }.toDoubleArray()
         val fp = FindPeak(accSignal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByProminence(totAccPeakLowerThresh, totAccPeakUpperThresh).toList()
+        return out.filterByHeight(totAccPeakLowerThresh, totAccPeakUpperThresh).toList()
     }
 
     private fun getTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>,
@@ -136,7 +146,6 @@ class DetailsViewModel : ViewModel() {
         }
                 .groupingBy { it.second.toBigDecimal().setScale(1, RoundingMode.HALF_UP) }
                 .eachCount()
-                .filterValues { it > 1 }
                 .mapKeys { it.key.toFloat() }
                 .toSortedMap()
         return peakOccurrences
@@ -159,7 +168,7 @@ class DetailsViewModel : ViewModel() {
 
         val fp = FindPeak(p1Signal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByProminence(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
+        return out.filterByHeight(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
     }
 
     private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):

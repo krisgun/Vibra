@@ -2,6 +2,7 @@
 package com.krisgun.vibra.util
 
 import java.util.Locale
+import kotlin.math.log10
 
 object Converter {
     @JvmStatic
@@ -72,5 +73,20 @@ object Converter {
     @JvmStatic
     fun dataPointsToString(value: Int): String {
         return "$value data points"
+    }
+
+    @JvmStatic
+    fun amplitudeSpectrumResonanceToString(dataPoint: Pair<Double, Double>?): String {
+        return if (dataPoint != null) {
+            "${dataPoint.first.format(3)} Hz: ${dataPoint.second.format(3)}"
+        } else "Calculating..."
+    }
+
+    @JvmStatic
+    fun powerSpectrumResonanceToString(dataPoint: Pair<Double, Double>?): String {
+        return if (dataPoint != null) {
+            "${dataPoint.first.format(3)} Hz: ${(10*log10(dataPoint.second)).format(3)} dB"
+        } else
+            "Calculating..."
     }
 }

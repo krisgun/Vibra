@@ -36,12 +36,13 @@
     <string name="resume">Resume</string>
     <string name="title">Title</string>
     <string name="optional_title">Generated if left blank</string>
+    <string name="data_collection">Data Collection</string>
 
     <string name="accelerometer">Accelerometer</string>
     <string name="gyroscope">Gyroscope</string>
     <string name="frequency">Frequency:</string>
 
-    <string name="raw_data_graph">Accelerometer Data</string>
+    <string name="raw_data_graph">Accelerometer</string>
     <string name="raw_gyro_data">Gyroscope Data</string>
     <string name="total_acceleration">Total Acceleration</string>
     <string name="amplitude_spectrum">Amplitude Spectrum</string>
@@ -94,6 +95,7 @@
     <string name="prefs_amp_spec_peak_lower_thresh">SHARED_PREFS_AMP_SPEC_PEAK_LOWER_THRESH</string>
 
     <string name="prefs_reset_preferences">SHARED_PREFS_RESET_PREFERENCES</string>
+    <string name="resonances">Resonances</string>
 
     <string-array name="prefs_show_graphs_values">
         <item>RAW_ACC_DATA</item>

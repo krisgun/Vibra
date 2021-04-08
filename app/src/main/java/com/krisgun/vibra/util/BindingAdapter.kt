@@ -186,6 +186,8 @@ fun setAccelerationPeakOccurrences(view: BarChart, data: Map<Float, Int>?) {
         val barData = BarData(barDataSet)
         barData.barWidth = 0.05f
 
+        view.axisRight.isEnabled = false
+        view.axisLeft.axisMinimum = 0F
         view.data = barData
         view.setBackgroundColor(view.resources.getColor(R.color.white))
         view.description.text = "Peak Occurrences"
