@@ -28,16 +28,16 @@ fun setLineChartData(view: LineChart, data: List<Pair<Long, Triple<Float, Float,
             entryListZ.add(Entry(dataPointTime, data[i].second.third))
         }
 
-        val xLineDataSet = LineDataSet(entryListX, "xAcc (m/s^2)")
+        val xLineDataSet = LineDataSet(entryListX, "X (m/s^2)")
         xLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         xLineDataSet.setDrawCircles(false)
 
-        val yLineDataSet = LineDataSet(entryListY, "yAcc (m/s^2)")
+        val yLineDataSet = LineDataSet(entryListY, "Y (m/s^2)")
         yLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         yLineDataSet.color = R.color.purple_700
         yLineDataSet.setDrawCircles(false)
 
-        val zLineDataSet = LineDataSet(entryListZ, "zAcc (m/s^2)")
+        val zLineDataSet = LineDataSet(entryListZ, "Z (m/s^2)")
         zLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         zLineDataSet.color = R.color.black
         zLineDataSet.setDrawCircles(false)
@@ -72,7 +72,7 @@ fun setTotAccLineChartData(view: LineChart, data: List<Pair<Long, Float>>?) {
             entryList.add(Entry(dataPointTime, it.second))
         }
 
-        val lineDataSet = LineDataSet(entryList, "Acc (m/s^2)")
+        val lineDataSet = LineDataSet(entryList, "sqrt(x^2 + y^2 + z^2) [ m/s^2 ]")
         lineDataSet.axisDependency = YAxis.AxisDependency.LEFT
         lineDataSet.setDrawCircles(false)
 

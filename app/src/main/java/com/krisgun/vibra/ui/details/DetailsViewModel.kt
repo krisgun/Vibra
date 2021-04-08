@@ -83,16 +83,16 @@ class DetailsViewModel : ViewModel() {
 
                     async {
                         getAmplitudeSpectrum(totAcc, measurement.sampling_frequency).also {
+                            _amplitudeSpectrumResonance.postValue(it.maxByOrNull { axis -> axis.second })
                             _amplitudeSpectrumLiveData.postValue(it)
                             setAmplitudeSpectrumPeaks(it)
-                            _amplitudeSpectrumResonance.postValue(it.maxByOrNull { axis -> axis.second })
                         }
                     }
 
                     async {
                         getPowerSpectrumData(totAcc, measurement.sampling_frequency).also {
-                            _powerSpectrumLiveData.postValue(it)
                             _powerSpectrumResonance.postValue(it.maxByOrNull { axis -> axis.second })
+                            _powerSpectrumLiveData.postValue(it)
                         }
                     }
                 }

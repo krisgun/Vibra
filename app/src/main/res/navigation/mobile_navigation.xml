@@ -7,7 +7,7 @@
 
     <navigation
         android:id="@+id/navigation_measure_countdown"
-        app:startDestination="@id/measureFragment" >
+        app:startDestination="@id/measureFragment">
 
         <fragment
             android:id="@+id/measureFragment"
@@ -60,7 +60,8 @@
 
     <fragment
         android:id="@+id/navigation_details"
-        android:name="com.krisgun.vibra.ui.details.DetailsFragment">
+        android:name="com.krisgun.vibra.ui.details.DetailsFragment"
+        tools:layout="@layout/fragment_details">
         <argument
             android:name="measurement_id"
             app:argType="java.util.UUID" />
@@ -114,12 +115,14 @@
         <dialog
             android:id="@+id/deleteMeasurementDialog"
             android:name="com.krisgun.vibra.ui.details.dialogs.DeleteMeasurementDialog"
-            android:label="DeleteMeasurementDialog" />
+            android:label="DeleteMeasurementDialog"
+            tools:layout="@layout/dialog_delete_measurement"/>
 
         <dialog
             android:id="@+id/detailsMenuDialog"
             android:name="com.krisgun.vibra.ui.details.dialogs.DetailsMenuDialog"
-            android:label="DetailsMenuDialog">
+            android:label="DetailsMenuDialog"
+            tools:layout="@layout/dialog_details_menu">
             <argument
                 android:name="measurement_id"
                 app:argType="java.util.UUID" />
@@ -136,11 +139,13 @@
         <dialog
             android:id="@+id/renameMeasurementDialog"
             android:name="com.krisgun.vibra.ui.details.dialogs.RenameMeasurementDialog"
-            android:label="RenameMeasurementDialog" />
+            android:label="RenameMeasurementDialog"
+            tools:layout="@layout/dialog_rename_measurement"/>
         <dialog
             android:id="@+id/shareMeasurementDialog"
             android:name="com.krisgun.vibra.ui.details.dialogs.ShareMeasurementDialog"
-            android:label="ShareMeasurementDialog" />
+            android:label="ShareMeasurementDialog"
+            tools:layout="@layout/dialog_share_measurement"/>
     </navigation>
     <fragment
         android:id="@+id/settingsFragment"
