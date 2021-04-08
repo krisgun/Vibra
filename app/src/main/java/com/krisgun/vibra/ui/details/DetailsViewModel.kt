@@ -1,6 +1,5 @@
 package com.krisgun.vibra.ui.details
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.github.psambit9791.jdsp.signal.peaks.FindPeak
@@ -10,11 +9,11 @@ import com.krisgun.vibra.database.MeasurementRepository
 import com.krisgun.vibra.util.DataNames
 import com.krisgun.vibra.util.SignalProcessing
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 import java.util.UUID
-import java.util.concurrent.Executors
 
 private const val TAG = "DetailsView"
 
@@ -23,7 +22,6 @@ class DetailsViewModel : ViewModel() {
     private val measurementRepository = MeasurementRepository.get()
     private val measurementIdLiveData = MutableLiveData<UUID>()
     private lateinit var measurement: Measurement
-    private val executor = Executors.newFixedThreadPool(4)
 
     val measurementLiveData: LiveData<Measurement?> =
         Transformations.switchMap(measurementIdLiveData) { id ->
@@ -73,45 +71,44 @@ class DetailsViewModel : ViewModel() {
     }
 
     fun setChartData(measurement: Measurement) {
-        executor.execute {
             this.measurement = measurement
+            viewModelScope.launch {
+                withContext(Dispatchers.Default) {
+                    val rawData = getRawAcceleration(measurement)
+                            .also { _rawDataLiveData.postValue(it) }
+                    val totAcc = getTotalAcceleration(rawData)
+                            .also { _totAccelDataLiveData.postValue(it) }
 
-            val rawData = measurementRepository.getRawAccDataFromFile(measurement)
-            _rawDataLiveData.postValue(rawData)
+                    async { setTotalAccelerationPeakOccurrences(totAcc) }
 
-            val totalAccelerationData = getTotalAcceleration(rawData)
-            _totAccelDataLiveData.postValue(totalAccelerationData)
-            val totalAccelerationPeaks = getTotalAccelerationPeaks(totalAccelerationData)
+                    async {
+                        getAmplitudeSpectrum(totAcc, measurement.sampling_frequency).also {
+                            _amplitudeSpectrumLiveData.postValue(it)
+                            setAmplitudeSpectrumPeaks(it)
+                            _amplitudeSpectrumResonance.postValue(it.maxByOrNull { axis -> axis.second })
+                        }
+                    }
 
-            val totalAccelerationPeakOccurrences =
-                    getTotalAccelerationPeakOccurrences(totalAccelerationData, totalAccelerationPeaks)
-            if  (totalAccelerationPeakOccurrences.isEmpty()) {
-                _showAccPeakOccurrences.postValue(View.GONE)
-            } else {
-                _showAccPeakOccurrences.postValue(_graphVisibleLiveData.value?.get(DataNames.TOTAL_ACCELERATION.ordinal))
+                    async {
+                        getPowerSpectrumData(totAcc, measurement.sampling_frequency).also {
+                            _powerSpectrumLiveData.postValue(it)
+                            _powerSpectrumResonance.postValue(it.maxByOrNull { axis -> axis.second })
+                        }
+                    }
+                }
             }
-            _accPeakOccurrencesLiveData.postValue(totalAccelerationPeakOccurrences)
-
-            val amplitudeSpectrumData = getAmplitudeSpectrum(totalAccelerationData, measurement.sampling_frequency)
-            _amplitudeSpectrumLiveData.postValue(amplitudeSpectrumData)
-            _amplitudeSpectrumResonance.postValue(amplitudeSpectrumData.maxByOrNull { it.second })
-
-            val amplitudeSpectrumPeaks = getAmplitudeSpectrumPeaks(amplitudeSpectrumData)
-            _amplitudeSpectrumPeaksLiveData.postValue(amplitudeSpectrumPeaks)
-
-            val powerSpectrumData = getPowerSpectrumData(totalAccelerationData, measurement.sampling_frequency)
-            _powerSpectrumLiveData.postValue(powerSpectrumData)
-            _powerSpectrumResonance.postValue(powerSpectrumData.maxByOrNull { it.second })
-        }
     }
 
-    private fun getTotalAcceleration(rawData: List<Pair<Long, Triple<Float, Float, Float>>>): List<Pair<Long, Float>> {
+    private suspend fun getRawAcceleration(measurement: Measurement): List<Pair<Long, Triple<Float, Float, Float>>> {
+        return  measurementRepository.getRawAccDataFromFile(measurement)
+    }
+
+    private suspend fun getTotalAcceleration(rawData: List<Pair<Long, Triple<Float, Float, Float>>>):
+            List<Pair<Long, Float>> {
 
         val totalAccelerationFile = measurementRepository.getTotalAccelerationFile(measurement)
-
         return if (totalAccelerationFile.exists()) {
             measurementRepository.getTotalAccelerationFromFile(measurement)
-
         } else {
             val totAccResult = SignalProcessing.totalAccelerationAmplitude(rawData, findSignIndexMaximaThreshold)
             val resultTuples: MutableList<Pair<Long, Float>> = mutableListOf()
@@ -119,9 +116,8 @@ class DetailsViewModel : ViewModel() {
             for (i in totAccResult.indices) {
                 resultTuples.add(Pair(rawData[i].first, totAccResult[i]))
             }
-
             measurementRepository.writeTotalAccelerationToFile(measurement, resultTuples)
-            resultTuples.toList()
+            resultTuples
         }
     }
 
@@ -132,8 +128,13 @@ class DetailsViewModel : ViewModel() {
         return out.filterByHeight(totAccPeakLowerThresh, totAccPeakUpperThresh).toList()
     }
 
-    private fun getTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>,
-                                                    peaks: List<Int>): Map<Float, Int> {
+    private fun setTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>) {
+        val peaks = getTotalAccelerationPeaks(totalAccelerationData)
+        if (peaks.isNullOrEmpty()) {
+            _showAccPeakOccurrences.postValue(View.GONE)
+            return
+        }
+
         val peakValues = peaks.map {
             totalAccelerationData[it]
                     .second.toBigDecimal().setScale(1,  RoundingMode.HALF_UP)
@@ -143,37 +144,40 @@ class DetailsViewModel : ViewModel() {
             peakValues.contains(
                 it.second.toBigDecimal().setScale(1, RoundingMode.HALF_UP)
             )
-        }
-                .groupingBy { it.second.toBigDecimal().setScale(1, RoundingMode.HALF_UP) }
+        }.groupingBy { it.second.toBigDecimal().setScale(1, RoundingMode.HALF_UP) }
                 .eachCount()
                 .mapKeys { it.key.toFloat() }
                 .toSortedMap()
-        return peakOccurrences
+
+        _accPeakOccurrencesLiveData.postValue(peakOccurrences)
+        _showAccPeakOccurrences.postValue(_graphVisibleLiveData.value?.get(DataNames.TOTAL_ACCELERATION.ordinal))
     }
 
-    private fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
+    private suspend fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
             List<Pair<Double, Double>> {
 
         return if (measurementRepository.getAmplitudeSpectrumFile(measurement).exists()) {
             measurementRepository.getAmplitudeSpectrumFromFile(measurement)
+
         } else {
-            SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, samplingFrequency).also {
-                measurementRepository.writeAmplitudeSpectrumToFile(measurement, it)
+            SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, samplingFrequency)
+                    .also { amplitudeSpectrum ->
+                        measurementRepository.writeAmplitudeSpectrumToFile(measurement, amplitudeSpectrum)
             }
         }
     }
 
-    private fun getAmplitudeSpectrumPeaks(amplitudeSpectrumData: List<Pair<Double, Double>>): List<Int> {
+    private fun setAmplitudeSpectrumPeaks(amplitudeSpectrumData: List<Pair<Double, Double>>) {
         val p1Signal = amplitudeSpectrumData.map { it.second }.toDoubleArray()
 
         val fp = FindPeak(p1Signal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByHeight(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
+        val peaks = out.filterByHeight(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
+        _amplitudeSpectrumPeaksLiveData.postValue(peaks)
     }
 
-    private fun getPowerSpectrumData(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
+    private suspend fun getPowerSpectrumData(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
             List<Pair<Double, Double>> {
-
         return if (measurementRepository.getPowerSpectrumFile(measurement).exists()) {
             measurementRepository.getPowerSpectrumFromFile(measurement)
         } else {

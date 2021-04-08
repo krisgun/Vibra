@@ -1,10 +1,11 @@
 package com.krisgun.vibra.database
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.krisgun.vibra.data.Measurement
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -98,68 +99,82 @@ class MeasurementRepository private constructor(context: Context){
     fun getRawAccDataFile(measurement: Measurement): File = File(filesDir, measurement.rawAccFileName)
     fun getRawGyroDataFile(measurement: Measurement): File = File(filesDir, measurement.rawGyroFileName)
 
-    fun getTotalAccelerationFromFile(measurement: Measurement): List<Pair<Long, Float>> {
-        if (filesDir != null) {
-            Log.d(TAG, filesDir)
-        }
+    suspend fun getTotalAccelerationFromFile(measurement: Measurement): List<Pair<Long, Float>> {
         val file: File = getTotalAccelerationFile(measurement)
         val totalAccelerationPairList = mutableListOf<Pair<Long, Float>>()
 
-        file.forEachLine { eachLine ->
-            if (!eachLine.contains("Timestamp")) {
-                eachLine.split(",").also { splitList ->
-                    totalAccelerationPairList.add(
-                            Pair(
-                                    splitList[0].toLong(),
-                                    splitList[1].toFloat())
-                    )
+        withContext(Dispatchers.IO) {
+            try {
+                file.forEachLine { eachLine ->
+                    if (!eachLine.contains("Timestamp")) {
+                        eachLine.split(",").also { splitList ->
+                            totalAccelerationPairList.add(
+                                    Pair(
+                                            splitList[0].toLong(),
+                                            splitList[1].toFloat())
+                            )
+                        }
+                    }
                 }
+            } catch (cause: Throwable) {
+                throw ReadDataFromFileException("Could not get total acceleration from file: ${file.absolutePath}", cause)
             }
         }
         return totalAccelerationPairList
     }
 
-    fun getAmplitudeSpectrumFromFile(measurement: Measurement): List<Pair<Double, Double>> {
+    suspend fun getAmplitudeSpectrumFromFile(measurement: Measurement): List<Pair<Double, Double>> {
         val file = getAmplitudeSpectrumFile(measurement)
         val amplitudeSpectrumPairList = mutableListOf<Pair<Double, Double>>()
-
-        file.forEachLine { eachLine ->
-            if (!eachLine.contains("Frequency")) {
-                eachLine.split(",").also { splitList ->
-                    amplitudeSpectrumPairList.add(
-                            Pair(
-                                    splitList[0].toDouble(),
-                                    splitList[1].toDouble()
+        withContext(Dispatchers.IO) {
+            try {
+                file.forEachLine { eachLine ->
+                    if (!eachLine.contains("Frequency")) {
+                        eachLine.split(",").also { splitList ->
+                            amplitudeSpectrumPairList.add(
+                                    Pair(
+                                            splitList[0].toDouble(),
+                                            splitList[1].toDouble()
+                                    )
                             )
-                    )
+                        }
+                    }
                 }
+            } catch (cause: Throwable) {
+                throw ReadDataFromFileException("Could not get amplitude spectrum from file: ${file.absolutePath}", cause)
             }
         }
         return amplitudeSpectrumPairList
     }
 
-    fun getPowerSpectrumFromFile(measurement: Measurement): List<Pair<Double, Double>> {
+    suspend fun getPowerSpectrumFromFile(measurement: Measurement): List<Pair<Double, Double>> {
         val file = getPowerSpectrumFile(measurement)
         val powerSpectrumPairList = mutableListOf<Pair<Double, Double>>()
 
-        file.forEachLine { eachLine ->
-            if (!eachLine.contains("Power")) {
-                eachLine.split(",").also { splitList ->
-                    powerSpectrumPairList.add(
-                            Pair(
-                                    splitList[0].toDouble(),
-                                    10.0.pow((splitList[1].toDouble()).div(10))
+        withContext(Dispatchers.IO) {
+            try {
+                file.forEachLine { eachLine ->
+                    if (!eachLine.contains("Power")) {
+                        eachLine.split(",").also { splitList ->
+                            powerSpectrumPairList.add(
+                                    Pair(
+                                            splitList[0].toDouble(),
+                                            (10.0).pow((splitList[1].toDouble()).div(10))
+                                    )
                             )
-                    )
+                        }
+                    }
                 }
+            } catch (cause: Throwable) {
+                throw ReadDataFromFileException("Could not get power spectrum from file: ${file.absolutePath}", cause)
             }
         }
         return powerSpectrumPairList
     }
 
-    fun writeTotalAccelerationToFile(measurement: Measurement, data: List<Pair<Long, Float>>) {
-        executor.execute {
-            val file = getTotalAccelerationFile(measurement)
+    suspend fun writeTotalAccelerationToFile(measurement: Measurement, data: List<Pair<Long, Float>>) {
+        val file = getTotalAccelerationFile(measurement)
+        withContext(Dispatchers.IO) {
             try {
                 val fileWriter = FileWriter(file, true)
                 fileWriter.write("Timestamp (ns),Total Acceleration (m/s^2)\n")
@@ -167,15 +182,15 @@ class MeasurementRepository private constructor(context: Context){
                     fileWriter.write(String.format(Locale.US, "%d,%f\n", it.first, it.second))
                 }
                 fileWriter.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
+            } catch (cause: Throwable) {
+                throw WriteDataToFileException("Could not write total acceleration to file: ${file.absolutePath}", cause)
             }
         }
     }
 
-    fun writeAmplitudeSpectrumToFile(measurement: Measurement, data: List<Pair<Double, Double>>) {
-        executor.execute {
-            val file = getAmplitudeSpectrumFile(measurement)
+    suspend fun writeAmplitudeSpectrumToFile(measurement: Measurement, data: List<Pair<Double, Double>>) {
+        val file = getAmplitudeSpectrumFile(measurement)
+        withContext(Dispatchers.IO) {
             try {
                 val fileWriter = FileWriter(file, true)
                 fileWriter.write("Frequency (Hz),Amplitude (|P1(f)|)\n")
@@ -183,51 +198,55 @@ class MeasurementRepository private constructor(context: Context){
                     fileWriter.write(String.format(Locale.US, "%f,%f\n", it.first, it.second))
                 }
                 fileWriter.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
+            } catch (cause: Throwable) {
+                throw WriteDataToFileException("Could not write amplitude spectrum to file: ${file.absolutePath}", cause)
             }
         }
     }
 
-    fun writePowerSpectrumToFile(measurement: Measurement, data: List<Pair<Double, Double>>) {
-        executor.execute {
-            val file = getPowerSpectrumFile(measurement)
-            try {
-                val fileWriter = FileWriter(file, true)
-                fileWriter.write("Frequency (Hz),Power (dB)\n")
-                data.forEach {
-                    fileWriter.write(String.format(Locale.US, "%f,%f\n", it.first, 10 * log10(it.second)))
-                }
-                fileWriter.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+   suspend fun writePowerSpectrumToFile(measurement: Measurement, data: List<Pair<Double, Double>>) {
+       val file = getPowerSpectrumFile(measurement)
+       withContext(Dispatchers.IO) {
+           try {
+               val fileWriter = FileWriter(file, true)
+               fileWriter.write("Frequency (Hz),Power (dB)\n")
+               data.forEach {
+                   fileWriter.write(String.format(Locale.US, "%f,%f\n", it.first, 10 * log10(it.second)))
+               }
+               fileWriter.close()
+           } catch (cause: Throwable) {
+               throw WriteDataToFileException("Could not write power spectrum to file: ${file.absolutePath}", cause)
+           }
         }
     }
 
     /**
      * Returns a List of Pairs in the form of: (timestamp, (xData, yData, zData))
      */
-    fun getRawAccDataFromFile(measurement: Measurement): List<Pair<Long, Triple<Float, Float, Float>>> {
+    suspend fun getRawAccDataFromFile(measurement: Measurement): List<Pair<Long, Triple<Float, Float, Float>>> {
         val file: File = getRawAccDataFile(measurement)
-
         val rawDataTripleList: MutableList<Pair<Long, Triple<Float, Float, Float>>> = mutableListOf()
 
-        file.forEachLine { eachLine ->
-            if (!eachLine.contains("Timestamp")) { //Check if title row
-
-                eachLine.split(",").also { splitList ->
-                    rawDataTripleList.add(
-                            Pair(
-                                    splitList[0].toLong(),
-                                    Triple(
-                                            splitList[1].toFloat(),
-                                            splitList[2].toFloat(),
-                                            splitList[3].toFloat()
+        withContext(Dispatchers.IO) {
+            try {
+                file.forEachLine { eachLine ->
+                    if (!eachLine.contains("Timestamp")) { //Check if title row
+                        eachLine.split(",").also { splitList ->
+                            rawDataTripleList.add(
+                                    Pair(
+                                            splitList[0].toLong(),
+                                            Triple(
+                                                    splitList[1].toFloat(),
+                                                    splitList[2].toFloat(),
+                                                    splitList[3].toFloat()
+                                            )
                                     )
                             )
-                    )
+                        }
+                    }
                 }
+            } catch (cause: Throwable) {
+                throw ReadDataFromFileException("Could not get accelerometer data from file: ${file.absolutePath}", cause)
             }
         }
         return rawDataTripleList
@@ -251,4 +270,7 @@ class MeasurementRepository private constructor(context: Context){
             throw IllegalStateException("MeasurementRepository must be initialized.")
         }
     }
+
+    class ReadDataFromFileException(message: String, cause: Throwable) : Throwable(message, cause)
+    class WriteDataToFileException(message: String, cause: Throwable) : Throwable(message, cause)
 }
