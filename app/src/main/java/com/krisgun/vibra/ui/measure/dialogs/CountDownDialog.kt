@@ -52,8 +52,9 @@ class CountDownDialog: DialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onPause() {
+        super.onPause()
         viewModel.countDownTimer.cancel()
+        this.dismiss()
     }
 }
