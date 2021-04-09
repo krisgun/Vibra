@@ -109,21 +109,26 @@ class CollectDataViewModel(application: Application) : AndroidViewModel(applicat
 
         //Unregister listener and measure time
         unregisterSensor()
-        startTime = timestamps.first()
-        endTime = timestamps.last()
-        countLines = timestamps.size
+        if (timestamps.size > 1) {
+            startTime = timestamps.first()
+            endTime = timestamps.last()
+            countLines = timestamps.size
 
-        (endTime - startTime).also {
-            if (actualDuration == 0) {
-                actualDuration = (it / 1000000000.0).roundToInt()
+            (endTime - startTime).also {
+                if (actualDuration == 0) {
+                    actualDuration = (it / 1000000000.0).roundToInt()
 
-                //Update measurement sampling frequency
-                measurement.sampling_frequency = (countLines / (it / 1000000000.0))
-                measurement.num_of_datapoints = countLines
+                    //Update measurement sampling frequency
+                    measurement.sampling_frequency = (countLines / (it / 1000000000.0))
+                    measurement.num_of_datapoints = countLines
 
-                Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration: ${(it / 1000000.0)} ms\t $countLines lines")
+                    Log.d(TAG, "Measured frequency: ${measurement.sampling_frequency}\tMeasured duration: ${(it / 1000000.0)} ms\t $countLines lines")
+                }
             }
+        } else {
+            measurement.num_of_datapoints = countLines
         }
+
 
         // Close filewriter
         try {

@@ -3,6 +3,7 @@ package com.krisgun.vibra.ui.details
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.preference.PreferenceManager
+import com.google.android.material.snackbar.Snackbar
 import com.krisgun.vibra.R
 import com.krisgun.vibra.databinding.FragmentDetailsBinding
 
@@ -22,6 +24,7 @@ class DetailsFragment : Fragment() {
 
     private lateinit var viewModel: DetailsViewModel
     private lateinit var navController: NavController
+    private lateinit var binding: FragmentDetailsBinding
     private val args: DetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +50,7 @@ class DetailsFragment : Fragment() {
     ): View? {
         viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
 
-        val binding = FragmentDetailsBinding.inflate(
+        binding = FragmentDetailsBinding.inflate(
             inflater,
             container,
             false
@@ -96,7 +99,15 @@ class DetailsFragment : Fragment() {
                 }
             }
         )
-
+        viewModel.statusMessage.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                val view: View = requireActivity().window.decorView.findViewById(android.R.id.content)
+                Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE).apply {
+                    setAction("Dismiss") { this.dismiss() }
+                    show()
+                }
+            }
+        })
     }
 
     private fun getSharedPreferences() {

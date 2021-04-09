@@ -57,8 +57,9 @@ object Converter {
         val minutes: String = (duration / 60).toString()
 
         return when {
+            (duration  == 0) -> "$seconds seconds"
+            (duration == 1) -> "$seconds second"
             (duration in 2..59) -> "$seconds seconds"
-            (duration < 60) -> "$seconds second"
             (duration % 60 == 0 && duration > 60) -> "$minutes minutes"
             (duration % 60 == 0) -> "$minutes minute"
             else -> "$minutes min $seconds sec"

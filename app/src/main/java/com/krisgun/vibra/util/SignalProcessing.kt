@@ -1,5 +1,6 @@
 package com.krisgun.vibra.util
 
+import android.util.Log
 import com.github.psambit9791.jdsp.transform.DiscreteFourier
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -122,11 +123,9 @@ class SignalProcessing {
             val oscSign = mutableListOf<Float>()
             for (i in timePoints.indices) {
                 val lastmax = totList[i]
-                val sign = sign(
-                        rawX[i]
-                        * moaArray[lastmax][1] + rawY[i]
-                        * moaArray[lastmax][2] + rawZ[i]
-                        * moaArray[lastmax][3])
+                val sign = sign(rawX[i] * moaArray[lastmax][1]
+                                + rawY[i] * moaArray[lastmax][2]
+                                + rawZ[i] * moaArray[lastmax][3])
                 oscSign.add(sign)
             }
             return oscSign

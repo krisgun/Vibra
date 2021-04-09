@@ -1,12 +1,15 @@
 package com.krisgun.vibra.ui.details
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.github.psambit9791.jdsp.signal.peaks.FindPeak
 import com.github.psambit9791.jdsp.signal.peaks.Peak
 import com.krisgun.vibra.data.Measurement
 import com.krisgun.vibra.database.MeasurementRepository
+import com.krisgun.vibra.database.MeasurementRepository.ReadDataFromFileException
 import com.krisgun.vibra.util.DataNames
+import com.krisgun.vibra.util.Event
 import com.krisgun.vibra.util.SignalProcessing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -27,6 +30,11 @@ class DetailsViewModel : ViewModel() {
         Transformations.switchMap(measurementIdLiveData) { id ->
             measurementRepository.getMeasurement(id)
         }
+
+    //Snackbar content
+    private val _statusMessage = MutableLiveData<Event<String>>()
+    val statusMessage: LiveData<Event<String>>
+        get() = _statusMessage
 
     /**
      * UI LiveData
@@ -76,6 +84,7 @@ class DetailsViewModel : ViewModel() {
                 withContext(Dispatchers.Default) {
                     val rawData = getRawAcceleration(measurement)
                             .also { _rawDataLiveData.postValue(it) }
+
                     val totAcc = getTotalAcceleration(rawData)
                             .also { _totAccelDataLiveData.postValue(it) }
 
@@ -100,35 +109,62 @@ class DetailsViewModel : ViewModel() {
     }
 
     private suspend fun getRawAcceleration(measurement: Measurement): List<Pair<Long, Triple<Float, Float, Float>>> {
-        return  measurementRepository.getRawAccDataFromFile(measurement)
+        return try {
+            measurementRepository.getRawAccDataFromFile(measurement)
+        } catch (error: ReadDataFromFileException) {
+            error.stackTraceToString().let { Log.e(TAG, it) }
+            _statusMessage.postValue(Event("Accelerometer data is missing or corrupted."))
+            emptyList()
+        }
     }
 
     private suspend fun getTotalAcceleration(rawData: List<Pair<Long, Triple<Float, Float, Float>>>):
             List<Pair<Long, Float>> {
+        if (rawData.isNullOrEmpty()) return emptyList()
 
-        val totalAccelerationFile = measurementRepository.getTotalAccelerationFile(measurement)
-        return if (totalAccelerationFile.exists()) {
-            measurementRepository.getTotalAccelerationFromFile(measurement)
-        } else {
+        //Try to fetch from file
+        val file = measurementRepository.getTotalAccelerationFile(measurement)
+        if (file.exists()) {
+            try {
+                return measurementRepository.getTotalAccelerationFromFile(measurement)
+            } catch (error: ReadDataFromFileException) {
+                error.stackTraceToString().let { Log.e(TAG, it) }
+            }
+        }
+
+        //Compute if no file found
+        return try {
             val totAccResult = SignalProcessing.totalAccelerationAmplitude(rawData, findSignIndexMaximaThreshold)
             val resultTuples: MutableList<Pair<Long, Float>> = mutableListOf()
 
             for (i in totAccResult.indices) {
                 resultTuples.add(Pair(rawData[i].first, totAccResult[i]))
             }
+            //Save to file then return result
             measurementRepository.writeTotalAccelerationToFile(measurement, resultTuples)
             resultTuples
+        } catch (error: Throwable) {
+            error.stackTraceToString().let { Log.e(TAG, it) }
+            _statusMessage.postValue(Event("Total acceleration could not be computed. Most likely due to too few data points."))
+            emptyList()
         }
     }
 
     private fun getTotalAccelerationPeaks(totalAccelerationData: List<Pair<Long, Float>>): List<Int> {
+        if (totalAccelerationData.isNullOrEmpty()) return emptyList()
+
         val accSignal = totalAccelerationData.map { it.second.toDouble() }.toDoubleArray()
         val fp = FindPeak(accSignal)
         val out: Peak = fp.detectPeaks()
-        return out.filterByHeight(totAccPeakLowerThresh, totAccPeakUpperThresh).toList()
+        return out.filterByProminence(totAccPeakLowerThresh, totAccPeakUpperThresh).toList()
     }
 
     private fun setTotalAccelerationPeakOccurrences(totalAccelerationData: List<Pair<Long, Float>>) {
+        if (totalAccelerationData.isNullOrEmpty()) {
+            _showAccPeakOccurrences.postValue(View.GONE)
+            return
+        }
+
         val peaks = getTotalAccelerationPeaks(totalAccelerationData)
         if (peaks.isNullOrEmpty()) {
             _showAccPeakOccurrences.postValue(View.GONE)
@@ -155,35 +191,68 @@ class DetailsViewModel : ViewModel() {
 
     private suspend fun getAmplitudeSpectrum(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
             List<Pair<Double, Double>> {
+        if (totalAccelerationData.isNullOrEmpty()) return emptyList()
 
-        return if (measurementRepository.getAmplitudeSpectrumFile(measurement).exists()) {
-            measurementRepository.getAmplitudeSpectrumFromFile(measurement)
+        //Try to fetch from file
+        val file = measurementRepository.getAmplitudeSpectrumFile(measurement)
+        if (file.exists()) {
+            try {
+                return measurementRepository.getAmplitudeSpectrumFromFile(measurement)
+            } catch (error: ReadDataFromFileException) {
+                error.stackTraceToString().let { Log.e(TAG, it) }
+            }
+        }
 
-        } else {
+        //Compute if no file found
+        return try {
             SignalProcessing.singleSidedAmplitudeSpectrum(totalAccelerationData, samplingFrequency)
                     .also { amplitudeSpectrum ->
                         measurementRepository.writeAmplitudeSpectrumToFile(measurement, amplitudeSpectrum)
-            }
+                    }
+        } catch (error: Throwable) {
+            error.stackTraceToString().let { Log.e(TAG, it) }
+            _statusMessage.postValue(Event("Amplitude spectrum could not be computed."))
+            emptyList()
         }
     }
 
     private fun setAmplitudeSpectrumPeaks(amplitudeSpectrumData: List<Pair<Double, Double>>) {
-        val p1Signal = amplitudeSpectrumData.map { it.second }.toDoubleArray()
-
-        val fp = FindPeak(p1Signal)
-        val out: Peak = fp.detectPeaks()
-        val peaks = out.filterByHeight(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
-        _amplitudeSpectrumPeaksLiveData.postValue(peaks)
+        if (amplitudeSpectrumData.isNullOrEmpty()) {
+            _amplitudeSpectrumPeaksLiveData.postValue(emptyList())
+        }
+        try {
+            val p1Signal = amplitudeSpectrumData.map { it.second }.toDoubleArray()
+            val fp = FindPeak(p1Signal)
+            val out: Peak = fp.detectPeaks()
+            val peaks = out.filterByProminence(ampSpecPeakLowerThresh, ampSpecPeakUpperThresh).toList()
+            _amplitudeSpectrumPeaksLiveData.postValue(peaks)
+        } catch (error: Throwable) {
+            error.stackTraceToString().let { Log.e(TAG, it) }
+            _amplitudeSpectrumPeaksLiveData.postValue(emptyList())
+        }
     }
 
     private suspend fun getPowerSpectrumData(totalAccelerationData: List<Pair<Long, Float>>, samplingFrequency: Double):
             List<Pair<Double, Double>> {
-        return if (measurementRepository.getPowerSpectrumFile(measurement).exists()) {
-            measurementRepository.getPowerSpectrumFromFile(measurement)
-        } else {
+        if (totalAccelerationData.isNullOrEmpty()) return emptyList()
+
+        val file = measurementRepository.getPowerSpectrumFile(measurement)
+        if (file.exists()) {
+            try {
+                return measurementRepository.getPowerSpectrumFromFile(measurement)
+            } catch (error: ReadDataFromFileException) {
+                error.stackTraceToString().let { Log.e(TAG, it) }
+            }
+        }
+
+        return try {
             SignalProcessing.powerSpectrum(totalAccelerationData, samplingFrequency).also {
                 measurementRepository.writePowerSpectrumToFile(measurement, it)
             }
+        } catch (error: Throwable) {
+            error.stackTraceToString().let { Log.e(TAG, it) }
+            _statusMessage.postValue(Event("Power spectrum could not be computed."))
+            emptyList()
         }
     }
 
