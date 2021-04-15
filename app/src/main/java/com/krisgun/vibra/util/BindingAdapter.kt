@@ -107,7 +107,7 @@ fun setTotAccLineChartData(view: LineChart, data: List<Pair<Long, Float>>?) {
 fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, Double>>?, peaks: List<Int>?) {
     view.setNoDataText("Loading graph data...")
 
-    if (data != null && peaks != null) {
+    if (data != null) {
 
         if (data.isEmpty()) {
             view.setNoDataTextColor(ContextCompat.getColor(view.context, R.color.red))
@@ -120,7 +120,7 @@ fun setAmplitudeSpectrumLineChartData(view: LineChart, data: List<Pair<Double, D
             data.forEach {
                 entryList.add(Entry(it.first.toFloat(), it.second.toFloat()))
             }
-            peaks.forEach {
+            peaks?.forEach {
                 peakEntryList.add(Entry(data[it].first.toFloat(), data[it].second.toFloat()))
             }
 

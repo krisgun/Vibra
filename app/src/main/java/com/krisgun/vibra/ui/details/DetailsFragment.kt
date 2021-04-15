@@ -32,7 +32,10 @@ class DetailsFragment : Fragment() {
         navController = findNavController()
 
         setHasOptionsMenu(true)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+
+        val activity = activity as AppCompatActivity
+        activity.supportActionBar?.show()
+        activity.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (navController.previousBackStackEntry?.destination?.id  == R.id.navigation_collect_data) {
                     navController.popBackStack(R.id.measureFragment, false)
@@ -40,7 +43,6 @@ class DetailsFragment : Fragment() {
                     navController.popBackStack()
             }
         })
-
     }
 
     override fun onCreateView(

@@ -164,7 +164,7 @@ class SignalProcessing {
                 p1.add(abs(spectrumData.div(numberOfPoints)))
             }
             for (i in 1..p1.size - 2) {
-                p1[i] = 2 * p1[i]
+                p1[i] = (2 * p1[i]).div(sqrt(2.0))
             }
 
             val f = DoubleArray((numberOfPoints / 2) + 1) { it.toDouble() }
