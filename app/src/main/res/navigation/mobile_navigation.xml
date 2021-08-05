@@ -17,8 +17,8 @@
             <action
                 android:id="@+id/action_navigation_measure_to_navigation_collect"
                 app:destination="@id/navigation_collect_and_dialog"
-                app:enterAnim="@anim/fragment_fade_enter"
-                app:exitAnim="@anim/fragment_fade_exit" />
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim" />
             <action
                 android:id="@+id/action_navigation_measure_to_countDownDialog"
                 app:destination="@id/countDownDialog" />
@@ -45,8 +45,8 @@
         <action
             android:id="@+id/action_navigation_history_to_navigation_details"
             app:destination="@id/navigation_details"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_navigation_history_to_detailsMenuDialog"
             app:destination="@id/navigation_details_menu" />
